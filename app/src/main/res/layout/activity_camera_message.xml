@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <Button
+        android:id="@+id/query_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date_ll"
+        android:layout_marginLeft="@dimen/mg_20"
+        android:layout_marginTop="@dimen/mg_5"
+        android:layout_marginRight="@dimen/mg_20"
+        android:background="@drawable/radius"
+        android:fontFamily="@font/app_main_font"
+        android:text="조 회"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/date_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bellRadioGroup"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/mg_10"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/date_start_txt"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:drawableRight="@drawable/calendar_btn_n"
+            android:gravity="center"
+
+            android:padding="@dimen/mg_5"
+            android:textColor="@color/gray_99"
+            android:textColorHint="@color/gray"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/ts_15"
+            tools:text="2019/11/12" />
+
+        <TextView
+            android:id="@+id/date_end_txt"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:drawableRight="@drawable/calendar_btn_n"
+            android:gravity="center"
+            android:padding="@dimen/mg_5"
+            android:textColor="@color/gray_99"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/ts_15"
+            tools:text="2019/11/12" />
+
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/mainRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_view"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rg_bell"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="@dimen/mg_15"
+            android:layout_marginTop="@dimen/mg_15"
+            android:layout_marginRight="@dimen/mg_10"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/mg_25"
+            android:text="도어벨"
+            android:textColor="#000" />
+
+        <RadioButton
+            android:id="@+id/rg_alarm"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="@dimen/mg_15"
+            android:layout_marginRight="@dimen/mg_15"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/mg_25"
+            android:text="경고 알림"
+            android:textColor="#000" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/bellRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainRadioGroup"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rg_month"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="@dimen/mg_15"
+            android:layout_marginTop="@dimen/mg_15"
+            android:layout_marginRight="@dimen/mg_10"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/mg_25"
+            android:text="당월"
+            android:textColor="#000" />
+
+        <RadioButton
+            android:id="@+id/rg_directInput"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="@dimen/mg_15"
+            android:layout_marginRight="@dimen/mg_15"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/mg_25"
+            android:text="직접입력"
+            android:textColor="#000" />
+    </RadioGroup>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="center"
+        android:background="@color/main_color"
+        android:fontFamily="@font/app_main_font"
+        android:gravity="center_vertical"
+        app:title="도어벨 카메라" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/query_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/query_btn"
+        android:layout_marginLeft="@dimen/mg_10"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="@dimen/mg_10" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/basic_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/query_btn"
+        android:layout_marginLeft="@dimen/mg_10"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="@dimen/mg_10" />
+
+</RelativeLayout>

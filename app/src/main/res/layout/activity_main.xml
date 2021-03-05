@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="90dp"
+        android:gravity="center"
+        android:drawableTop="@drawable/logoimg"
+        android:textColor="@color/color_ff5800"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="스마트 출입 관리"
+        android:textColor="@color/black"
+        android:textSize="38sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="220dp"
+        android:gravity="center"
+        android:text="대전시 유성구 장방경로당"
+        android:textColor="@color/black_10"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+<!--    <Button-->
+<!--        android:id="@+id/action_login_reg_onclick"-->
+<!--        style="@style/Button.Normal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/wh_55"-->
+<!--        android:layout_marginLeft="@dimen/phone_button_margin_left"-->
+<!--        android:layout_marginRight="@dimen/phone_button_margin_right"-->
+<!--        android:layout_marginTop="400dp"-->
+<!--        android:textSize="23sp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/ty_login_register" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/action_login_onclick"-->
+<!--        style="@style/Button.Normal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/wh_55"-->
+<!--        android:layout_marginLeft="@dimen/phone_button_margin_left"-->
+<!--        android:layout_marginRight="@dimen/phone_button_margin_right"-->
+<!--        android:layout_marginTop="480dp"-->
+<!--        android:textSize="23sp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/login" />-->
+
+</LinearLayout>

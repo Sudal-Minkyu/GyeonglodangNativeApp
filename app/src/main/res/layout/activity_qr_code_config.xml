@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tuya.smart.android.demo.config.QrCodeConfigActivity"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/mg_22"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_input_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_wifi_ssid"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mg_70"
+            android:padding="15dp"
+            android:fontFamily="@font/app_main_font"
+
+            android:hint="Wi-Fi 이름"
+            android:background="@drawable/asset_inputbox_bg"
+            android:layout_marginTop="130dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/mg_10"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_979797" />
+
+        <EditText
+            android:id="@+id/et_wifi_pwd"
+            android:layout_width="match_parent"
+            android:padding="15dp"
+            android:layout_height="@dimen/mg_70"
+            android:fontFamily="@font/app_main_font"
+
+            android:layout_gravity="center"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="@dimen/mg_10"
+            android:hint="Wi-Fi 비밀번호"
+            android:textStyle="bold"
+            android:background="@drawable/asset_inputbox_bg"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_979797" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:background="@drawable/radius"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:fontFamily="@font/app_main_font"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_height="@dimen/mg_60"
+            android:text="확 인" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

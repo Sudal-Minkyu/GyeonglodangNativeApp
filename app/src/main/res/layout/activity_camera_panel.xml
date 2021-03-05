@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:background="@color/main_color"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        app:title="도어벨 카메라"
+        android:fontFamily="@font/app_main_font"
+        android:layout_gravity="center"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/camera_video_view_Rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_view">
+
+        <com.tuya.smart.camera.middleware.widget.TuyaCameraView
+            android:id="@+id/camera_video_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/Battery_Txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/app_main_font"
+                tools:text="100%"
+                tools:textColor="@color/black"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="28dp" />
+
+            <ImageView
+                android:id="@+id/camera_mute"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:src="@drawable/camera_mute_btn" />
+
+        <ImageView
+            android:id="@+id/speak_Txt"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="280dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/camera_icon_mic_selector"
+            android:gravity="center" />
+
+            <TextView
+                android:id="@+id/record_Txt"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:background="@drawable/record_shape_op"
+
+                android:layout_marginLeft="105dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
+            />
+
+            <TextView
+                android:id="@+id/photo_Txt"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:background="@drawable/camera_shape_op"
+
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:padding="7dp"
+                android:gravity="center"
+            />
+
+            <TextView
+                android:id="@+id/camera_quality"
+                android:visibility="gone"
+                android:layout_width="@dimen/wh_60"
+                android:layout_height="@dimen/wh_28"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/camera_mute"
+                android:background="@drawable/camera_shape_wirlesswake"
+                android:gravity="center"
+                android:text="HD"
+                android:textColor="@color/white"
+                android:textSize="@dimen/ts_12" />
+
+    </RelativeLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/camera_video_view_Rl"
+        android:layout_weight="1"
+        android:gravity="center">
+
+
+        <LinearLayout
+            android:id="@+id/Open_Door"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="75dp"
+            android:layout_marginRight="75dp"
+            android:paddingTop="25dp"
+            android:paddingBottom="15dp"
+            android:background="@drawable/radius"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:clickable="false"
+                android:id="@+id/doorImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/lock" />
+
+            <TextView
+                android:clickable="false"
+                android:id="@+id/doorTxt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:background="@null"
+                android:fontFamily="@font/app_main_font"
+                android:text="문 닫힘"
+                android:textColor="@color/app_bg_color"
+                android:textSize="25dp"
+                android:textStyle="bold"
+
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

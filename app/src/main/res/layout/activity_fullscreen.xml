@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_textview"
+    android:theme="@style/ThemeOverlay.TuyaSmartCameraSdkDemo.FullscreenContainer"
+    tools:context=".FullscreenActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <Button
+            android:id="@+id/fullscreen_cancel_btn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="180dp"
+            android:layout_marginRight="100dp"
+            android:background="@drawable/callnot_btn_pressed"
+            android:drawableRight="@drawable/ic_call_end"
+            android:gravity="center"
+            android:padding="25dp" />
+
+        <Button
+            android:id="@+id/fullscreen_open_btn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="180dp"
+            android:background="@drawable/call_btn_pressed"
+            android:drawableRight="@drawable/ic_call"
+            android:gravity="center"
+            android:padding="25dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/app_main_font"
+        android:gravity="center"
+        android:text="초인종이 울렸습니다."
+        android:textColor="@color/white"
+        android:textSize="38sp"
+        android:textStyle="bold" />
+
+    <!--    <TextView android:id="@+id/call_Icon" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="100dp" android:drawableTop="@drawable/logoimg" android:gravity="center" />-->
+    <com.tuya.drawee.view.DecryptImageView
+        android:id="@+id/call_Icon"
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="45dp"
+        android:gravity="center"
+        fresco:actualImageScaleType="fitXY"
+        fresco:roundedCornerRadius="4dp" />
+</FrameLayout>

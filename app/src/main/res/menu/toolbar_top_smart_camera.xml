@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile"
+        android:title="프로필"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/device_add"
+        android:title="도어벨 등록"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/gallery"
+        android:title="갤러리"
+        android:visibility="gone"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/history"
+        android:title="알림센터"
+        android:visibility="gone"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/tutorial"
+        android:title="튜토리얼"
+        android:visibility="gone"
+        app:showAsAction="never" />
+
+    <!--    <item-->
+    <!--        android:id="@+id/main_refresh"-->
+    <!--        android:icon="@drawable/toolbar_menu_refresh"-->
+    <!--        android:title="@string/toolbar_menu_refresh"-->
+    <!--        app:showAsAction="always" />-->
+
+</menu>

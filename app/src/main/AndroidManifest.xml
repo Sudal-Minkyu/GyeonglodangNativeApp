@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.tuya.smart.android.demo">
+
+    <application
+        android:name=".TuyaSmartApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_homemain"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_homemain_round"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
+        tools:replace="android:supportsRtl,android:allowBackup">
+        <meta-data android:name="DATABASE" android:value="sugar_example.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.tuya.smart.android.demo" />
+
+
+
+        <activity
+            android:name=".FullscreenActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <!-- 안드로이드 부팅 이벤트 받기 : BroadcastReceiver -->
+        <activity android:name=".camera.CameraCloudVideoActivity" />
+        <activity android:name=".camera.SettingActivity" /> <!-- BackgroundService -->
+        <activity
+            android:name=".base.activity.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity
+            android:name=".base.activity.DoorbellActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".camera.BackgroundCameraPanelActivity"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".base.activity.BackgroundSplashActivity"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.Transparent" />
+
+
+        <activity
+            android:name=".device.CommonDeviceDebugActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".login.activity.CountryListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+
+        <activity
+            android:name=".login.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".login.activity.LoginWithPhoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".login.activity.AccountInputActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".login.activity.AccountConfirmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".base.activity.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".base.activity.PersonalInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.ECBindActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.AddDeviceAPTipActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" /> <!-- <activity -->
+
+        <activity
+            android:name=".device.SwitchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.ECFailedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.ECActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.AddDeviceTipActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".base.activity.BrowserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".device.common.DeviceCommonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".device.common.DpSendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".group.GroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".group.GroupDpSendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".group.GroupListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".scene.activity.SceneEditActivity" />
+        <activity android:name=".personal.FeedbackActivity" />
+        <activity
+            android:name=".base.activity.ZigBeeConfigActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolrTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".base.activity.HomeKitTest" />
+        <activity
+            android:name=".family.activity.FamilyIndexActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Default_Public_Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" /> <!-- <activity -->
+
+        <activity
+            android:name=".family.activity.FamilyAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Default_Public_Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".family.activity.FamilyInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Default_Public_Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".family.activity.FamilyEmptyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Default_Public_Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.AddDeviceTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".config.ZigbeeConfigActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" /> <!-- <activity -->
+
+        <activity
+            android:name=".config.QrCodeConfigActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera.CameraPanelActivity"
+            android:screenOrientation="portrait" /> <!-- <activity -->
+
+        <activity
+            android:name=".camera.CameraPlaybackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera.AlarmDetectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera.CameraCloudStorageActivity"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="TUYA_SMART_APPKEY"
+            android:value="cy8vrt8hxkxchcshqt4t" />
+        <meta-data
+            android:name="TUYA_SMART_SECRET"
+            android:value="ctueyrcx5dxefr83ek4cmyj9mrcx7ndk" />
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="BOOTReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".RestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name="com.tuya.smart.android.demo.RestartService" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".RestartService"
+            android:exported="false"
+            android:label="RestartService"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="ACTION.RESTART.PersistentService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:exported="false"
+            android:label="AlarmReceiver"
+            android:process=":remote" />
+
+
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true"
+            android:stopWithTask="false" />
+
+        <service
+            android:name=".PersistentService"
+            android:enabled="true"
+            android:process=":remote"></service>
+        <service
+            android:name="org.eclipse.paho.android.service.MqttService"
+            android:stopWithTask="false" />
+        <service
+            android:name="com.tuya.smart.android.hardware.service.GwBroadcastMonitorService"
+            android:exported="true"
+            android:label="UDPService"
+            android:process=":monitor">
+            <intent-filter>
+                <action android:name="tuya.intent.action.udp" />
+
+                <category android:name="tuya" />
+            </intent-filter>
+        </service> <!-- 서비스 태그 추가 -->
+        <service
+            android:name="com.tuya.smart.android.hardware.service.DevTransferService"
+            android:label="TCPService">
+            <intent-filter>
+                <action android:name="tuya.intent.action.tcp" />
+
+                <category android:name="tuya" />
+            </intent-filter>
+        </service> <!-- [START fcm_disable_auto_init] -->
+        <service
+            android:name="com.tuya.smart.mqtt.MqttService"
+            android:stopWithTask="false"></service>
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="false" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission
+        android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
+        android:required="false" />
+
+</manifest>

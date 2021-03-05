@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/app_bg_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar_layout"
+        android:layout_marginTop="79dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/wifi_btn"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/sirenorder_qr_btn_p"
+            android:visibility="visible" />
+        <!--        <Button-->
+        <!--            android:id="@+id/gateway_btn"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="50dp"-->
+        <!--            android:text="@string/ty_add_device_gateway"-->
+        <!--            />-->
+
+        <Button
+            android:id="@+id/grcode_btn"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/mg_50"
+            android:background="@drawable/radius"
+            android:layout_height="@dimen/wh_60"
+            android:layout_below="@id/wifi_btn"
+            android:fontFamily="@font/app_main_font"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="@dimen/mg_50"
+            android:layout_marginLeft="@dimen/mg_50"
+            android:textSize="@dimen/ts_18"
+            android:text="@string/ty_add_device_grcode" />
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/action_bar_layout"
+        layout="@layout/toolbar_top_view" />
+</RelativeLayout>

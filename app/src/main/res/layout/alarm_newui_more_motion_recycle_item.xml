@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/bg_line"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_reg_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/app_main_font"
+        android:paddingLeft="@dimen/mg_15"
+        android:paddingTop="@dimen/mg_15"
+        android:singleLine="true"
+        android:textColor="@color/google_blue"
+
+        android:textSize="@dimen/ts_13"
+        android:textStyle="bold"
+        tools:text="2021/02/20" />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/app_main_font"
+        android:paddingLeft="@dimen/mg_15"
+        android:paddingTop="@dimen/mg_15"
+        android:singleLine="true"
+        android:textColor="@color/black"
+
+        android:textSize="@dimen/ts_15"
+        android:textStyle="bold"
+        tools:text="test" />
+
+    <TextView
+        android:id="@+id/tv_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/app_main_font"
+        android:paddingLeft="@dimen/mg_15"
+        android:paddingTop="@dimen/mg_15"
+        android:paddingBottom="@dimen/mg_15"
+        android:singleLine="true"
+        android:textColor="@color/black_60"
+        android:textSize="@dimen/ts_15"
+        tools:text="test" />
+</LinearLayout>
+
