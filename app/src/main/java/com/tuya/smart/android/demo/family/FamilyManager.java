@@ -1,7 +1,8 @@
 package com.tuya.smart.android.demo.family;
 
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
 import com.tuya.smart.android.demo.family.event.EventCurrentHomeChange;
@@ -22,7 +23,7 @@ public class FamilyManager {
 
     private HomeBean currentHomeBean;
 
-    private FamilySpHelper mFamilySpHelper;
+    private final FamilySpHelper mFamilySpHelper;
 
 
     private FamilyManager() {
@@ -41,18 +42,20 @@ public class FamilyManager {
     }
 
     public void setCurrentHome(HomeBean homeBean) {
+        Log.e(TAG, "KMK setCurrentHome - homeBean : "+homeBean);
         if (null == homeBean) {
             return;
         }
         boolean isChange = false;
 
+        Log.e(TAG, "KMK setCurrentHome - homeBean : "+homeBean);
         if (null == currentHomeBean) {
-            Log.i(TAG, "setCurrentHome  currentHome is null so push current home change event");
             isChange = true;
         } else {
             long currentHomeId = currentHomeBean.getHomeId();
             long targetHomeId = homeBean.getHomeId();
-            Log.i(TAG, "setCurrentHome: currentHomeId=" + currentHomeId + " targetHomeId=" + targetHomeId);
+            Log.e(TAG, "KMK setCurrentHome - currentHomeBean : "+currentHomeBean);
+            Log.i(TAG, "KMK setCurrentHome: currentHomeId=" + currentHomeId + " targetHomeId=" + targetHomeId);
             if (currentHomeId != targetHomeId) {
                 isChange = true;
             }
@@ -64,22 +67,25 @@ public class FamilyManager {
         if (isChange) {
             EventBus.getDefault().post(new EventCurrentHomeChange(currentHomeBean));
         }
+
     }
 
 
     public HomeBean getCurrentHome() {
         if (null == currentHomeBean) {
-            setCurrentHome(mFamilySpHelper.getCurrentHome());
+            Log.e(TAG, "KMK currentHomeBean : 널입니다.");
+        }else{
+            Log.e(TAG, "KMK currentHomeBean : 널이 아닙니다.");
         }
-        System.out.println("currentHomeBean2 : "+currentHomeBean);
         return currentHomeBean;
     }
 
 
     public long getCurrentHomeId() {
         HomeBean currentHome = getCurrentHome();
-        System.out.println("currentHome : "+currentHome);
+//        Log.e(TAG, "KMK currentHome : "+currentHome);
         if (null == currentHome) {
+            Log.e(TAG, "KMK currentHome은 널입니다. 토큰이 비어있음.");
             return -1;
         }
         return currentHome.getHomeId();
