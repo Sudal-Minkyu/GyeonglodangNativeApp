@@ -75,6 +75,8 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:visibility="gone"
+            android:enabled="false"
             android:id="@+id/rg_bell"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -89,6 +91,8 @@
             android:textColor="#000" />
 
         <RadioButton
+            android:visibility="gone"
+            android:enabled="false"
             android:id="@+id/rg_alarm"
             android:layout_width="match_parent"
             android:layout_height="35dp"

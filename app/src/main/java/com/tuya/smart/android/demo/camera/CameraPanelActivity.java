@@ -865,13 +865,11 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
     public void openDoorActiveData() {
         try {
-
             String key = ActivityUtils.GetString(getBaseContext(), "topic_key");
             if (key == null || key.trim().equals("")) {
                 ActivityUtils.SetString(getBaseContext(), "topic_key", "jb");
                 key = "jb";
             }
-
             String topic = key + "/data/door";
             AWSIotQos qos = AWSIotQos.QOS0;
             MyTopic myTopic = new MyTopic(topic, qos, this);
@@ -1138,7 +1136,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                                 if (Boolean.parseBoolean(callin)) {
                                     int mute;
                                     mute = previewMute == ICameraP2P.MUTE ? ICameraP2P.UNMUTE : ICameraP2P.MUTE;
-                                    mCameraP2P.setMute(ICameraP2P.PLAYMODE.LIVE, mute, new OperationDelegateCallBack() {
+                                    mCameraP2P.setMute(mute, new OperationDelegateCallBack() {
                                         @Override
                                         public void onSuccess(int sessionId, int requestId, String data) {
                                             previewMute = Integer.parseInt(data);
