@@ -108,6 +108,8 @@ dependencies {
     implementation 'com.tuya.smart:tuyasmart-ipc-camera-outside:3.20.0'
     implementation 'com.tuya.smart:tuyasmart-base-utils:3.18.0r143-rc.9'
 
+//    implementation 'com.tuya.smart:tuyasmart-ipc-sdk:3.24.0-open'
+
     //option
     implementation 'com.tuya.smart:tuyasmart-ipc-camera-message:3.13.0r128'
     implementation 'com.tuya.smart:tuyasmart-ipc-devicecontrol:3.17.0r139'
