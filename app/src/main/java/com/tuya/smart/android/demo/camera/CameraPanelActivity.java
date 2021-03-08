@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.github.florent37.tutoshowcase.TutoShowcase;
+import com.tuya.smart.android.camera.api.ITuyaHomeCamera;
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
@@ -71,6 +72,8 @@ import com.tuyasmart.camera.devicecontrol.bean.DpWirelessLowpower;
 import com.tuyasmart.camera.devicecontrol.bean.DpWirelessPowermode;
 import com.tuyasmart.camera.devicecontrol.model.DpNotifyModel;
 import com.tuyasmart.camera.devicecontrol.model.PTZDirection;
+import com.tuyasmart.camera.devicecontrol.utils.CRC32;
+import com.tuyasmart.camera.devicecontrol.utils.IntToButeArray;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -264,16 +267,21 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void handleConnect(Message msg) {
-        cameraOn();
+//        cameraOn();
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
+            Log.e(TAG, "KMK 카메라연결성공");
             ProgressUtil.hideLoading();
             isPlay = true;
             preview();
         } else if (msg.arg1 == DEVICENOT) {
+            Log.e(TAG, "KMK 카메라존재하지않음");
             ToastUtil.shortToast(CameraPanelActivity.this, "등록된 도어벨이 없습니다.\n도어벨을 등록해주세요.");
             ProgressUtil.hideLoading();
         } else {
-            OnRefresh();
+            Log.e(TAG, "KMK 카메라연결실패 다시 새로고침합니다.");
+            ProgressUtil.hideLoading();
+            ToastUtil.shortToast(CameraPanelActivity.this, "카메라 연결상태가 좋지않습니다.\n잠시후 상단의 새로고침 버튼을 눌러주세요.");
+//            OnRefresh();
         }
     }
 
@@ -303,7 +311,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         initMenu();
         initData();
         initListener();
-        cameraOn();
+//        cameraOn();
         BatteryTxt.performClick();
 
         TrafficStats.setThreadStatsTag(THREAD_ID);
@@ -355,6 +363,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     if (null != mCameraP2P) {
                         mCameraP2P.removeOnP2PCameraListener();
                         mCameraP2P.destroyP2P();
+                        Log.e(TAG, "KMK 화면끄기");
                     }
                 } else if (intent.getAction().equals("android.intent.action.SCREEN_ON")) {
 //                    onResume();
@@ -363,7 +372,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                         if (pm.isDeviceIdleMode()) {
                             // the device is now in doze mode
-
+                            Log.e(TAG, "KMK 화면키기");
                             Intent startMain = new Intent(Intent.ACTION_MAIN);
                             startMain.addCategory(Intent.CATEGORY_HOME);
                             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -604,10 +613,17 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
 
     private void cameraOn() {
+        Log.e(TAG, "KMK 카메라를 켭니다. 장비아이디 devId = "+devId);
+        Log.e(TAG, "KMK 카메라를 켭니다. 로컬키 localKey = "+localKey);
         devId = getIntent().getStringExtra(INTENT_DEVID);
         localKey = getIntent().getStringExtra(INTENT_LOCALKEY);
         mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
         mDeviceControl.wirelessWake(localKey, devId);
+//        int crcsum = CRC32.getChecksum(localKey.getBytes());
+//        String topicId = "m/w/" + devId;
+//        byte[] bytes = IntToButeArray.intToByteArray(crcsum);
+//        ITuyaHomeCamera homeCamera = TuyaHomeSdk.getCameraInstance();
+//        homeCamera.publishWirelessWake(topicId, bytes);
     }
 
     private void initView() {
@@ -691,14 +707,16 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         mCameraP2P.startPreview(new OperationDelegateCallBack() {
             @Override
             public void onSuccess(int sessionId, int requestId, String data) {
-                cameraOn();
+//                cameraOn();
+                Log.e(TAG, "KMK 프리뷰함수 실행 isPlay=true");
                 isPlay = true;
             }
 
             @Override
             public void onFailure(int sessionId, int requestId, int errCode) {
 //                Log.d(TAG, "start preview onFailure, errCode: " + errCode);
-                cameraOn();
+//                cameraOn();
+                Log.e(TAG, "KMK 프리뷰함수 실행 isPlay=false");
                 isPlay = false;
             }
         });
@@ -1103,8 +1121,9 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     AudioUtils.getModel(this);
                     mCameraP2P.registorOnP2PCameraListener(p2pCameraListener);
                     mCameraP2P.generateCameraView(mVideoView.createdView());
-                    cameraOn();
+                    //cameraOn();
                     ProgressUtil.showLoading(this, "카메라 로딩중...");
+                    //ProgressUtil.showLoading(this, "카메라 연결상태가 좋지않습니다.\n잠시후 다시 상단의 새로고침을 연결해주세요2");
                     if (mCameraP2P.isConnecting()) {
                         mCameraP2P.startPreview(new OperationDelegateCallBack() {
                             @Override
@@ -1115,10 +1134,13 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                             @Override
                             public void onFailure(int sessionId, int requestId, int errCode) {
                                 Log.d(TAG, "start preview onFailure, errCode: " + errCode);
+                                Log.e(TAG,"CIS - 카메라 연결실패1 ");
                             }
                         });
                     }
                     if (!mCameraP2P.isConnecting()) {
+                        cameraOn();
+                        Log.e(TAG,"CIS - 카메라 연결실패2 ");
                         mCameraP2P.connect(devId, new OperationDelegateCallBack() {
                             @Override
                             public void onSuccess(int i, int i1, String s) {
@@ -1153,6 +1175,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                                         @Override
                                         public void onFailure(int sessionId, int requestId, int errCode) {
                                             mHandler.sendMessage(MessageUtil.getMessage(MSG_MUTE, ARG1_OPERATE_FAIL));
+                                            Log.e(TAG,"CIS - 카메라 연결실패3 ");
                                         }
                                     });
 
@@ -1162,12 +1185,14 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                             @Override
                             public void onFailure(int i, int i1, int i2) {
                                 mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_FAIL, i2));
+                                Log.e(TAG,"CIS - 카메라 연결실패4 ");
+
                             }
                         });
                     }
                 }
             }
-//            NotifyCameraView();
+            //NotifyCameraView();
         }
     }
 

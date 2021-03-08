@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "kr.co.broadwave.broadwavehomeservice",
+  "applicationId": "kr.co.gyeonglodang.jbgyeonglodang",
   "variantName": "processReleaseResources",
   "elements": [
     {

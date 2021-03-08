@@ -19,10 +19,13 @@ public class ScreenReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         // 전달된 값이 '부팅완료' 인 경우에만 동작 하도록 조건문을 설정 해줍니다.
         Log.d(TAG, "action = " + action);
-        if (action.equals("android.intent.action.SCREEN_OFF")) {
-            TuyaHomeSdk.enableBackgroundConnect();
-            Log.d(TAG, "tuya sdk background connect ");
-        }
+        TuyaHomeSdk.enableBackgroundConnect();
+        Log.e(TAG, "CIS TuyaHomeSdk.enableBackgroundConnect() 수행  ");
+
+//        if (action.equals("android.intent.action.SCREEN_OFF")) {
+//            TuyaHomeSdk.enableBackgroundConnect();
+//            Log.d(TAG, "tuya sdk background connect ");
+//        }
     }
 }
 

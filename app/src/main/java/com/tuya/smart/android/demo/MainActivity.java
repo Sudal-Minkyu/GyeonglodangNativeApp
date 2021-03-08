@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
             @Override
             public void run() {
                 if (TuyaHomeSdk.getUserInstance().isLogin()) {
+                    Log.e(TAG, "KMK 앱실행 완료");
                     //LoginHelper.afterLogin(); //CIS삭제
                     deviceLoad();
                 } else {
@@ -114,7 +115,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICE, "false");
                             } else {
-                                ITuyaCameraDevice mDeviceControl;
+//                                ITuyaCameraDevice mDeviceControl;
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, bean.getDeviceList().get(0).getDevId());
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_LOCALKEY, bean.getDeviceList().get(0).getLocalKey());
                                 Map<String, Object> map = bean.getDeviceList().get(0).getSkills();
@@ -127,8 +128,9 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICE, "true");
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_P2P_TYPE, p2pType);
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
-                                mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
-                                mDeviceControl.wirelessWake(bean.getDeviceList().get(0).getLocalKey(), bean.getDeviceList().get(0).getDevId());
+//                                mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
+//                                Log.e(TAG, "KMK 앱 처음 실행 카메라를 켭니다.");
+//                                mDeviceControl.wirelessWake(bean.getDeviceList().get(0).getLocalKey(), bean.getDeviceList().get(0).getDevId());
                             }
                             startActivity(intent);
                         }
