@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity implements ILoginView, TextWatch
         setContentView(R.layout.activity_login);
 
         checkVerify();
-        checkWhiteListRegist();
+//        checkWhiteListRegist();
 
 
         mBind = ButterKnife.bind(this);

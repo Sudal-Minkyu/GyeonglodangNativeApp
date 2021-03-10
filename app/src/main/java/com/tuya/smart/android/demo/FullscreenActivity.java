@@ -160,7 +160,7 @@ public class FullscreenActivity extends Activity {
     }
 
     private MediaPlayer mediaPlayer;
-
+    private BroadcastReceiver scrOffReceiver;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +176,7 @@ public class FullscreenActivity extends Activity {
 
         Notify();
 
-        BroadcastReceiver scrOffReceiver = new BroadcastReceiver() {
+        scrOffReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("android.intent.action.SCREEN_OFF")) {
@@ -399,6 +399,10 @@ public class FullscreenActivity extends Activity {
         super.onDestroy();
 
         hasVibrator = false; // 진동상태 해제
+
+        if(scrOffReceiver!=null) {
+            unregisterReceiver(scrOffReceiver);
+        }
 
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);

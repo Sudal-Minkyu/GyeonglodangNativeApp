@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.tuya.smart.android.base.utils.PreferencesUtil;
@@ -15,7 +16,6 @@ import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
-import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.camera.CameraPanelActivity;
 import com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter;
 import com.tuya.smart.android.demo.family.activity.IFamilyAddView;
@@ -25,12 +25,13 @@ import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
-import com.tuyasmart.camera.devicecontrol.ITuyaCameraDevice;
-import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
+import com.tuyasmart.camera.devicecontrol.utils.CRC32;
+import com.tuyasmart.camera.devicecontrol.utils.IntToButeArray;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by letian on 16/7/15.
@@ -40,29 +41,25 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
     private static final String TAG = MainActivity.class.getSimpleName();
     private FamilyAddPresenter mPresenter;
 
+    DoorBellLogin doorBellLogin;
+
     private void initPresenter() {
         mPresenter = new FamilyAddPresenter(this);
+//        doorBellLogin = new DoorBellLogin();
     }
 
-    private static ITuyaHomeCamera homeCamera;
-
-
     private void initService() {
-        new Handler().postDelayed(new Runnable() {
-            // 3초 후에 실행
-            @Override
-            public void run() {
-                boolean isServiceRunningCheck = ActivityUtils.isServiceRunningCheck(MainActivity.this);
-                Log.d(TAG, "isServiceRunningCheck = " + isServiceRunningCheck);
-                if (isServiceRunningCheck) {
-                    return;
-                }
-                Intent serviceLauncher = new Intent(MainActivity.this, BackgroundService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(serviceLauncher);
-                } else {
-                    startService(serviceLauncher);
-                }
+        new Handler(Objects.requireNonNull(Looper.myLooper())).postDelayed(() -> {
+            boolean isServiceRunningCheck = ActivityUtils.isServiceRunningCheck(MainActivity.this);
+            Log.d(TAG, "isServiceRunningCheck = " + isServiceRunningCheck);
+            if (isServiceRunningCheck) {
+                return;
+            }
+            Intent serviceLauncher = new Intent(MainActivity.this, BackgroundService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceLauncher);
+            } else {
+                startService(serviceLauncher);
             }
         }, 3000);
     }
@@ -77,17 +74,16 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
         initPresenter();
 //        initData();
         initService();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (TuyaHomeSdk.getUserInstance().isLogin()) {
-                    Log.e(TAG, "KMK 앱실행 완료");
-                    //LoginHelper.afterLogin(); //CIS삭제
-                    deviceLoad();
-                } else {
-                    ActivityUtils.gotoActivity(MainActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
-                }
+        new Handler(Objects.requireNonNull(Looper.myLooper())).postDelayed(() -> {
+            if (TuyaHomeSdk.getUserInstance().isLogin()) {
+                Log.e(TAG, "KMK 앱실행 완료");
+//                    LoginHelper.afterLogin(); //CIS삭제
+//                    DoorBellLogin doorBellLogin = new DoorBellLogin();
+//                    doorBellLogin.afterLogout();
+//                doorBellLogin.afterLogin(this);
+                deviceLoad();
+            } else {
+                ActivityUtils.gotoActivity(MainActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
             }
         }, 1000); //3초 뒤에 Runner객체 실행하도록 함
     }
@@ -114,6 +110,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_P2P_TYPE, "p2pId");
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICE, "false");
+                                intent.putExtra(CommonDeviceDebugPresenter.DEVICESTART, "false");
                             } else {
 //                                ITuyaCameraDevice mDeviceControl;
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, bean.getDeviceList().get(0).getDevId());
@@ -128,8 +125,18 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICE, "true");
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_P2P_TYPE, p2pType);
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
+                                intent.putExtra(CommonDeviceDebugPresenter.DEVICESTART, "true");
 //                                mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
-//                                Log.e(TAG, "KMK 앱 처음 실행 카메라를 켭니다.");
+                                Log.e(TAG, "KMK 앱 처음 실행 카메라를 켭니다.");
+                                int crcsum = CRC32.getChecksum(bean.getDeviceList().get(0).getLocalKey().getBytes());
+                                Log.e(TAG, "KMK CAMERA_ON crcsum : "+crcsum);
+                                String topicId = "m/w/" + bean.getDeviceList().get(0).getDevId();
+                                Log.e(TAG, "KMK CAMERA_ON topicId : "+topicId);
+                                byte[] bytes = IntToButeArray.intToByteArray(crcsum);
+                                Log.e(TAG, "KMK CAMERA_ON bytes : "+bytes);
+                                ITuyaHomeCamera homeCamera = TuyaHomeSdk.getCameraInstance();
+                                Log.e(TAG, "KMK CAMERA_ON homeCamera : "+homeCamera);
+                                homeCamera.publishWirelessWake(topicId, bytes);
 //                                mDeviceControl.wirelessWake(bean.getDeviceList().get(0).getLocalKey(), bean.getDeviceList().get(0).getDevId());
                             }
                             startActivity(intent);
@@ -137,7 +144,8 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
 
                         @Override
                         public void onError(String errorCode, String errorMsg) {
-
+                            Log.e(TAG, "KMK 메인액티비티 조회에러2 -> deviceLoad();함수실행");
+                            deviceLoad();
                         }
                     });
                 }
@@ -145,17 +153,8 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
 
             @Override
             public void onError(String errorCode, String error) {
-                TuyaHomeSdk.newHomeInstance(Constant.HOME_ID).getHomeLocalCache(new ITuyaHomeResultCallback() {
-                    @Override
-                    public void onSuccess(HomeBean bean) {
-
-                    }
-
-                    @Override
-                    public void onError(String errorCode, String errorMsg) {
-
-                    }
-                });
+                Log.e(TAG, "KMK 메인액티비티 조회에러1 -> deviceLoad();함수실행");
+                deviceLoad();
             }
         });
     }

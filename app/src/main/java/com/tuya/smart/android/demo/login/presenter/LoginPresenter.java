@@ -87,9 +87,9 @@ public class LoginPresenter extends BasePresenter {
                 // 로그인 성공
                 mView.modelResult(msg.what, null);
 //                Constant.finishActivity();
-                LoginHelper.afterLogin();
+//                LoginHelper.afterLogin();
 //                ActivityUtils.gotoHomeActivity(mContext); // 기존메인페이지
-                ActivityUtils.gotoSplashActivity(mContext); // 스플레쉬액티비티 실행 -> 최초로그인후 나오는화면
+                ActivityUtils.gotoMainActivity(mContext); // 스플레쉬액티비티 실행 -> 최초로그인후 나오는화면
 //                ActivityUtils.gotoMainActivity(mContext);
                 break;
             case MSG_LOGIN_FAILURE:

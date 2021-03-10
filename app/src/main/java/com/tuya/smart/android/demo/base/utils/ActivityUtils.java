@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 
 import com.tuya.smart.android.common.utils.TuyaUtil;
+import com.tuya.smart.android.demo.FullscreenActivity;
 import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BrowserActivity;

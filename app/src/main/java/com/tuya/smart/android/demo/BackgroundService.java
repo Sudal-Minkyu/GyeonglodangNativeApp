@@ -76,10 +76,9 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
         return null;
     }
 
-    private FamilyAddPresenter mPresenter;
-
+    DoorBellLogin doorBellLogin;
     private void initPresenter() {
-        mPresenter = new FamilyAddPresenter(this);
+        doorBellLogin = new DoorBellLogin();
     }
 
     private void checkLogin() {
@@ -98,6 +97,7 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
     private PowerManager.WakeLock mWakeLock;
     private static final String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
     private static final String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
+
 
     @Override
     public void onCreate() {
@@ -126,14 +126,14 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
             startForeground(1, notification);
         }
 
+        Context context = this;
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Log.e("isLogin", TuyaHomeSdk.getUserInstance().isLogin() + "");
                 if (TuyaHomeSdk.getUserInstance().isLogin()) {
-                    Log.e("homeCamera", homeCamera + "");
-
+                    Log.e(TAG,"KMK 백그라운드서비스 homeCamera : "+homeCamera);
 //                    if (homeCamera != null) {
 //                        homeCamera.unRegisterCameraPushListener(BackgroundService.this::onResult);
 //                    }
@@ -142,8 +142,8 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
 //                    if (homeCamera != null) {
 //                        homeCamera.registerCameraPushListener(BackgroundService.this::onResult);
 //                    }
+                    doorBellLogin.afterLogin(context);
                     Log.e(TAG, "CIS 백그라운드서비스 실행시 로그인 완료되면 수행");
-                    LoginHelper.afterLogin();
                     deviceLoad();
                 }
             }

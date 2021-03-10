@@ -55,6 +55,7 @@ public class CommonDeviceDebugPresenter extends BasePresenter implements IDevLis
     public static final String INTENT_P2P_TYPE = "intent_p2p_type";
     public static final String CALL = "callin";
     public static final String DEVICE = "device";
+    public static final String DEVICESTART = "devicestart";
     private String mDevId;
     private DeviceBean mDevBean;
     private ITuyaDevice mTuyaDevice;

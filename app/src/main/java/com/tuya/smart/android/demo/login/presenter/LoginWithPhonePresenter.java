@@ -172,8 +172,8 @@ public class LoginWithPhonePresenter extends BasePresenter {
 
     private void loginSuccess() {
         Constant.finishActivity();
-        LoginHelper.afterLogin();
-        ActivityUtils.gotoHomeActivity(mContext);
+//        LoginHelper.afterLogin();
+        ActivityUtils.gotoMainActivity(mContext);
     }
 
     @Override

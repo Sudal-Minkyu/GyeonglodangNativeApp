@@ -89,6 +89,7 @@ public class BaseActivity extends AppCompatActivity {
                                 Uri uri = Uri.fromParts("package", getPackageName(), null);
                                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, uri);
                                 startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                                checkWhiteListRegist();
                             }
                         })
                         .setNegativeButton("아니오", new DialogInterface.OnClickListener() {

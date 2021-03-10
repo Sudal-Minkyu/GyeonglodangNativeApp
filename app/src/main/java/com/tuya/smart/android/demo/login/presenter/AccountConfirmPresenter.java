@@ -347,7 +347,7 @@ public class AccountConfirmPresenter extends BasePresenter {
     private void loginSuccess() {
         Constant.finishActivity();
         //LoginHelper.afterLogin(); //CIS삭제
-        ActivityUtils.gotoHomeActivity(mContext);
+        ActivityUtils.gotoMainActivity(mContext);
     }
 
 

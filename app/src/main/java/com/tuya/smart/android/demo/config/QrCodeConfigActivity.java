@@ -145,8 +145,8 @@ public class QrCodeConfigActivity extends AppCompatActivity implements ITuyaSmar
         String wifiPwd = mEtInputWifiPwd.getText().toString();
 
         Log.e(TAG, "KMK token : " + token);
-        Log.e(TAG, "KMK wifiPwd : " + wifiPwd);
         Log.e(TAG, "KMK wifiSSId : " + wifiSSId);
+        Log.e(TAG, "KMK wifiPwd : " + wifiPwd);
 
         TuyaCameraActivatorBuilder builder = new TuyaCameraActivatorBuilder()
                 .setToken(token).setPassword(wifiPwd).setSsid(wifiSSId).setListener(this);

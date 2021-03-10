@@ -85,6 +85,7 @@ import butterknife.Unbinder;
 
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.CALL;
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.DEVICE;
+import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.DEVICESTART;
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_DEVID;
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_LOCALKEY;
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_P2P_TYPE;
@@ -142,20 +143,17 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     private int previewMute = ICameraP2P.MUTE;
     private int videoClarity = ICameraP2P.HD;
 
-    private String picPath;
-
     private int p2pType;
-
 
     private String device;
     private String callin;
+    private String devicestart;
     private String devId;
     private String localKey;
     private ITuyaCameraDevice mDeviceControl;
     private ITuyaSmartCameraP2P mCameraP2P;
 
     private AWSIotMqttClient client;
-    private int value;
 
     private Unbinder mBind;
 
@@ -299,18 +297,17 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_panel);
         checkVerify();
-        checkWhiteListRegist();
+//        checkWhiteListRegist();
         mBind = ButterKnife.bind(this);
         initPresenter();
         initView();
         initMenu();
         initData();
         initListener();
-//        cameraOn();
         BatteryTxt.performClick();
 
         TrafficStats.setThreadStatsTag(THREAD_ID);
-        value = DoorOpen();
+        int value = DoorOpen();
         if (value == 1) {
             openDoorNowData();
         }
@@ -358,6 +355,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     if (null != mCameraP2P) {
                         mCameraP2P.removeOnP2PCameraListener();
                         mCameraP2P.destroyP2P();
+                        devicestart = "false";
+                        Log.e(TAG, "KMK 전원버튼 클릭 devicestart : " + devicestart);
                         Log.e(TAG, "KMK 화면끄기");
                     }
                 } else if (intent.getAction().equals("android.intent.action.SCREEN_ON")) {
@@ -388,6 +387,12 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
         device = getIntent().getStringExtra(DEVICE);
         callin = getIntent().getStringExtra(CALL);
+        devicestart = getIntent().getStringExtra(DEVICESTART);
+
+        devId = getIntent().getStringExtra(INTENT_DEVID);
+        localKey = getIntent().getStringExtra(INTENT_LOCALKEY);
+        mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
+
         ToastUtil.shortToast(CameraPanelActivity.this, "장방 경로당 앱이 실행되었습니다.");
 
     }
@@ -395,6 +400,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onUserLeaveHint() {
         if (null != mCameraP2P) {
+            Log.e(TAG, "KMK 홈버튼 클릭 devicestart : " + devicestart);
+            devicestart = "false";
             mCameraP2P.removeOnP2PCameraListener();
             mCameraP2P.destroyP2P();
         }
@@ -525,7 +532,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                                         @Override
                                         public void onError(String code, String error) {
                                             ToastUtil.shortToast(getApplicationContext(), "도어벨 제거를 실패하였습니다. 인터넷연결 확인 후 다시 시도해주시길 바랍니다.");
-                                            return;
                                         }
 
                                         @Override
@@ -533,7 +539,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                                             ToastUtil.showToast(getApplicationContext(), "도어벨을 제거하였습니다.");
                                             Intent intent = new Intent(CameraPanelActivity.this, MainActivity.class);
                                             startActivity(intent);
-                                            return;
                                         }
                                     });
                                     finish();
@@ -571,8 +576,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     }
 
     private int tutorialStep;
-    private int[] tutorialLayoutArray = {R.layout.tutorial_01, R.layout.tutorial_02, R.layout.tutorial_03, R.layout.tutorial_05, R.layout.tutorial_06, R.layout.tutorial_07, R.layout.tutorial_08};
-    private int[] tutorialTargetArray = {R.id.photo_Txt, R.id.record_Txt, R.id.main_refresh, R.id.Battery_Txt, R.id.camera_mute, R.id.speak_Txt, R.id.Open_Door};
+    private final int[] tutorialLayoutArray = {R.layout.tutorial_01, R.layout.tutorial_02, R.layout.tutorial_03, R.layout.tutorial_05, R.layout.tutorial_06, R.layout.tutorial_07, R.layout.tutorial_08};
+    private final int[] tutorialTargetArray = {R.id.photo_Txt, R.id.record_Txt, R.id.main_refresh, R.id.Battery_Txt, R.id.camera_mute, R.id.speak_Txt, R.id.Open_Door};
     TutoShowcase showcase;
 
     public void GetTutorial() {
@@ -605,17 +610,21 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void cameraOn() {
-        Log.e(TAG, "KMK 카메라를 켭니다. 장비아이디 devId = "+devId);
-        Log.e(TAG, "KMK 카메라를 켭니다. 로컬키 localKey = "+localKey);
-        devId = getIntent().getStringExtra(INTENT_DEVID);
-        localKey = getIntent().getStringExtra(INTENT_LOCALKEY);
-        mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
-        mDeviceControl.wirelessWake(localKey, devId);
-//        int crcsum = CRC32.getChecksum(localKey.getBytes());
-//        String topicId = "m/w/" + devId;
-//        byte[] bytes = IntToButeArray.intToByteArray(crcsum);
-//        ITuyaHomeCamera homeCamera = TuyaHomeSdk.getCameraInstance();
-//        homeCamera.publishWirelessWake(topicId, bytes);
+        if(!Boolean.parseBoolean(devicestart)){
+            Log.e(TAG, "KMK 카메라를 다시 실행합니다. devicestart : "+devicestart);
+            Log.e(TAG, "KMK 카메라를 켭니다. 장비아이디 devId = "+devId);
+            Log.e(TAG, "KMK 카메라를 켭니다. 로컬키 localKey = "+localKey);
+            mDeviceControl.wirelessWake(localKey, devId);
+            devicestart = "false";
+        }else{
+            Log.e(TAG, "KMK 카메라는 이미 실행했습니다. devicestart : "+devicestart);
+        }
+//        Log.e(TAG, "KMK 카메라를 켭니다. 장비아이디 devId = "+devId);
+//        Log.e(TAG, "KMK 카메라를 켭니다. 로컬키 localKey = "+localKey);
+//        devId = getIntent().getStringExtra(INTENT_DEVID);
+//        localKey = getIntent().getStringExtra(INTENT_LOCALKEY);
+//        mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
+//        mDeviceControl.wirelessWake(localKey, devId);
     }
 
     private void initView() {
@@ -631,7 +640,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 //        doorTxt = findViewById(R.id.doorTxt);
 //        doorImage = findViewById(R.id.doorImage);
 //        BatteryTxt = findViewById(R.id.Battery_Txt);
-
 
         int width = getDisplayWidth(this);
         int height = width * ASPECT_RATIO_WIDTH / ASPECT_RATIO_HEIGHT;
@@ -701,6 +709,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 //                cameraOn();
                 Log.e(TAG, "KMK 프리뷰함수 실행 isPlay=true");
                 isPlay = true;
+                devicestart = "false";
             }
 
             @Override
@@ -709,6 +718,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 //                cameraOn();
                 Log.e(TAG, "KMK 프리뷰함수 실행 isPlay=false");
                 isPlay = false;
+                devicestart = "false";
             }
         });
     }
@@ -1096,7 +1106,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         }, 3000);
     }
 
-
     private void OnRefresh() {
         if (!isPlay) {
             mVideoView.onResume();
@@ -1110,70 +1119,81 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     mCameraP2P.generateCameraView(mVideoView.createdView());
                     //cameraOn();
                     ProgressUtil.showLoading(this, "카메라 로딩중...");
+
+                    Log.e(TAG,"KMK 커넥팅테스트 mCameraP2P.isConnecting() : "+mCameraP2P.isConnecting());
+
                     if (mCameraP2P.isConnecting()) {
-                        Log.e(TAG,"KMK - 커넥팅이 되어 있음.");
+                        Log.e(TAG,"KMK 커넥팅이 되어 있음.");
                         mCameraP2P.startPreview(new OperationDelegateCallBack() {
                             @Override
                             public void onSuccess(int sessionId, int requestId, String data) {
+                                Log.e(TAG,"KMK 카메라 연결성공");
                                 mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_SUCCESS));
                             }
 
                             @Override
                             public void onFailure(int sessionId, int requestId, int errCode) {
-                                Log.e(TAG,"KMK - 카메라 연결실패1 ");
+                                Log.e(TAG,"KMK 카메라 연결실패");
                             }
                         });
                     }
                     if (!mCameraP2P.isConnecting()) {
-                        initData();
                         cameraOn();
-                        Log.e(TAG,"KMK - 커넥팅이 되어있지 않음. 커넥트시작");
-                        mCameraP2P.connect(devId, new OperationDelegateCallBack() {
+                        initData();
+                        Log.e(TAG,"KMK 커넥팅이 되어있지 않음. 커넥트시작");
+                        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                             @Override
-                            public void onSuccess(int i, int i1, String s) {
-                                mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_SUCCESS));
-                                //전화받고 말하기
-                                if (Boolean.parseBoolean(callin)) {
-                                    int mute;
-                                    mute = previewMute == ICameraP2P.MUTE ? ICameraP2P.UNMUTE : ICameraP2P.MUTE;
-                                    mCameraP2P.setMute(mute, new OperationDelegateCallBack() {
-                                        @Override
-                                        public void onSuccess(int sessionId, int requestId, String data) {
-                                            previewMute = Integer.parseInt(data);
-                                            mHandler.sendMessage(MessageUtil.getMessage(MSG_MUTE, ARG1_OPERATE_SUCCESS));
-                                            callin = "false";
-                                            mCameraP2P.startAudioTalk(new OperationDelegateCallBack() {
+                            public void run() {
+                                mCameraP2P.connect(devId, new OperationDelegateCallBack() {
+                                    @Override
+                                    public void onSuccess(int i, int i1, String s) {
+                                        Log.e(TAG,"KMK 커넥팅 성공");
+                                        mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_SUCCESS));
+                                        //전화받고 말하기
+                                        if (Boolean.parseBoolean(callin)) {
+                                            int mute;
+                                            mute = previewMute == ICameraP2P.MUTE ? ICameraP2P.UNMUTE : ICameraP2P.MUTE;
+                                            mCameraP2P.setMute(mute, new OperationDelegateCallBack() {
                                                 @Override
                                                 public void onSuccess(int sessionId, int requestId, String data) {
-                                                    isSpeaking = true;
-                                                    speakStatue(true);
-                                                    mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_SUCCESS));
+                                                    previewMute = Integer.parseInt(data);
+                                                    mHandler.sendMessage(MessageUtil.getMessage(MSG_MUTE, ARG1_OPERATE_SUCCESS));
+                                                    callin = "false";
+                                                    mCameraP2P.startAudioTalk(new OperationDelegateCallBack() {
+                                                        @Override
+                                                        public void onSuccess(int sessionId, int requestId, String data) {
+                                                            isSpeaking = true;
+                                                            speakStatue(true);
+                                                            mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_SUCCESS));
+                                                        }
+                                                        @Override
+                                                        public void onFailure(int sessionId, int requestId, int errCode) {
+                                                            isSpeaking = false;
+                                                            speakStatue(false);
+                                                            mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_FAIL));
+                                                        }
+                                                    });
                                                 }
-
                                                 @Override
                                                 public void onFailure(int sessionId, int requestId, int errCode) {
-                                                    isSpeaking = false;
-                                                    speakStatue(false);
-                                                    mHandler.sendMessage(MessageUtil.getMessage(MSG_TALK_BACK_BEGIN, ARG1_OPERATE_FAIL));
+                                                    mHandler.sendMessage(MessageUtil.getMessage(MSG_MUTE, ARG1_OPERATE_FAIL));
+                                                    Log.e(TAG,"KMK 커넥팅 실패2 ");
+                                                    devicestart = "false";
+                                                    Log.e(TAG, "KMK 연결실패3 devicestart : " + devicestart);
                                                 }
                                             });
                                         }
-
-                                        @Override
-                                        public void onFailure(int sessionId, int requestId, int errCode) {
-                                            mHandler.sendMessage(MessageUtil.getMessage(MSG_MUTE, ARG1_OPERATE_FAIL));
-                                            Log.e(TAG,"KMK - 카메라 연결실패3 ");
-                                        }
-                                    });
-                                }
+                                    }
+                                    @Override
+                                    public void onFailure(int i, int i1, int i2) {
+                                        mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_FAIL, i2));
+                                        Log.e(TAG,"KMK 커넥팅 실패1 ");
+                                        devicestart = "false";
+                                        Log.e(TAG, "KMK 연결실패4 devicestart : " + devicestart);
+                                    }
+                                });
                             }
-
-                            @Override
-                            public void onFailure(int i, int i1, int i2) {
-                                mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, ARG1_OPERATE_FAIL, i2));
-                                Log.e(TAG,"KMK - 카메라 연결실패4 ");
-                            }
-                        });
+                        }, 1000);
                     }
                 }
             }
@@ -1181,7 +1201,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private AbsP2pCameraListener p2pCameraListener = new AbsP2pCameraListener() {
+    private final AbsP2pCameraListener p2pCameraListener = new AbsP2pCameraListener() {
         @Override
         public void onReceiveSpeakerEchoData(ByteBuffer pcm, int sampleRate) {
             if (null != mCameraP2P) {

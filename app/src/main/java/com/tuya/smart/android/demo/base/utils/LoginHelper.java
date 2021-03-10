@@ -1,18 +1,26 @@
 package com.tuya.smart.android.demo.base.utils;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.AlarmManagerCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.tuya.smart.android.camera.api.ITuyaHomeCamera;
 import com.tuya.smart.android.camera.api.bean.CameraPushDataBean;
 import com.tuya.smart.android.common.utils.L;
+import com.tuya.smart.android.demo.AlarmReceiver;
+import com.tuya.smart.android.demo.Foreground;
+import com.tuya.smart.android.demo.MyFirebaseMessagingService;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.login.activity.LoginActivity;
@@ -28,12 +36,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
-public class LoginHelper extends Activity {
+public class LoginHelper {
 
     private static final String TAG = "LoginHelper";
     private static ITuyaHomeCamera homeCamera;
-    private static String mToken;
     private static URL obj;
 
     static {
@@ -44,51 +53,69 @@ public class LoginHelper extends Activity {
         }
     }
 
-    private static ITuyaGetBeanCallback<CameraPushDataBean> mTuyaGetBeanCallback = new ITuyaGetBeanCallback<CameraPushDataBean>() {
-        @Override
-        public void onResult(CameraPushDataBean o) {
-//            L.e(TAG, "Doorbell Info");
-//            L.e(TAG, "timestamp=" + o.getTimestamp());
-//            L.e(TAG, "devid=" + o.getDevId());
-//            L.e(TAG, "msgid=" + o.getEdata());
-//            L.e(TAG, "etype=" + o.getEtype());
+//    private void WakeUpMoveFullScreen() {
+//        Log.e(TAG, "KMK WakeUpMoveFullScreen");
+//        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+//        Date t = new Date();
+//        t.setTime(java.lang.System.currentTimeMillis() + 1000);
+//        AlarmManagerCompat.setAlarmClock(manager, t.getTime(), pendingIntent, pendingIntent);
+//    }
+
+    private static final ITuyaGetBeanCallback<CameraPushDataBean> mTuyaGetBeanCallback = o -> {
+        Log.e(TAG, "KMK 도어벨 클릭");
+//            Log.e(TAG, "timestamp=" + o.getTimestamp());
+        Log.e(TAG, "KMK 장비아이디값 = " + o.getDevId());
+//            Log.e(TAG, "msgid=" + o.getEdata());
+//            Log.e(TAG, "etype=" + o.getEtype());
+
+        boolean isBackground = Foreground.isBackground();
+
+        if (isBackground) {
+            Log.e(TAG, "KMK 현재 백그라운드 상태입니다.");
+//            firebaseMessagingService.WakeUpMoveFullScreen(context,"알람아 가봐");
+//            WakeUpMoveFullScreen();
+//            WakeUpMoveFullScreen();
+
+        } else {
+            Log.e(TAG, "KMK 현재 도x어벨화면 상태입니다.");
 
             // 새 버전 fcm 전송
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
 
-                    // Get new FCM registration token
-                    String token = task.getResult();
+                // Get new FCM registration token
+                String token = task.getResult();
 
-                    // Log and toast
-                    // String msg = getString(R.string.msg_token_fmt, token);
-                    Log.e("Firebase Token : ", "CIS "  + token);
+                // Log and toast
+                // String msg = getString(R.string.msg_token_fmt, token);
+                Log.e(TAG, "KMK token : " + token);
 
-                    try {
-                        JSONObject data = new JSONObject();
-                        JSONObject auth = new JSONObject();
+                try {
+                    JSONObject data = new JSONObject();
+                    JSONObject auth = new JSONObject();
 
-                        data.put("title", "초인종이 울렸습니다~");
-                        data.put("message", "확인해주세요~");
+                    data.put("title", "초인종이 울렸습니다~");
+                    data.put("message", "확인해주세요~");
 
-                        auth.put("to", token);
-                        auth.put("priority", "high");
-                        auth.put("direct_book_ok", true);
-                        auth.put("data", data);
+                    auth.put("to", token);
+                    auth.put("priority", "high");
+                    auth.put("direct_book_ok", true);
+                    auth.put("data", data);
 
-                        Log.e("Firebase Token", "CIS 초인종 FCM호출 - LoginHelper.java onComplete");
-                        new HttpUtil().execute(auth.toString());
+                    Log.e(TAG, "KMK 초인종 FCM호출 - LoginHelper.java onComplete");
+                    new HttpUtil().execute(auth.toString());
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
+
         }
     };
 
@@ -106,7 +133,7 @@ public class LoginHelper extends Activity {
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Authorization", "key=AAAAsIcKiJo:APA91bEpVRhvZt8PlOHMNcu1tNqMKH8eogyd4TN0eOuAxJvLRm8ZbWhXe8BTjlkydK7pyughHlljYX94IagDmnGihidK2poV0y_mBhEsxWdMSjnyZwTTazwCPOjOwUCWXKyy9eumsHUk");
-                byte[] outputInBytes = params[0].getBytes("UTF-8");
+                byte[] outputInBytes = params[0].getBytes(StandardCharsets.UTF_8);
                 OutputStream os = conn.getOutputStream();
                 os.write(outputInBytes);
                 os.close();
@@ -114,7 +141,7 @@ public class LoginHelper extends Activity {
                 InputStream is = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String line;
-                StringBuffer response = new StringBuffer();
+                StringBuilder response = new StringBuilder();
                 while ((line = br.readLine()) != null) {
                     response.append(line);
                 }
@@ -127,14 +154,15 @@ public class LoginHelper extends Activity {
         }
     }
 
-    public static void afterLogin() {
-        L.e(TAG, "afterLogin");
-        homeCamera = TuyaHomeSdk.getCameraInstance();
-        if (homeCamera != null) {
-            L.e(TAG, "CIS - 로그인 후 도어벨 리스너 서비스 시작 ");
-            homeCamera.registerCameraPushListener(mTuyaGetBeanCallback);
-        }
-    }
+//    public static void afterLogin() {
+//        L.e(TAG, "afterLogin");
+//        homeCamera = TuyaHomeSdk.getCameraInstance();
+//        if (homeCamera != null) {
+//            L.e(TAG, "CIS - 로그인 후 도어벨 리스너 서비스 시작 ");
+//            homeCamera.registerCameraPushListener(mTuyaGetBeanCallback);
+////            backgroundService();
+//        }
+//    }
 
     private static void afterLogout() {
         L.e(TAG, "afterLogout");
@@ -155,7 +183,7 @@ public class LoginHelper extends Activity {
         }
         try {
             ActivityUtils.gotoActivity((Activity) context, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
-        } catch (java.lang.ClassCastException e) {
+        } catch (java.lang.ClassCastException ignored) {
         }
     }
 
