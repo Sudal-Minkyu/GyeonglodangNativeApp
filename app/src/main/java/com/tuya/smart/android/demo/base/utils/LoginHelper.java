@@ -153,10 +153,10 @@ public class LoginHelper extends Activity{
 
     public static void afterLogin(Context context) {
         mcontext = context;
-        L.e(TAG, "afterLogin");
+        Log.e(TAG, "afterLogin");
         homeCamera = TuyaHomeSdk.getCameraInstance();
         if (homeCamera != null) {
-            L.e(TAG, "CIS - 로그인 후 도어벨 리스너 서비스 시작 ");
+            Log.e(TAG, "KMK - 로그인 후 도어벨 리스너 서비스 시작 ");
             homeCamera.registerCameraPushListener(mTuyaGetBeanCallback);
         }
     }

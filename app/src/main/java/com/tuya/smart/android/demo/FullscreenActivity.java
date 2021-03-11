@@ -61,6 +61,7 @@ public class FullscreenActivity extends Activity {
 
     private static final String TAG = FullscreenActivity.class.getSimpleName();
     private DecryptImageView mSnapshot;
+    private boolean media = true;
 
     private void ShowPicture(CameraMessageBean cameraMessageBean) {
         String attachPics = cameraMessageBean.getAttachPics();
@@ -92,15 +93,20 @@ public class FullscreenActivity extends Activity {
     protected void onResume() {
         super.onResume();
         //진동울리기
-
-        initVibrator();
-        initMedia();
+//        initVibrator();
+        if(hasVibrator) {
+            EnableVibrator();
+        }
+        if(media) {
+            initMedia();
+        }
     }
 
     /**
      * 미디어플레이어 초기화
      */
     private void initMedia() {
+        media = false;
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.doorbell);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
@@ -108,16 +114,19 @@ public class FullscreenActivity extends Activity {
 
     @Override
     public void onUserLeaveHint() {
+        Log.e(TAG, "KMK - 전원버튼클릭 ");
+        media = true;
         mediaPlayer.stop();
-        hasVibrator = false;
+        hasVibrator = true;
+        DisableVibrator();
     }
 
     /**
      * 진동 초기화
      */
     private void initVibrator() {
-        ShowVibrator(false);
-        ShowVibrator(true);
+//        ShowVibrator(false);
+//        ShowVibrator(true);
     }
 
     /**
@@ -125,22 +134,22 @@ public class FullscreenActivity extends Activity {
      *
      * @param isShowing 활성화 여부
      */
-    private void ShowVibrator(boolean isShowing) {
-        if (isShowing) {
-            EnableVibrator();
-        } else {
-            DisableVibrator();
-        }
-    }
+//    private void ShowVibrator(boolean isShowing) {
+//        if (isShowing) {
+//            EnableVibrator();
+//        } else {
+//            DisableVibrator();
+//        }
+//    }
 
-    private boolean hasVibrator; // 진동여부
+    private boolean hasVibrator = true; // 진동여부
 
     /**
      * 진동 활성화
      */
     private void EnableVibrator() {
-        if (!hasVibrator) {
-            hasVibrator = true;
+        if (hasVibrator) {
+            hasVibrator = false;
             ((TuyaSmartApp) TuyaSmartApp.getAppContext()).vibrator.vibrate(new long[]{100, 1000, 100, 500, 100, 500, 100, 1000}, 0); // 무한진동오게하기
         }
     }
@@ -149,14 +158,15 @@ public class FullscreenActivity extends Activity {
      * 진동 비 활성화
      */
     private void DisableVibrator() {
-        if (((TuyaSmartApp) TuyaSmartApp.getAppContext()) != null)
+        if (TuyaSmartApp.getAppContext() != null) {
             ((TuyaSmartApp) TuyaSmartApp.getAppContext()).vibrator.cancel();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        DisableVibrator();
+//        DisableVibrator();
     }
 
     private MediaPlayer mediaPlayer;
@@ -167,7 +177,12 @@ public class FullscreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_fullscreen);
-
+        if(media) {
+            initMedia();
+        }
+        if(hasVibrator) {
+            EnableVibrator();
+        }
         mSnapshot = (DecryptImageView) findViewById(R.id.call_Icon);
         devId = getIntent().getStringExtra(INTENT_DEVID);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -183,7 +198,8 @@ public class FullscreenActivity extends Activity {
                     System.out.println("인텐트 : " + intent.getAction());
                     System.out.println("전원버튼 클릭 (꺼짐)");
                     mediaPlayer.stop();
-                    hasVibrator = false;
+                    hasVibrator = true;
+                    media = true;
                 }
             }
         };
@@ -200,9 +216,9 @@ public class FullscreenActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-
                 DisableVibrator();
-
+                hasVibrator = true;
+                media = true;
                 mediaPlayer.stop();
                 mediaPlayer.reset();
 
@@ -219,7 +235,8 @@ public class FullscreenActivity extends Activity {
                 Constant.finishActivity();
                 finish();
                 DisableVibrator();
-
+                hasVibrator = true;
+                media = true;
                 mediaPlayer.stop();
                 mediaPlayer.reset();
                 Intent intent = new Intent(FullscreenActivity.this, DoorbellActivity.class)
@@ -398,7 +415,7 @@ public class FullscreenActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        hasVibrator = false; // 진동상태 해제
+        hasVibrator = true; // 진동상태 해제
 
         if(scrOffReceiver!=null) {
             unregisterReceiver(scrOffReceiver);
