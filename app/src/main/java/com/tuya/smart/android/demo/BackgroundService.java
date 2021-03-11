@@ -142,7 +142,8 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
 //                    if (homeCamera != null) {
 //                        homeCamera.registerCameraPushListener(BackgroundService.this::onResult);
 //                    }
-                    doorBellLogin.afterLogin(context);
+//                    doorBellLogin.afterLogin(context);
+                    LoginHelper.afterLogin(context);
                     Log.e(TAG, "CIS 백그라운드서비스 실행시 로그인 완료되면 수행");
                     deviceLoad();
                 }

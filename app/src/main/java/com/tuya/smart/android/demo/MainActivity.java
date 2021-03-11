@@ -16,6 +16,7 @@ import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
+import com.tuya.smart.android.demo.base.utils.ToastUtil;
 import com.tuya.smart.android.demo.camera.CameraPanelActivity;
 import com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter;
 import com.tuya.smart.android.demo.family.activity.IFamilyAddView;
@@ -51,7 +52,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
     private void initService() {
         new Handler(Objects.requireNonNull(Looper.myLooper())).postDelayed(() -> {
             boolean isServiceRunningCheck = ActivityUtils.isServiceRunningCheck(MainActivity.this);
-            Log.d(TAG, "isServiceRunningCheck = " + isServiceRunningCheck);
+            Log.e(TAG, "KMK 백그라운드 서비스가 돌고있나? isServiceRunningCheck : " + isServiceRunningCheck);
             if (isServiceRunningCheck) {
                 return;
             }
@@ -144,6 +145,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
 
                         @Override
                         public void onError(String errorCode, String errorMsg) {
+                            ToastUtil.showToast(MainActivity.this, "인터넷 연결상태가 좋지않습니다.\n잠시만 기다려주세요.");
                             Log.e(TAG, "KMK 메인액티비티 조회에러2 -> deviceLoad();함수실행");
                             deviceLoad();
                         }
@@ -153,6 +155,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
 
             @Override
             public void onError(String errorCode, String error) {
+                ToastUtil.showToast(MainActivity.this, "인터넷 연결상태가 좋지않습니다.\n잠시만 기다려주세요.");
                 Log.e(TAG, "KMK 메인액티비티 조회에러1 -> deviceLoad();함수실행");
                 deviceLoad();
             }

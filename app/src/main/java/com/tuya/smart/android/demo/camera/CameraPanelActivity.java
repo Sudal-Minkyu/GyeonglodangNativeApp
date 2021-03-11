@@ -37,6 +37,7 @@ import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.github.florent37.tutoshowcase.TutoShowcase;
 import com.tuya.smart.android.common.utils.L;
+import com.tuya.smart.android.demo.Foreground;
 import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
@@ -65,6 +66,7 @@ import com.tuya.smart.sdk.api.IResultCallback;
 import com.tuyasmart.camera.devicecontrol.ITuyaCameraDevice;
 import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
 import com.tuyasmart.camera.devicecontrol.api.ITuyaCameraDeviceControlCallback;
+import com.tuyasmart.camera.devicecontrol.bean.DpPIRSwitch;
 import com.tuyasmart.camera.devicecontrol.bean.DpPTZControl;
 import com.tuyasmart.camera.devicecontrol.bean.DpPTZStop;
 import com.tuyasmart.camera.devicecontrol.bean.DpWirelessBatterylock;
@@ -348,6 +350,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         }
 
         // TODO:  전원버튼누를때, 액션 카메라절전모드들어가기, 카메라키기
+        boolean isBackground = Foreground.isBackground();
+
         scrOffReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -377,6 +381,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         };
+
 
         // TODO: IntentFilter에 Action 등록
         scrFilter = new IntentFilter();
@@ -781,11 +786,10 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                 });
                 mDeviceControl.publishCameraDps(DpWirelessElectricity.ID, null);
                 mDeviceControl.publishCameraDps(DpWirelessBatterylock.ID, true);
-                mDeviceControl.publishCameraDps(DpWirelessLowpower.ID, 20);
+                mDeviceControl.publishCameraDps(DpWirelessLowpower.ID, 50);
                 mDeviceControl.publishCameraDps(DpWirelessPowermode.ID, null);
+                mDeviceControl.publishCameraDps(DpPIRSwitch.ID, "3");
                 break;
-
-
             default:
                 break;
         }

@@ -82,12 +82,13 @@ public class LoginPresenter extends BasePresenter {
 
     @Override
     public boolean handleMessage(Message msg) {
+
         switch (msg.what) {
             case MSG_LOGIN_SUCCESS:
                 // 로그인 성공
                 mView.modelResult(msg.what, null);
 //                Constant.finishActivity();
-//                LoginHelper.afterLogin();
+                LoginHelper.afterLogin(mContext);
 //                ActivityUtils.gotoHomeActivity(mContext); // 기존메인페이지
                 ActivityUtils.gotoMainActivity(mContext); // 스플레쉬액티비티 실행 -> 최초로그인후 나오는화면
 //                ActivityUtils.gotoMainActivity(mContext);

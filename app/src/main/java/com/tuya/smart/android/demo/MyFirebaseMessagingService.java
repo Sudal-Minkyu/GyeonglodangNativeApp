@@ -47,9 +47,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
-        boolean isBackground = Foreground.isBackground();
+//        boolean isBackground = Foreground.isBackground();
 
-        if (remoteMessage.getData().size() > 0 && !isBackground) {
+        if (remoteMessage.getData().size() > 0) {
             sendNotification(remoteMessage);
         }
 //        else{

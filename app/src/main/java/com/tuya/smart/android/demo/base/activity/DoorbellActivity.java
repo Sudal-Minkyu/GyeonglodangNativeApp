@@ -48,7 +48,7 @@ public class DoorbellActivity extends Activity {
                     ActivityUtils.gotoActivity(DoorbellActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
                 }
             }
-        }, 500); //3초 뒤에 Runner객체 실행하도록 함
+        }, 1000); //3초 뒤에 Runner객체 실행하도록 함
 
     }
 

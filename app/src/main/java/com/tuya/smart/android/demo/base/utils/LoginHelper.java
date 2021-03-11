@@ -39,11 +39,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class LoginHelper {
+public class LoginHelper extends Activity{
 
     private static final String TAG = "LoginHelper";
     private static ITuyaHomeCamera homeCamera;
     private static URL obj;
+    private static Context mcontext;
 
     static {
         try {
@@ -53,16 +54,15 @@ public class LoginHelper {
         }
     }
 
-//    private void WakeUpMoveFullScreen() {
-//        Log.e(TAG, "KMK WakeUpMoveFullScreen");
-//        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-//        Date t = new Date();
-//        t.setTime(java.lang.System.currentTimeMillis() + 1000);
-//        AlarmManagerCompat.setAlarmClock(manager, t.getTime(), pendingIntent, pendingIntent);
-//    }
+    private static void WakeUpMoveFullScreen() {
+        Log.e(TAG, "KMK LoginHelper WakeUpMoveFullScreen");
+        AlarmManager manager = (AlarmManager)mcontext.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(mcontext.getApplicationContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext.getApplicationContext(), 0, intent, 0);
+        Date t = new Date();
+        t.setTime(java.lang.System.currentTimeMillis() + 1000);
+        AlarmManagerCompat.setAlarmClock(manager, t.getTime(), pendingIntent, pendingIntent);
+    }
 
     private static final ITuyaGetBeanCallback<CameraPushDataBean> mTuyaGetBeanCallback = o -> {
         Log.e(TAG, "KMK 도어벨 클릭");
@@ -75,10 +75,7 @@ public class LoginHelper {
 
         if (isBackground) {
             Log.e(TAG, "KMK 현재 백그라운드 상태입니다.");
-//            firebaseMessagingService.WakeUpMoveFullScreen(context,"알람아 가봐");
-//            WakeUpMoveFullScreen();
-//            WakeUpMoveFullScreen();
-
+            WakeUpMoveFullScreen();
         } else {
             Log.e(TAG, "KMK 현재 도x어벨화면 상태입니다.");
 
@@ -154,15 +151,15 @@ public class LoginHelper {
         }
     }
 
-//    public static void afterLogin() {
-//        L.e(TAG, "afterLogin");
-//        homeCamera = TuyaHomeSdk.getCameraInstance();
-//        if (homeCamera != null) {
-//            L.e(TAG, "CIS - 로그인 후 도어벨 리스너 서비스 시작 ");
-//            homeCamera.registerCameraPushListener(mTuyaGetBeanCallback);
-////            backgroundService();
-//        }
-//    }
+    public static void afterLogin(Context context) {
+        mcontext = context;
+        L.e(TAG, "afterLogin");
+        homeCamera = TuyaHomeSdk.getCameraInstance();
+        if (homeCamera != null) {
+            L.e(TAG, "CIS - 로그인 후 도어벨 리스너 서비스 시작 ");
+            homeCamera.registerCameraPushListener(mTuyaGetBeanCallback);
+        }
+    }
 
     private static void afterLogout() {
         L.e(TAG, "afterLogout");
