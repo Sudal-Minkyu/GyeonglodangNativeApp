@@ -17,7 +17,7 @@ import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BrowserActivity;
 import com.tuya.smart.android.demo.base.activity.HomeActivity;
-import com.tuya.smart.android.demo.base.activity.SplashActivity;
+//import com.tuya.smart.android.demo.base.activity.SplashActivity;
 import com.tuya.smart.android.demo.config.CommonConfig;
 import com.tuya.smart.sdk.TuyaSdk;
 
@@ -108,11 +108,17 @@ public class ActivityUtils {
         overridePendingTransition(activity, direction);
     }
 
-    public static void startActivityForResult(Activity activity, Intent intent, int backCode, int direction, boolean finishLastActivity) {
-        if (activity == null) return;
+    private static final String TAG = "ActivityUtils";
+    public static void startActivityForResult(Activity activity, Intent intent, int backCode, int direction) {
+        Log.e(TAG, "KMK activity : "+activity);
+        if (activity == null) {
+            Log.e(TAG, "KMK activity 가 널입니다.");
+            return;
+        }
+        Log.e(TAG, "KMK intent : "+intent);
+        Log.e(TAG, "KMK backCode : "+backCode);
+
         activity.startActivityForResult(intent, backCode);
-        if (finishLastActivity) activity.finish();
-        overridePendingTransition(activity, direction);
     }
 
     public static void back(Activity activity) {
@@ -154,11 +160,11 @@ public class ActivityUtils {
         startActivity(context, intent, ANIMATE_NONE, true);
     }
 
-    public static void gotoSplashActivity(Activity context) {
-        Intent intent = new Intent(context, SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(context, intent, ANIMATE_NONE, true);
-    }
+//    public static void gotoSplashActivity(Activity context) {
+//        Intent intent = new Intent(context, SplashActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        startActivity(context, intent, ANIMATE_NONE, true);
+//    }
 
     public static void gotoMainActivity(Activity context) {
         Intent intent = new Intent(context, MainActivity.class);

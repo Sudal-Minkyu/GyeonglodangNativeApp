@@ -115,6 +115,20 @@
         android:layout_height="1px"
         android:layout_marginTop="@dimen/mg_30"
         android:background="?attr/list_line_color" />
+
+    <Button
+        android:id="@+id/btn_passwordchange"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ty_cell_height"
+        android:layout_marginTop="@dimen/mg_20"
+        android:background="@drawable/bg_button_selector"
+        android:gravity="center"
+        android:text="@string/ty_change_keyword"
+        android:textAllCaps="false"
+        android:textColor="?attr/navbar_font_color"
+        android:textSize="@dimen/ts_16"
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"

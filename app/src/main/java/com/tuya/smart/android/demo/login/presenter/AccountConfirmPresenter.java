@@ -2,27 +2,20 @@ package com.tuya.smart.android.demo.login.presenter;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.tuya.smart.android.base.utils.PreferencesUtil;
-import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
-import com.tuya.smart.android.demo.base.utils.DialogUtil;
-import com.tuya.smart.android.demo.camera.CameraPanelActivity;
-import com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter;
-import com.tuya.smart.android.demo.family.presenter.FamilyAddPresenter;
-import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
+import com.tuya.smart.android.demo.base.utils.DialogUtil;
 import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
 import com.tuya.smart.android.demo.login.IAccountConfirmView;
-import com.tuya.smart.android.demo.login.activity.LoginActivity;
+import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
 import com.tuya.smart.android.mvp.bean.Result;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.android.user.api.ILoginCallback;
@@ -31,19 +24,7 @@ import com.tuya.smart.android.user.api.IResetPasswordCallback;
 import com.tuya.smart.android.user.api.IValidateCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
-import com.tuya.smart.home.sdk.api.ITuyaHomeStatusListener;
-import com.tuya.smart.home.sdk.bean.HomeBean;
-import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
-import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
 import com.tuya.smart.sdk.api.IResultCallback;
-import com.tuyasmart.camera.devicecontrol.ITuyaCameraDevice;
-import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.tuya.smart.android.demo.login.activity.AccountConfirmActivity.MODE_REGISTER;
 
@@ -51,7 +32,6 @@ import static com.tuya.smart.android.demo.login.activity.AccountConfirmActivity.
  * Created by lee on 16/6/3.
  */
 public class AccountConfirmPresenter extends BasePresenter {
-    private static final String TAG = "AccountConfirmPresenter";
 
     public static final int MSG_SEND_VALIDATE_CODE_SUCCESS = 12;
     public static final int MSG_SEND_VALIDATE_CODE_ERROR = 13;
@@ -63,7 +43,7 @@ public class AccountConfirmPresenter extends BasePresenter {
 
     private static final int GET_VALIDATE_CODE_PERIOD = 60 * 1000;
 
-    private IAccountConfirmView mView;
+    private final IAccountConfirmView mView;
 
 
     private String mCountryCode;
@@ -71,8 +51,7 @@ public class AccountConfirmPresenter extends BasePresenter {
     private String mEmail;
 
     protected boolean mSend;
-    private CountDownTimer mCountDownTimer;
-    private Activity mContext;
+    private final Activity mContext;
 
     IResultCallback iResultCallback = new IResultCallback() {
         @Override
@@ -85,7 +64,7 @@ public class AccountConfirmPresenter extends BasePresenter {
             mHandler.sendEmptyMessage(MSG_SEND_VALIDATE_CODE_SUCCESS);
         }
     };
-    private IValidateCallback mIValidateCallback = new IValidateCallback() {
+    private final IValidateCallback mIValidateCallback = new IValidateCallback() {
         @Override
         public void onSuccess() {
             mHandler.sendEmptyMessage(MSG_SEND_VALIDATE_CODE_SUCCESS);
@@ -97,7 +76,7 @@ public class AccountConfirmPresenter extends BasePresenter {
         }
     };
 
-    private IResetPasswordCallback mIResetPasswordCallback = new IResetPasswordCallback() {
+    private final IResetPasswordCallback mIResetPasswordCallback = new IResetPasswordCallback() {
         @Override
         public void onSuccess() {
             mHandler.sendEmptyMessage(MSG_RESET_PASSWORD_SUCC);
@@ -110,20 +89,7 @@ public class AccountConfirmPresenter extends BasePresenter {
         }
     };
 
-    private IRegisterCallback mIRegisterCallback = new IRegisterCallback() {
-        @Override
-        public void onSuccess(User user) {
-            mHandler.sendEmptyMessage(MSG_REGISTER_SUCC);
-        }
-
-        @Override
-        public void onError(String errorCode, String errorMsg) {
-            Message msg = MessageUtil.getCallFailMessage(MSG_REGISTER_FAIL, errorCode, errorMsg);
-            mHandler.sendMessage(msg);
-        }
-    };
-
-    private ILoginCallback mILoginCallback = new ILoginCallback() {
+    private final ILoginCallback mILoginCallback = new ILoginCallback() {
         @Override
         public void onSuccess(User user) {
             loginSuccess();
@@ -220,11 +186,29 @@ public class AccountConfirmPresenter extends BasePresenter {
         }
 
         switch (mView.getMode()) {
+            //비밀번호 변경
             case AccountConfirmActivity.MODE_CHANGE_PASSWORD:
-                resetPassword();
+                DialogUtil.simpleConfirmDialog(mContext, "비밀번호변경", "정말 비밀번호를 변경 하시겠습니까?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (DialogInterface.BUTTON_POSITIVE == i) {
+                            resetPassword();
+                        }
+                        dialogInterface.dismiss();
+                    }
+                });
                 break;
+            //비밀번호 찾기
             case AccountConfirmActivity.MODE_FORGET_PASSWORD:
-                resetPassword();
+                DialogUtil.simpleConfirmDialog(mContext, "비밀번호찾기", "작성하신 비밀번호로 변경됩니다.", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (DialogInterface.BUTTON_POSITIVE == i) {
+                            resetPassword();
+                        }
+                        dialogInterface.dismiss();
+                    }
+                });
                 break;
             case MODE_REGISTER:
                 register();
@@ -242,7 +226,6 @@ public class AccountConfirmPresenter extends BasePresenter {
             @Override
             public void onError (String code, String error) {
                 Toast.makeText (mContext, "회원가입 실패, 다시 시도해주세요." + error, Toast.LENGTH_SHORT).show ();
-                return;
             }
         });
 //        switch (mView.getPlatform()) {
@@ -257,15 +240,16 @@ public class AccountConfirmPresenter extends BasePresenter {
     }
 
     private void resetPassword() {
-        switch (mView.getPlatform()) {
-            case AccountConfirmActivity.PLATFORM_EMAIL:
-                TuyaHomeSdk.getUserInstance().resetEmailPassword(mCountryCode, mEmail, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
-                break;
+//        switch (mView.getPlatform()) {
 
-            case AccountConfirmActivity.PLATFORM_PHONE:
-                TuyaHomeSdk.getUserInstance().resetPhonePassword(mCountryCode, mPhoneNum, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
-                break;
-        }
+//            case AccountConfirmActivity.PLATFORM_EMAIL:
+                TuyaHomeSdk.getUserInstance().resetEmailPassword(mCountryCode, mEmail, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
+//                break;
+
+//            case AccountConfirmActivity.PLATFORM_PHONE:
+//                TuyaHomeSdk.getUserInstance().resetPhonePassword(mCountryCode, mPhoneNum, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
+//                break;
+//        }
     }
 
     private void loginWithPhoneCode() {
@@ -273,16 +257,11 @@ public class AccountConfirmPresenter extends BasePresenter {
     }
 
     private void loginWithPassword() {
-        if (mView.getPlatform() == AccountConfirmActivity.PLATFORM_PHONE) {
-            if (mView.getMode() == AccountConfirmActivity.MODE_FORGET_PASSWORD) {
-                TuyaHomeSdk.getUserInstance().loginWithPhonePassword(mCountryCode, mPhoneNum, mView.getPassword(), mILoginCallback);
-            } else {
-                TuyaHomeSdk.getUserInstance().loginWithPhonePassword(mCountryCode, mPhoneNum, mView.getPassword(), mILoginCallback);
-            }
-
-        } else {
+//        if (mView.getPlatform() == AccountConfirmActivity.PLATFORM_PHONE) {
+//            TuyaHomeSdk.getUserInstance().loginWithPhonePassword(mCountryCode, mPhoneNum, mView.getPassword(), mILoginCallback);
+//        } else {
             TuyaHomeSdk.getUserInstance().loginWithEmail(mCountryCode, mEmail, mView.getPassword(), mILoginCallback);
-        }
+//        }
     }
 
     @Override
@@ -303,14 +282,11 @@ public class AccountConfirmPresenter extends BasePresenter {
                 if ("IS_EXISTS".equals(result.getErrorCode())) {
                     if (AccountConfirmActivity.PLATFORM_PHONE == mView.getPlatform()) {
                         DialogUtil.simpleConfirmDialog(mContext, mContext.getString(R.string.user_exists), mContext.getString(R.string.direct_login),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                                            loginWithPhoneCode();
-                                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                            resetPassword();
-                                        }
+                                (dialog, which) -> {
+                                    if (which == DialogInterface.BUTTON_POSITIVE) {
+                                        loginWithPhoneCode();
+                                    } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                        resetPassword();
                                     }
                                 });
                     } else {
@@ -322,17 +298,15 @@ public class AccountConfirmPresenter extends BasePresenter {
                 break;
 
             case MSG_RESET_PASSWORD_SUCC:
+                // 비밀번호 리셋 로직
                 if (mView.getMode() == AccountConfirmActivity.MODE_CHANGE_PASSWORD) {
-                    DialogUtil.simpleSmartDialog(mContext, R.string.modify_password_success, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LoginHelper.reLogin(mContext, false);
-                        }
-                    });
-
+                    // 비밀번호 변경 로직
+                    Toast.makeText(mContext, "비밀번호가 변경되었습니다.\n다시 로그인해주세요.", Toast.LENGTH_LONG).show();
+                    LoginHelper.reLogin(mContext, false);
                 } else {
-                    // 找回/更换 密码成功直接进入app
-                    loginWithPassword();
+                    // 비밀번호 찾기 로직
+                    Toast.makeText(mContext, "작성하신 비밀번호로 변경되었습니다.\n다시 로그인해주세요.", Toast.LENGTH_LONG).show();
+                    LoginHelper.reLogin(mContext, false);
                 }
 
                 break;
@@ -362,7 +336,7 @@ public class AccountConfirmPresenter extends BasePresenter {
     }
 
     private void buildCountDown() {
-        mCountDownTimer = new Countdown(GET_VALIDATE_CODE_PERIOD, 1000);
+        CountDownTimer mCountDownTimer = new Countdown(GET_VALIDATE_CODE_PERIOD, 1000);
         mCountDownTimer.start();
         mView.disableGetValidateCode();
     }

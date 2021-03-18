@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_P2P_TYPE, p2pType);
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICESTART, "true");
+                                Log.e(TAG, "KMK 장비아이디 : "+bean.getDeviceList().get(0).getDevId());
 //                                mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
                                 Log.e(TAG, "KMK 앱 처음 실행 카메라를 켭니다.");
                                 int crcsum = CRC32.getChecksum(bean.getDeviceList().get(0).getLocalKey().getBytes());

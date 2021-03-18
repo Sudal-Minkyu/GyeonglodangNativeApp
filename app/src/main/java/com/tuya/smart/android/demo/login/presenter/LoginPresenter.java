@@ -7,7 +7,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.tuya.smart.android.common.utils.ValidatorUtil;
-import com.tuya.smart.android.demo.base.activity.SplashActivity;
+//import com.tuya.smart.android.demo.base.activity.SplashActivity;
 import com.tuya.smart.android.demo.camera.CameraPanelActivity;
 import com.tuya.smart.android.demo.login.activity.CountryListActivity;
 import com.tuya.smart.android.demo.base.app.Constant;

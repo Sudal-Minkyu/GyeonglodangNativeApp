@@ -3,6 +3,7 @@ package com.tuya.smart.android.demo.base.presenter;
 import android.app.Activity;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
@@ -77,15 +78,19 @@ public class PersonalInfoPresenter extends BasePresenter {
         return super.handleMessage(msg);
     }
 
+    private static final String TAG = "PersonalInfoPresenter";
     public void resetPassword() {
         User user = TuyaHomeSdk.getUserInstance().getUser();
+        Log.e(TAG, "KMK 비밀번호변경 유저이메일 : " + user.getEmail());
+        Log.e(TAG, "KMK 비밀번호변경 국가코드 : " + user.getPhoneCode());
         int accountType;
         String strAccount;
-        if (!TextUtils.isEmpty(user.getMobile())) {
-            accountType = AccountConfirmActivity.PLATFORM_PHONE;
-            strAccount = CommonUtil.getPhoneNumberFormMobile(user.getMobile());
-            AccountConfirmActivity.gotoAccountConfirmActivityForResult(mActivity, strAccount, user.getPhoneCode(), AccountConfirmActivity.MODE_CHANGE_PASSWORD, accountType, 0);
-        } else if (!TextUtils.isEmpty(user.getEmail())) {
+//        if (!TextUtils.isEmpty(user.getMobile())) {
+//            accountType = AccountConfirmActivity.PLATFORM_PHONE;
+//            strAccount = CommonUtil.getPhoneNumberFormMobile(user.getMobile());
+//            AccountConfirmActivity.gotoAccountConfirmActivityForResult(mActivity, strAccount, user.getPhoneCode(), AccountConfirmActivity.MODE_CHANGE_PASSWORD, accountType, 0);
+//        } else
+        if (!TextUtils.isEmpty(user.getEmail())) {
             accountType = AccountConfirmActivity.PLATFORM_EMAIL;
             strAccount = user.getEmail();
             AccountConfirmActivity.gotoAccountConfirmActivityForResult(mActivity, strAccount, user.getPhoneCode(), AccountConfirmActivity.MODE_CHANGE_PASSWORD, accountType, 0);

@@ -16,11 +16,10 @@ import android.widget.TextView;
 
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
-import com.tuya.smart.android.demo.family.presenter.FamilyAddPresenter;
-import com.tuya.smart.android.demo.login.presenter.AccountConfirmPresenter;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
 import com.tuya.smart.android.demo.login.IAccountConfirmView;
+import com.tuya.smart.android.demo.login.presenter.AccountConfirmPresenter;
 import com.tuya.smart.android.mvp.bean.Result;
 
 /**
@@ -52,7 +51,7 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
     private int mPlatform = PLATFORM_PHONE;
     private boolean passwordOn = true;
 
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.bt_confirm) {
@@ -71,7 +70,7 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT_PLATFORM, accountType);
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT_CONFIRM_MODE, mode);
-        ActivityUtils.startActivityForResult(mContext, intent, requestCode, 0, false);
+        ActivityUtils.startActivityForResult(mContext, intent, requestCode, 0);
     }
 
 
@@ -119,19 +118,19 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
     }
 
     private void initView() {
-        mValidateCode = (EditText) findViewById(R.id.validate_code);
-        mETPassword = (EditText) findViewById(R.id.et_password);
+        mValidateCode = findViewById(R.id.validate_code);
+        mETPassword = findViewById(R.id.et_password);
         mETPassword.addTextChangedListener(this);
-        mGetValidateCode = (Button) findViewById(R.id.get_validate_code);
+        mGetValidateCode = findViewById(R.id.get_validate_code);
         mGetValidateCode.setOnClickListener(mOnClickListener);
 
-        mBtConfirm = (Button) findViewById(R.id.bt_confirm);
+        mBtConfirm = findViewById(R.id.bt_confirm);
         mBtConfirm.setOnClickListener(mOnClickListener);
         mBtConfirm.setEnabled(false);
-        mPasswordSwitch = (ImageButton) findViewById(R.id.bt_password_switch);
+        mPasswordSwitch = findViewById(R.id.bt_password_switch);
         mPasswordSwitch.setOnClickListener(mOnClickListener);
 
-        mTip = (TextView) findViewById(R.id.tv_validate_tip);
+        mTip = findViewById(R.id.tv_validate_tip);
 
 
         if (mMode == MODE_CHANGE_PASSWORD) {
@@ -178,12 +177,8 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
     public void afterTextChanged(Editable s) {
         String password = mETPassword.getText().toString();
 
-        if (TextUtils.isEmpty(password)) {
-            mBtConfirm.setEnabled(false);
-        } else {
-            // TODO: 비밀번호 판단 로직 추가 여부
-            mBtConfirm.setEnabled(true);
-        }
+        // TODO: 비밀번호 판단 로직 추가 여부
+        mBtConfirm.setEnabled(!TextUtils.isEmpty(password));
     }
 
     @Override

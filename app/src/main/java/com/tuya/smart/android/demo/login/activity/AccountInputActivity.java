@@ -59,7 +59,7 @@ public class AccountInputActivity extends BaseActivity implements TextWatcher, I
     public static void gotoAccountInputActivity(Activity activity, int mode, int requestCode) {
         Intent intent = new Intent(activity, AccountInputActivity.class);
         intent.putExtra(EXTRA_ACCOUNT_INPUT_MODE, mode);
-        ActivityUtils.startActivityForResult(activity, intent, requestCode, 0, false);
+        ActivityUtils.startActivityForResult(activity, intent, requestCode, 0);
 
     }
 

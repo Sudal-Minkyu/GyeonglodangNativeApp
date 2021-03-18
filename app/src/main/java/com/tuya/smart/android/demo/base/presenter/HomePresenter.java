@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.DoorbellActivity;
-import com.tuya.smart.android.demo.base.activity.SplashActivity;
+//import com.tuya.smart.android.demo.base.activity.SplashActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.fragment.DeviceListFragment;
 import com.tuya.smart.android.demo.base.fragment.PersonalCenterFragment;

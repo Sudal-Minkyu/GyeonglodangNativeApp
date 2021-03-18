@@ -31,13 +31,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.github.florent37.tutoshowcase.TutoShowcase;
 import com.tuya.smart.android.common.utils.L;
-import com.tuya.smart.android.demo.Foreground;
 import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
@@ -276,14 +276,14 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         } else {
             Log.e(TAG, "KMK 카메라연결실패 다시 새로고침합니다.");
             ProgressUtil.hideLoading();
+//            ToastUtil.shortToast(CameraPanelActivity.this, "카메라 연결상태가 좋지않습니다.\n잠시만 기다려주세요.");
             ToastUtil.shortToast(CameraPanelActivity.this, "카메라 연결상태가 좋지않습니다.\n잠시후 상단의 새로고침 버튼을 눌러주세요.");
 //            OnRefresh();
         }
     }
 
     private IntentFilter scrFilter;
-    private BroadcastReceiver scrOffReceiver;
-    private int currentPos = 0;
+    private BroadcastReceiver scrOffReceiver2;
     /**
      * the lower power Doorbell device change to true
      */
@@ -294,6 +294,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         nickName = mPersonalInfoPresenter.getNickName();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -350,9 +351,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         }
 
         // TODO:  전원버튼누를때, 액션 카메라절전모드들어가기, 카메라키기
-        boolean isBackground = Foreground.isBackground();
-
-        scrOffReceiver = new BroadcastReceiver() {
+        scrOffReceiver2 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("android.intent.action.SCREEN_OFF")) {
@@ -363,22 +362,22 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                         Log.e(TAG, "KMK 전원버튼 클릭 devicestart : " + devicestart);
                         Log.e(TAG, "KMK 화면끄기");
                     }
-                } else if (intent.getAction().equals("android.intent.action.SCREEN_ON")) {
-//                    onResume();
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                        if (pm.isDeviceIdleMode()) {
-                            // the device is now in doze mode
-                            Log.e(TAG, "KMK 화면키기");
-                            Intent startMain = new Intent(Intent.ACTION_MAIN);
-                            startMain.addCategory(Intent.CATEGORY_HOME);
-                            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(startMain);
-                        }
-                    }
-//                    onResume();
                 }
+//                else if (intent.getAction().equals("android.intent.action.SCREEN_ON")) {
+//
+//                } else {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//                        if (pm.isDeviceIdleMode()) {
+//                            // the device is now in doze mode
+//                            Log.e(TAG, "KMK 화면키기");
+//                            Intent startMain = new Intent(Intent.ACTION_MAIN);
+//                            startMain.addCategory(Intent.CATEGORY_HOME);
+//                            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            context.startActivity(startMain);
+//                        }
+//                    }
+//                }
             }
         };
 
@@ -388,7 +387,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         scrFilter.addAction(Intent.ACTION_SCREEN_OFF);
         scrFilter.addAction(Intent.ACTION_SCREEN_ON);
         scrFilter.addAction(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED);
-        registerReceiver(scrOffReceiver, scrFilter);
+        registerReceiver(scrOffReceiver2, scrFilter);
 
         device = getIntent().getStringExtra(DEVICE);
         callin = getIntent().getStringExtra(CALL);
@@ -461,8 +460,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Intent intent;
-//                    Log.i("장비아이디 : ", devId);
-//                    Log.i("로컬아이디 : ", localKey);
                     switch (item.getItemId()) {
                         case R.id.profile:  // TODO:  프로필
                             intent = new Intent(CameraPanelActivity.this, PersonalInfoActivity.class);
@@ -648,8 +645,9 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
         int width = getDisplayWidth(this);
         int height = width * ASPECT_RATIO_WIDTH / ASPECT_RATIO_HEIGHT;
-        // TODO:  기기별 높이해상도 : 450 갤럭시S7, 600 갤럭시S6
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height + 450); // 카메라 해상도?
+        // TODO:  기기별 높이해상도 : 갤럭시S7,갤럭시노트9 -> 450
+        // TODO:  기기별 높이해상도 : 갤럭시S6,LG폰 -> 600
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height + 600); // 카메라 해상도?
         layoutParams.addRule(RelativeLayout.BELOW, R.id.toolbar_view);
         findViewById(R.id.camera_video_view_Rl).setLayoutParams(layoutParams);
 
@@ -902,7 +900,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     Log.e(TAG, "KMK 버전이 Q이상 입니다.");
                     String destPath = getApplicationContext().getExternalFilesDir(null).getAbsolutePath();
                     String[] paths = destPath.split("Android", 2);
-                    String path = null;
+                    String path;
                     if (paths.length > 0) {
                         System.out.println(Arrays.toString(paths));
                         path = paths[0] + "DCIM/DoorBell/";
@@ -971,12 +969,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 String destPath = getApplicationContext().getExternalFilesDir(null).getAbsolutePath();
                 String[] paths = destPath.split("Android", 2);
-                String path = null;
+                String path;
                 if (paths.length > 0) {
-//                    Date date = new Date();
-//                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_");
-//                    String nowTime = dateFormat.format(date);
-
                     path = paths[0] + "DCIM/DoorBell/";
                     File folder = new File(path);
                     if (!folder.exists()) {

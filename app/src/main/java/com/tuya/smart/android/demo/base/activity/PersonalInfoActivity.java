@@ -113,11 +113,10 @@ public class PersonalInfoActivity extends BaseActivity implements IPersonalInfoV
         });
     }
 
-
-//    @OnClick(R.id.rl_reset_login_pwd)
-//    public void onClickResetPassword() {
-//        mPersonalInfoPresenter.resetPassword();
-//    }
+    @OnClick(R.id.btn_passwordchange)
+    public void onClickResetPassword() {
+        mPersonalInfoPresenter.resetPassword();
+    }
 
     @OnClick(R.id.btn_logout)
     public void logout() {
@@ -131,7 +130,6 @@ public class PersonalInfoActivity extends BaseActivity implements IPersonalInfoV
                 dialogInterface.dismiss();
             }
         });
-
     }
 
     @Override
