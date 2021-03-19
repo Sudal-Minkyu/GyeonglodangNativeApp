@@ -17,8 +17,8 @@ import java.util.List;
  * Created by letian on 16/8/4.
  */
 public class SchemaListAdapter extends BaseAdapter {
-    private List<SchemaBean> mSchemaBeen;
-    private LayoutInflater mInflater;
+    private final List<SchemaBean> mSchemaBeen;
+    private final LayoutInflater mInflater;
 
     public SchemaListAdapter(Context context) {
         mSchemaBeen = new ArrayList<>();
@@ -63,23 +63,23 @@ public class SchemaListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public class SchemaViewHolder extends ViewHolder<SchemaBean> {
+    public static class SchemaViewHolder extends ViewHolder<SchemaBean> {
         public TextView schemaName;
         public TextView schemaId;
-        private TextView schemaMode;
+        private final TextView schemaMode;
 
         public SchemaViewHolder(View contentView) {
             super(contentView);
-            schemaName = (TextView) contentView.findViewById(R.id.tv_name);
-            schemaId = (TextView) contentView.findViewById(R.id.tv_id);
-            schemaMode = (TextView) contentView.findViewById(R.id.tv_mode);
+            schemaName = contentView.findViewById(R.id.tv_name);
+            schemaId = contentView.findViewById(R.id.tv_id);
+            schemaMode = contentView.findViewById(R.id.tv_mode);
         }
 
         @Override
         public void initData(SchemaBean schemaBean) {
             schemaId.setText(schemaBean.getId());
             schemaName.setText(schemaBean.getName());
-            schemaMode.setText(schemaBean.getMode().toString());
+            schemaMode.setText(schemaBean.getMode());
         }
     }
 }

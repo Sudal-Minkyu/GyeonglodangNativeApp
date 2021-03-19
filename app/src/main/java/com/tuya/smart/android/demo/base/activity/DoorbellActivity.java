@@ -1,24 +1,18 @@
 package com.tuya.smart.android.demo.base.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.tuya.smart.android.base.utils.PreferencesUtil;
-import com.tuya.smart.android.common.utils.L;
-import com.tuya.smart.android.common.utils.TuyaUtil;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.app.Constant;
-import com.tuya.smart.android.demo.base.fragment.DeviceListFragment;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
-import com.tuya.smart.android.demo.base.utils.DialogUtil;
 import com.tuya.smart.android.demo.camera.CameraPanelActivity;
 import com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter;
 import com.tuya.smart.android.demo.login.activity.LoginActivity;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
-import com.tuya.smart.home.sdk.api.ITuyaHomeStatusListener;
 import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
@@ -39,19 +33,15 @@ public class DoorbellActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (TuyaHomeSdk.getUserInstance().isLogin()) {
-                    deviceLoad();
-                } else {
-                    ActivityUtils.gotoActivity(DoorbellActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
-                }
+        handler.postDelayed(() -> {
+            if (TuyaHomeSdk.getUserInstance().isLogin()) {
+                deviceLoad();
+            } else {
+                ActivityUtils.gotoActivity(DoorbellActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
             }
-        }, 1000); //3초 뒤에 Runner객체 실행하도록 함
+        }, 1000);
 
     }
-
 
     public void deviceLoad() {
         TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {

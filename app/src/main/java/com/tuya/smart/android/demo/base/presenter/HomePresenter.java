@@ -1,30 +1,15 @@
 package com.tuya.smart.android.demo.base.presenter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.tuya.smart.android.demo.MainActivity;
-import com.tuya.smart.android.demo.R;
-import com.tuya.smart.android.demo.base.activity.DoorbellActivity;
-//import com.tuya.smart.android.demo.base.activity.SplashActivity;
-import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.fragment.DeviceListFragment;
 import com.tuya.smart.android.demo.base.fragment.PersonalCenterFragment;
-import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
-import com.tuya.smart.android.demo.base.utils.DialogUtil;
 import com.tuya.smart.android.demo.base.view.IHomeView;
-import com.tuya.smart.android.demo.config.AddDeviceTypeActivity;
-import com.tuya.smart.android.demo.family.activity.FamilyAddActivity;
 import com.tuya.smart.android.demo.family.model.FamilyIndexModel;
 import com.tuya.smart.android.demo.family.model.IFamilyIndexModel;
-import com.tuya.smart.android.demo.family.presenter.FamilyAddPresenter;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.bean.HomeBean;
@@ -34,14 +19,11 @@ import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by letian on 16/7/18.
- */
+//import com.tuya.smart.android.demo.base.activity.SplashActivity;
+
 public class HomePresenter extends BasePresenter {
 
     public static final String TAG = "HomeKitPresenter";
-
-    public static final String TAB_FRGMENT = "TAB_FRGMENT";
 
     private IHomeView mHomeView;
     protected Activity mActivity;
@@ -94,50 +76,18 @@ public class HomePresenter extends BasePresenter {
         });
     }
 
-    private void checkParams() {
-//        List<String> checkRoomList = new ArrayList<>();
-//        mPresenter.addFamily("경로당",checkRoomList);
-    }
-
-    //添加设备
-    public void addDevice() {
-        final WifiManager mWifiManager = (WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (!mWifiManager.isWifiEnabled()) {
-            DialogUtil.simpleConfirmDialog(mActivity, mActivity.getString(R.string.open_wifi), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            mWifiManager.setWifiEnabled(true);
-                            gotoAddDevice();
-                            break;
-                    }
-                }
-            });
-        } else {
-            gotoAddDevice();
-        }
-    }
-
-    //个人中心
     public void showPersonalCenterPage() {
         showTab(TAB_PERSONAL_CENTER);
     }
 
-    //我的设备
     public void showMyDevicePage() {
         showTab(TAB_MY_DEVICE);
-    }
-
-    public void gotoAddDevice() {
-        ActivityUtils.gotoActivity(mActivity, AddDeviceTypeActivity.class, ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM, false);
     }
 
     public void showTab(int tab) {
         if (tab == mCurrentTab) {
             return;
         }
-
         mHomeView.offItem(mCurrentTab);
 
         mHomeView.onItem(tab);

@@ -59,7 +59,6 @@ public class AlertPickDialog {
         value = alertPickBean.getRangeValues().toArray(value);
         numberPicker.setDisplayedValues(value);
         numberPicker.setMaxValue(value.length - 1);
-        numberPicker.setValue(alertPickBean.getSelected());
         numberPicker.setWrapSelectorWheel(alertPickBean.isLoop());
     }
 

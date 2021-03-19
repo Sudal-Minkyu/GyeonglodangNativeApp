@@ -362,6 +362,7 @@
     <string name="operation_revise">수정</string>
     <string name="paramter_is_not_legal">잘못된 매개 변수</string>
     <string name="personal_center">프로필</string>
+    <string name="StringValue" translatable="false">이미지가 열리지 않습니다.</string>
     <string name="phone_number">전화번호</string>
     <string name="topic">Topic</string>
     <string name="phone_number_is_not_correct">잘못된 전화번호 입니다.</string>

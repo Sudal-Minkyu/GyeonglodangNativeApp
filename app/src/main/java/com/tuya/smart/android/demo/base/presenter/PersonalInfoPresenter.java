@@ -3,24 +3,17 @@ package com.tuya.smart.android.demo.base.presenter;
 import android.app.Activity;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.tuya.smart.android.demo.R;
-import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
-import com.tuya.smart.android.demo.personal.PersonalInfoModel;
-import com.tuya.smart.android.demo.base.utils.CommonUtil;
 import com.tuya.smart.android.demo.base.utils.ProgressUtil;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
+import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
 import com.tuya.smart.android.demo.personal.IPersonalInfoView;
+import com.tuya.smart.android.demo.personal.PersonalInfoModel;
 import com.tuya.smart.android.mvp.bean.Result;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 
-
-/**
- * Created by letian on 15/6/16.
- */
 public class PersonalInfoPresenter extends BasePresenter {
 
     private final Activity mActivity;
@@ -35,7 +28,6 @@ public class PersonalInfoPresenter extends BasePresenter {
     }
 
     public void reNickName(String titleName) {
-//        ProgressUtil.showLoading(mActivity, R.string.loading);
         mPersonalInfoModel.reNickName(titleName);
     }
 
@@ -51,10 +43,6 @@ public class PersonalInfoPresenter extends BasePresenter {
     public void logout() {
         mPersonalInfoModel.logout();
         mView.onLogout();
-    }
-
-    public String getMobile() {
-        return mPersonalInfoModel.getMobile();
     }
 
     @Override
@@ -78,18 +66,10 @@ public class PersonalInfoPresenter extends BasePresenter {
         return super.handleMessage(msg);
     }
 
-    private static final String TAG = "PersonalInfoPresenter";
     public void resetPassword() {
         User user = TuyaHomeSdk.getUserInstance().getUser();
-        Log.e(TAG, "KMK 비밀번호변경 유저이메일 : " + user.getEmail());
-        Log.e(TAG, "KMK 비밀번호변경 국가코드 : " + user.getPhoneCode());
         int accountType;
         String strAccount;
-//        if (!TextUtils.isEmpty(user.getMobile())) {
-//            accountType = AccountConfirmActivity.PLATFORM_PHONE;
-//            strAccount = CommonUtil.getPhoneNumberFormMobile(user.getMobile());
-//            AccountConfirmActivity.gotoAccountConfirmActivityForResult(mActivity, strAccount, user.getPhoneCode(), AccountConfirmActivity.MODE_CHANGE_PASSWORD, accountType, 0);
-//        } else
         if (!TextUtils.isEmpty(user.getEmail())) {
             accountType = AccountConfirmActivity.PLATFORM_EMAIL;
             strAccount = user.getEmail();

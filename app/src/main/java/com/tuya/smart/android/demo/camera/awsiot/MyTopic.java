@@ -28,8 +28,6 @@ public class MyTopic extends AWSIotTopic {
     @Override
     public void onMessage(AWSIotMessage message) {
         try {
-//            System.out.println("Subscribe topic :"+ message.getTopic() +"    Message : "+ message.getStringPayload());
-//            Log.e("받아오기 : ","받아오기 성공!");
             final JSONObject json = new JSONObject(message.getStringPayload());
             final String doordata = json.getString("door1");
             this.datasend(doordata);

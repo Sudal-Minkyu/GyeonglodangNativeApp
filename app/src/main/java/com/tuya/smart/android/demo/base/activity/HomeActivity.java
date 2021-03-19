@@ -153,11 +153,6 @@ public class HomeActivity extends BaseActivity implements IHomeView {
     }
 
     @Override
-    public boolean isContainFragment() {
-        return true;
-    }
-
-    @Override
     public void onItem(int id) {
         switch (id) {
             case HomePresenter.TAB_MY_DEVICE:
@@ -189,14 +184,6 @@ public class HomeActivity extends BaseActivity implements IHomeView {
                 mIvHomeCenter.setImageDrawable(VectorDrawable.getDrawable(TuyaSdk.getApplication(), R.drawable.ty_home_center));
                 break;
         }
-    }
-
-    @Override
-    public void goToFamilyEmptyActivity() {
-        ActivityUtils.gotoActivity(this,
-                FamilyEmptyActivity.class,
-                ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM,
-                false);
     }
 
     private class HomeFragmentAdapter extends FragmentPagerAdapter {

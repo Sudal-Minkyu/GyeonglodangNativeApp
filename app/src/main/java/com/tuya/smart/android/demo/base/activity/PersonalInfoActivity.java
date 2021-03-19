@@ -17,9 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-/**
- * Created by letian on 15/6/15.
- */
 public class PersonalInfoActivity extends BaseActivity implements IPersonalInfoView {
     private static final String TAG = PersonalInfoActivity.class.getSimpleName();
     private PersonalInfoPresenter mPersonalInfoPresenter;

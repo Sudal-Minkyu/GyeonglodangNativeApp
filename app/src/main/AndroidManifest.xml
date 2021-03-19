@@ -18,8 +18,6 @@
         <meta-data android:name="QUERY_LOG" android:value="true" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.tuya.smart.android.demo" />
 
-
-
         <activity
             android:name=".FullscreenActivity"
             android:launchMode="singleInstance"
@@ -27,11 +25,6 @@
         <!-- 안드로이드 부팅 이벤트 받기 : BroadcastReceiver -->
         <activity android:name=".camera.CameraCloudVideoActivity" />
         <activity android:name=".camera.SettingActivity" /> <!-- BackgroundService -->
-        <activity
-            android:name=".base.activity.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Splash.Theme"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".base.activity.DoorbellActivity"
@@ -47,16 +40,10 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".camera.BackgroundCameraPanelActivity"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.Transparent" />
-        <activity
-            android:name=".base.activity.BackgroundSplashActivity"
-            android:screenOrientation="unspecified"
-            android:theme="@style/Theme.Transparent" />
-
 
         <activity
             android:name=".device.CommonDeviceDebugActivity"
@@ -97,6 +84,11 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".base.activity.PersonalInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".base.activity.ImageViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash.Theme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -279,13 +271,13 @@
         <service
             android:name=".PersistentService"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
         <service
             android:name="org.eclipse.paho.android.service.MqttService"
             android:stopWithTask="false" />
         <service
             android:name="com.tuya.smart.android.hardware.service.GwBroadcastMonitorService"
-            android:exported="true"
+            android:exported="false"
             android:label="UDPService"
             android:process=":monitor">
             <intent-filter>
@@ -296,7 +288,8 @@
         </service> <!-- 서비스 태그 추가 -->
         <service
             android:name="com.tuya.smart.android.hardware.service.DevTransferService"
-            android:label="TCPService">
+            android:label="TCPService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="tuya.intent.action.tcp" />
 
@@ -305,10 +298,11 @@
         </service> <!-- [START fcm_disable_auto_init] -->
         <service
             android:name="com.tuya.smart.mqtt.MqttService"
-            android:stopWithTask="false"></service>
+            android:stopWithTask="false" />
         <service
             android:name=".MyFirebaseMessagingService"
-            android:stopWithTask="false">
+            android:stopWithTask="false"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

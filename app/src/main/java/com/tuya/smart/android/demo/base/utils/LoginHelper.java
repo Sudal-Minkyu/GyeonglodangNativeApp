@@ -5,13 +5,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.AlarmManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -20,7 +16,6 @@ import com.tuya.smart.android.camera.api.bean.CameraPushDataBean;
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.demo.AlarmReceiver;
 import com.tuya.smart.android.demo.Foreground;
-import com.tuya.smart.android.demo.MyFirebaseMessagingService;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.login.activity.LoginActivity;
@@ -174,7 +169,7 @@ public class LoginHelper extends Activity{
     }
 
     public static void reLogin(Context context, boolean tip) {
-        onLogout(context);
+        onLogout();
         if (tip) {
             ToastUtil.shortToast(context, R.string.login_session_expired);
         }
@@ -184,12 +179,12 @@ public class LoginHelper extends Activity{
         }
     }
 
-    private static void onLogout(Context context) {
+    private static void onLogout() {
         afterLogout();
-        exit(context);
+        exit();
     }
 
-    public static void exit(Context context) {
+    public static void exit() {
         Constant.finishActivity();
         TuyaHomeSdk.onDestroy();
     }

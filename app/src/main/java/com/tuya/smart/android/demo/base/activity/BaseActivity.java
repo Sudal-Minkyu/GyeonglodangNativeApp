@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,10 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.demo.R;
@@ -43,14 +44,6 @@ import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-
-/**
- * Created by letian on 16/7/15.
- */
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1123;
@@ -67,7 +60,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private boolean mNeedDefaultAni = true;
 
-
     @TargetApi(Build.VERSION_CODES.M)
     public void checkVerify() {
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -79,7 +71,8 @@ public class BaseActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SYSTEM_ALERT_WINDOW}, 1);
             }
 
-            if (!Settings.canDrawOverlays(this)) {              // 다른앱 위에 그리기 체크
+            // 다른앱 위에 그리기 체크
+            if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder setdialog = new AlertDialog.Builder(BaseActivity.this);
                 setdialog.setTitle("권한이 필요합니다.")
                         .setMessage("슬립모드에서 알람을 확인하기 위해서는\"다른앱 위에 그리기\" 기능을 켜야 합니다. 설정화면으로 이동 하시겠습니까?")
@@ -103,7 +96,6 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public void checkWhiteListRegist() {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -156,15 +148,6 @@ public class BaseActivity extends AppCompatActivity {
                 .build());
     }
 
-    public void closeDefaultAni() {
-        mNeedDefaultAni = false;
-    }
-
-
-    protected boolean isUseCustomTheme() {
-        return false;
-    }
-
     private void checkLogin() {
         if (needLogin() && !TuyaHomeSdk.getUserInstance().isLogin()) {
             LoginHelper.reLogin(this);
@@ -191,10 +174,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public Toolbar getToolBar() {
-        return mToolBar;
-    }
-
     protected void setTitle(String title) {
         if (mToolBar != null) {
             mToolBar.setTitle(title);
@@ -205,24 +184,6 @@ public class BaseActivity extends AppCompatActivity {
     public void setTitle(int titleId) {
         if (mToolBar != null) {
             mToolBar.setTitle(titleId);
-        }
-    }
-
-    protected void setSubTitle(String title) {
-        if (mToolBar != null) {
-            mToolBar.setSubtitle(title);
-        }
-    }
-
-    protected void setLogo(Drawable logo) {
-        if (mToolBar != null) {
-            mToolBar.setLogo(logo);
-        }
-    }
-
-    protected void setNavigationIcon(Drawable logo) {
-        if (mToolBar != null) {
-            mToolBar.setNavigationIcon(logo);
         }
     }
 
@@ -249,6 +210,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    // 뒤로가기 버튼 액티브
     protected void setDisplayHomeAsUpEnabled() {
         setDisplayHomeAsUpEnabled(R.drawable.tysmart_back_white, null);
     }
@@ -269,19 +231,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(19)
-    protected void setTranslucentStatus(boolean on) {
-        Window win = getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
-
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
@@ -296,8 +245,6 @@ public class BaseActivity extends AppCompatActivity {
         if (mNeedDefaultAni) {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
-
-
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
@@ -340,7 +287,7 @@ public class BaseActivity extends AppCompatActivity {
     private static boolean isExit = false;
 
     protected void exitByClick(ITuyaSmartCameraP2P mCameraP2P) {
-        Timer tExit = null;
+        Timer tExit;
         if (!isExit) {
             isExit = true;
             ToastUtil.shortToast(this, getString(R.string.action_tips_exit_hint));
@@ -360,7 +307,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void exitBy2Click() {
-        Timer tExit = null;
+        Timer tExit;
         if (!isExit) {
             isExit = true;
             ToastUtil.shortToast(this, getString(R.string.action_tips_exit_hint));
@@ -372,7 +319,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             }, 2000);
         } else {
-            LoginHelper.exit(this);
+            LoginHelper.exit();
         }
     }
 
@@ -432,7 +379,7 @@ public class BaseActivity extends AppCompatActivity {
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPanelTopView = inflater.inflate(layoutResID, null);
         super.setContentView(mPanelTopView);
-        initSystemBarColor();// 设置系统导航颜色
+        initSystemBarColor();
     }
 
     @Override
@@ -447,16 +394,8 @@ public class BaseActivity extends AppCompatActivity {
         super.setContentView(view, params);
     }
 
-    /**
-     * 是否需要登录，子类根据业务需要决定.
-     * 默认所有界面都需要判断是否登录状态。
-     */
     public boolean needLogin() {
         return true;
-    }
-
-    public boolean isContainFragment() {
-        return false;
     }
 
     public static void setViewVisible(View view) {
@@ -470,7 +409,6 @@ public class BaseActivity extends AppCompatActivity {
             view.setVisibility(View.GONE);
         }
     }
-
 
     protected boolean isPause() {
         return mIsPaused;
@@ -487,7 +425,6 @@ public class BaseActivity extends AppCompatActivity {
     public void initSystemBarColor() {
         CommonUtil.initSystemBarColor(this);
     }
-
 
     public void showToast(int resId) {
         ToastUtil.showToast(this, resId);
@@ -508,7 +445,6 @@ public class BaseActivity extends AppCompatActivity {
     public void hideLoading() {
         ProgressUtil.hideLoading();
     }
-
 
     @Override
     public void onDestroy() {

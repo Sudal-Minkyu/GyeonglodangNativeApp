@@ -2,13 +2,14 @@ package com.tuya.smart.android.demo.camera.bean;
 
 import java.util.List;
 
-/**
- * Created by huangdaju3 on 2018/6/7.
- */
-
 public class RecordInfoBean {
     private int count;
-    private List<TimePieceBean> items;
+
+    private final List<TimePieceBean> items;
+
+    public RecordInfoBean(List<TimePieceBean> items) {
+        this.items = items;
+    }
 
     public int getCount() {
         return count;
@@ -22,7 +23,4 @@ public class RecordInfoBean {
         return items;
     }
 
-    public void setItems(List<TimePieceBean> items) {
-        this.items = items;
-    }
 }

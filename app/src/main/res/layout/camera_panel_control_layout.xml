@@ -5,11 +5,7 @@
     android:layout_weight="1"
     android:background="#F5F5F5"
     android:gravity="center"
-
     android:orientation="vertical">
-
-
-
 
     <LinearLayout
         android:id="@+id/Open_Door"
@@ -39,15 +35,11 @@
             android:gravity="center"
             android:background="@null"
             android:fontFamily="@font/app_main_font"
-            android:text="문 닫힘"
+            android:text="문닫힘"
             android:textColor="@color/app_bg_color"
             android:textSize="25dp"
             android:textStyle="bold"
-
             />
-
-
     </LinearLayout>
-
 
 </LinearLayout>

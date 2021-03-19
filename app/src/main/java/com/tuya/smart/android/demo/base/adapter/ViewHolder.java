@@ -2,9 +2,6 @@ package com.tuya.smart.android.demo.base.adapter;
 
 import android.view.View;
 
-/**
- * Created by mikeshou on 15/5/11.
- */
 public abstract class ViewHolder<T> {
 
     protected View contentView;
@@ -15,7 +12,4 @@ public abstract class ViewHolder<T> {
 
     public abstract void initData(T data);
 
-    public View getContentView() {
-        return contentView;
-    }
 }

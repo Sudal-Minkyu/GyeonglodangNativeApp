@@ -17,7 +17,6 @@
         android:layout_gravity="center"
         />
 
-
     <RelativeLayout
         android:id="@+id/camera_video_view_Rl"
         android:layout_width="match_parent"

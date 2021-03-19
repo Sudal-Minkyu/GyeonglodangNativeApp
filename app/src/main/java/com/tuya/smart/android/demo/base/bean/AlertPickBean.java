@@ -31,14 +31,6 @@ public class AlertPickBean {
         this.loop = loop;
     }
 
-    public int getSelected() {
-        return selected;
-    }
-
-    public void setSelected(int selected) {
-        this.selected = selected;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -67,6 +59,5 @@ public class AlertPickBean {
     private String cancelText;
     private String confirmText;
     private boolean loop;
-    private int selected;
     private String title;
 }

@@ -1,40 +1,28 @@
 package com.tuya.smart.android.demo.base.fragment;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tuya.smart.android.common.utils.NetworkUtil;
 import com.tuya.smart.android.demo.R;
-import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.presenter.DeviceListFragmentPresenter;
 import com.tuya.smart.android.demo.base.utils.AnimationUtil;
 import com.tuya.smart.android.demo.base.view.IDeviceListFragmentView;
 import com.tuya.smart.android.demo.device.CommonDeviceAdapter;
-import com.tuya.smart.android.demo.family.view.SwitchFamilyText;
 import com.tuya.smart.sdk.bean.DeviceBean;
-import com.tuyasmart.camera.devicecontrol.ITuyaCameraDevice;
 
 import java.util.List;
 
-
-/**
- * Created by letian on 16/7/18.
- */
 public class DeviceListFragment extends BaseFragment implements IDeviceListFragmentView {
 
-    private static final String TAG = "DeviceListFragment";
     private volatile static DeviceListFragment mDeviceListFragment;
     private View mContentView;
     private DeviceListFragmentPresenter deviceListFragmentPresenter;
@@ -44,7 +32,6 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
     private TextView mNetWorkTip;
     private View mRlView;
     private View mAddDevView;
-    private View mBackgroundView;
 
     public static Fragment newInstance() {
         if (mDeviceListFragment == null) {
@@ -61,7 +48,6 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.fragment_device_list, container, false);
         initToolbar(mContentView);
-//        initMenu();
         initView();
         initAdapter();
         initSwipeRefreshLayout();
@@ -80,14 +66,11 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
                 getResources().getColor(R.color.primary_button_bg_color),
                 getResources().getColor(R.color.primary_button_bg_color),
                 getResources().getColor(R.color.primary_button_bg_color));
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetworkUtil.isNetworkAvailable(getContext())) {
-                    deviceListFragmentPresenter.getDataFromServer();
-                } else {
-                    loadFinish();
-                }
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (NetworkUtil.isNetworkAvailable(getContext())) {
+                deviceListFragmentPresenter.getDataFromServer();
+            } else {
+                loadFinish();
             }
         });
     }
@@ -95,21 +78,10 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
     public void initAdapter() {
         mCommonDeviceAdapter = new CommonDeviceAdapter(getActivity());
         mDevListView.setAdapter(mCommonDeviceAdapter);
-        mDevListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return deviceListFragmentPresenter.onDeviceLongClick((DeviceBean) parent.getAdapter().getItem(position));
-            }
-        });
-        mDevListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                deviceListFragmentPresenter.onDeviceClick((DeviceBean) parent.getAdapter().getItem(position));
-            }
-        });
+        mDevListView.setOnItemLongClickListener((parent, view, position, id) -> deviceListFragmentPresenter.onDeviceLongClick((DeviceBean) parent.getAdapter().getItem(position)));
+        mDevListView.setOnItemClickListener((parent, view, position, id) -> deviceListFragmentPresenter.onDeviceClick((DeviceBean) parent.getAdapter().getItem(position)));
     }
 
-    private ITuyaCameraDevice mDeviceControl;
     @Override
     public void updateDeviceData(List<DeviceBean> myDevices) {
         Log.e("myDevicesSize : ", String.valueOf(myDevices.size()));
@@ -120,17 +92,6 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
             deviceListFragmentPresenter.gotoDeviceCommonActivity(myDevices.get(0));
         }
 
-        // 장비리스트를 찾고 도어벨로 이동하여 카메라깨우기
-//        mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(myDevices.get(i).getDevId());
-//        mDeviceControl.wirelessWake(myDevices.get(i).getLocalKey(),myDevices.get(i).getDevId());
-//        Log.e(myDevices.get(i).getName()+" : ","카메라 깨우기 완료");
-//        mDeviceListFragmentPresenter.onDeviceClick(myDevices.get(i));
-
-//        for(int i=0; i<myDevices.size(); i++){
-//           if(myDevices.get(i).getName().equals("스마트 도어벨 2")){
-//
-//            }
-//        }
         if (mCommonDeviceAdapter != null) {
             mCommonDeviceAdapter.setData(myDevices);
         }
@@ -142,41 +103,17 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
     }
 
     protected void initView() {
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mContentView.findViewById(R.id.swipe_container);
-        mNetWorkTip = (TextView) mContentView.findViewById(R.id.network_tip);
-        mDevListView = (ListView) mContentView.findViewById(R.id.lv_device_list);
+        mSwipeRefreshLayout = mContentView.findViewById(R.id.swipe_container);
+        mNetWorkTip = mContentView.findViewById(R.id.network_tip);
+        mDevListView = mContentView.findViewById(R.id.lv_device_list);
         mRlView = mContentView.findViewById(R.id.rl_list);
         mAddDevView = mContentView.findViewById(R.id.tv_empty_func);
-        mBackgroundView = mContentView.findViewById(R.id.list_background_tip);
-        mAddDevView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deviceListFragmentPresenter.addDemoDevice();
-            }
-        });
+        mAddDevView.setOnClickListener(view -> deviceListFragmentPresenter.addDemoDevice());
     }
 
     protected void initPresenter() {
         deviceListFragmentPresenter = new DeviceListFragmentPresenter(this, this);
     }
-
-//    protected void initMenu() {
-//        //setTitle(getCurrentHome(R.string.home_my_device));
-//        SwitchFamilyText switchFamilyText = new SwitchFamilyText(getContext());
-//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-//        getToolBar().addView(switchFamilyText, layoutParams);
-//
-//        setMenu(R.menu.toolbar_add_device, new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                if (item.getItemId() == R.id.action_add_device) {
-//                    deviceListFragmentPresenter.addDevice();
-//                }
-//                return false;
-//            }
-//        });
-//    }
 
     @Override
     public void loadFinish() {
@@ -198,18 +135,6 @@ public class DeviceListFragment extends BaseFragment implements IDeviceListFragm
             AnimationUtil.translateView(mRlView, 0, 0, mNetWorkTip.getHeight(), 0, 300, false, null);
             mNetWorkTip.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void showBackgroundView() {
-        BaseActivity.setViewGone(mDevListView);
-        BaseActivity.setViewVisible(mBackgroundView);
-    }
-
-    @Override
-    public void hideBackgroundView() {
-        BaseActivity.setViewVisible(mDevListView);
-        BaseActivity.setViewGone(mBackgroundView);
     }
 
     @Override

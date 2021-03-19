@@ -2,23 +2,21 @@ package com.tuya.smart.android.demo.base.fragment;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.tuya.smart.android.demo.R;
-import com.tuya.smart.android.demo.group.GroupListActivity;
 import com.tuya.smart.android.demo.base.presenter.PersonalCenterFragmentPresenter;
-import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.personal.IPersonalCenterView;
 
-/**
- * Created by letian on 16/7/18.
- */
+import java.util.Objects;
+
 public class PersonalCenterFragment extends BaseFragment implements IPersonalCenterView {
 
     public Toolbar mToolBar;
@@ -54,50 +52,15 @@ public class PersonalCenterFragment extends BaseFragment implements IPersonalCen
 
 
     private void initView() {
-        mToolBar = (Toolbar) mContentView.findViewById(R.id.toolbar_top_view);
-        mUserName = (TextView) mContentView.findViewById(R.id.tv_username);
-        mNickName = (TextView) mContentView.findViewById(R.id.tv_nickname);
+        mToolBar = mContentView.findViewById(R.id.toolbar_top_view);
+        mUserName = mContentView.findViewById(R.id.tv_username);
+        mNickName = mContentView.findViewById(R.id.tv_nickname);
 
-//        mContentView.findViewById(R.id.rl_share).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                gotoShareActivity();
-//            }
-//        });
-//        mContentView.findViewById(R.id.rl_question).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                gotoQuestionActivity();
-//            }
-//        });
-        mContentView.findViewById(R.id.rl_edit_person).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPersonalCenterFragmentPresenter.gotoPersonalInfoActivity();
-            }
-        });
+        mContentView.findViewById(R.id.rl_edit_person).setOnClickListener(v -> mPersonalCenterFragmentPresenter.gotoPersonalInfoActivity());
 
-//        mContentView.findViewById(R.id.rl_group).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ActivityUtils.gotoActivity(getActivity(), GroupListActivity.class, ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM, false);
-//            }
-//        });
-        TypedArray a = getActivity().obtainStyledAttributes(new int[]{
+        TypedArray a = Objects.requireNonNull(getActivity()).obtainStyledAttributes(new int[]{
                 R.attr.user_default_portrait});
-        int portraitRes = a.getResourceId(0, -1);
-//        if (portraitRes != -1) {
-//            mContentView.findViewById(R.id.iv_head_photo).setBackgroundResource(portraitRes);
-//        }
         a.recycle();
-    }
-
-    private void gotoShareActivity() {
-//        ActivityUtils.gotoActivity(getActivity(), SharedActivity.class, ActivityUtils.ANIMATE_FORWARD, false);
-    }
-
-    private void gotoQuestionActivity() {
-
     }
 
     private void initPresenter() {

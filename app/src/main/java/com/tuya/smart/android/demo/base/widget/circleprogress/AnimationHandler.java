@@ -12,37 +12,23 @@ import java.lang.ref.WeakReference;
 public class AnimationHandler extends Handler {
 
     private final WeakReference<CircleProgressView> mCircleViewWeakReference;
-    // Spin bar length in degree at start of animation
     private float mSpinningBarLengthStart;
     private long mAnimationStartTime;
     private long mLengthChangeAnimationStartTime;
     private TimeInterpolator mLengthChangeInterpolator = new DecelerateInterpolator();
-    // The interpolator for value animations
     private TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
     private double mLengthChangeAnimationDuration;
     private long mFrameStartTime = 0;
 
     AnimationHandler(CircleProgressView circleView) {
         super(circleView.getContext().getMainLooper());
-        mCircleViewWeakReference = new WeakReference<CircleProgressView>(circleView);
+        mCircleViewWeakReference = new WeakReference<>(circleView);
     }
 
-
-    /**
-     * Sets interpolator for value animations.
-     *
-     * @param mInterpolator the m interpolator
-     */
     public void setValueInterpolator(TimeInterpolator mInterpolator) {
         this.mInterpolator = mInterpolator;
     }
 
-
-    /**
-     * Sets the interpolator for length changes of the bar.
-     *
-     * @param mLengthChangeInterpolator the m length change interpolator
-     */
     public void setLengthChangeInterpolator(TimeInterpolator mLengthChangeInterpolator) {
         this.mLengthChangeInterpolator = mLengthChangeInterpolator;
     }
@@ -55,24 +41,17 @@ public class AnimationHandler extends Handler {
         }
         AnimationMsg msgType = AnimationMsg.values()[msg.what];
         if (msgType == AnimationMsg.TICK) {
-            removeMessages(AnimationMsg.TICK.ordinal()); // necessary to remove concurrent ticks.
+            removeMessages(AnimationMsg.TICK.ordinal());
         }
 
-        //if (msgType != AnimationMsg.TICK)
-        //    Log.d("JaGr", TAG + "LOG00099: State:" + circleView.mAnimationState + "     Received: " + msgType);
         mFrameStartTime = SystemClock.uptimeMillis();
         switch (circleView.mAnimationState) {
-
-
             case IDLE:
                 switch (msgType) {
-
                     case START_SPINNING:
                         enterSpinning(circleView);
-
                         break;
                     case STOP_SPINNING:
-                        //IGNORE not spinning
                         break;
                     case SET_VALUE:
                         setValue(msg, circleView);
@@ -82,8 +61,7 @@ public class AnimationHandler extends Handler {
                         enterSetValueAnimated(msg, circleView);
                         break;
                     case TICK:
-                        removeMessages(AnimationMsg.TICK.ordinal()); // remove old ticks
-                        //IGNORE nothing to do
+                        removeMessages(AnimationMsg.TICK.ordinal());
                         break;
                 }
                 break;
@@ -91,7 +69,6 @@ public class AnimationHandler extends Handler {
                 switch (msgType) {
 
                     case START_SPINNING:
-                        //IGNORE already spinning
                         break;
                     case STOP_SPINNING:
                         enterEndSpinning(circleView);
@@ -356,13 +333,6 @@ public class AnimationHandler extends Handler {
         sendEmptyMessageDelayed(AnimationMsg.TICK.ordinal(), circleView.mFrameDelayMillis-(SystemClock.uptimeMillis() - mFrameStartTime));
     }
 
-
-    /**
-     * *
-     *
-     * @param circleView the circle view
-     * @return false if animation still running, true if animation is finished.
-     */
     private boolean calcNextAnimationValue(CircleProgressView circleView) {
         float t = (float) ((System.currentTimeMillis() - mAnimationStartTime)
                 / circleView.mAnimationDuration);

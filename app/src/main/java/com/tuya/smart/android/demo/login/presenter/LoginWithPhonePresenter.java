@@ -7,13 +7,12 @@ import android.os.CountDownTimer;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.tuya.smart.android.demo.login.activity.CountryListActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.CountryUtils;
-import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
 import com.tuya.smart.android.demo.login.ILoginWithPhoneView;
+import com.tuya.smart.android.demo.login.activity.CountryListActivity;
 import com.tuya.smart.android.mvp.bean.Result;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.android.user.api.ILoginCallback;
@@ -22,12 +21,7 @@ import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.sdk.TuyaSdk;
 
-/**
- * Created by letian on 15/5/30.
- */
 public class LoginWithPhonePresenter extends BasePresenter {
-
-    private static final String TAG = "LoginWithPhonePresenter";
 
     protected Activity mContext;
 
@@ -37,8 +31,6 @@ public class LoginWithPhonePresenter extends BasePresenter {
 
 
     private CountDownTimer mCountDownTimer;
-
-    private boolean isCountDown;
 
     protected String mPhoneCode;
 
@@ -54,26 +46,21 @@ public class LoginWithPhonePresenter extends BasePresenter {
 
     private void getCountry() {
         String countryKey = CountryUtils.getCountryKey(TuyaSdk.getApplication());
-        if (!TextUtils.isEmpty(countryKey)) {
-            mCountryName = CountryUtils.getCountryTitle(countryKey);
-            mPhoneCode = CountryUtils.getCountryNum(countryKey);
-        } else {
-            countryKey = CountryUtils.getCountryDefault(TuyaSdk.getApplication());
-            mCountryName = CountryUtils.getCountryTitle(countryKey);
-            mPhoneCode = CountryUtils.getCountryNum(countryKey);
+        if (TextUtils.isEmpty(countryKey)) {
+            countryKey = CountryUtils.getCountryDefault();
         }
+        mCountryName = CountryUtils.getCountryTitle(countryKey);
+        mPhoneCode = CountryUtils.getCountryNum(countryKey);
         mView.setCountry(mCountryName, mPhoneCode);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0x01:
-                if (resultCode == Activity.RESULT_OK) {
-                    mCountryName = data.getStringExtra(CountryListActivity.COUNTRY_NAME);
-                    mPhoneCode = data.getStringExtra(CountryListActivity.PHONE_CODE);
-                    mView.setCountry(mCountryName, mPhoneCode);
-                }
-                break;
+        if (requestCode == 0x01) {
+            if (resultCode == Activity.RESULT_OK) {
+                mCountryName = data.getStringExtra(CountryListActivity.COUNTRY_NAME);
+                mPhoneCode = data.getStringExtra(CountryListActivity.PHONE_CODE);
+                mView.setCountry(mCountryName, mPhoneCode);
+            }
         }
     }
 
@@ -82,11 +69,6 @@ public class LoginWithPhonePresenter extends BasePresenter {
     public static final int MSG_LOGIN_SUCCESS = 15;
     public static final int MSG_LOGIN_ERROR = 16;
 
-    /**
-     * 获取验证码
-     *
-     * @return
-     */
     public void getValidateCode() {
         mSend = true;
         TuyaHomeSdk.getUserInstance().getValidateCode(mPhoneCode, mView.getPhone(), new IValidateCallback() {
@@ -108,11 +90,6 @@ public class LoginWithPhonePresenter extends BasePresenter {
         mSend = false;
     }
 
-    /**
-     * 登录
-     *
-     * @return
-     */
     public void login() {
         String phoneNumber = mView.getPhone();
         String code = mView.getValidateCode();
@@ -155,8 +132,6 @@ public class LoginWithPhonePresenter extends BasePresenter {
                 break;
 
             case MSG_SEND_VALIDATE_CODE_ERROR:
-                mView.modelResult(msg.what, (Result) msg.obj);
-                break;
 
             case MSG_LOGIN_ERROR:
                 mView.modelResult(msg.what, (Result) msg.obj);
@@ -172,19 +147,12 @@ public class LoginWithPhonePresenter extends BasePresenter {
 
     private void loginSuccess() {
         Constant.finishActivity();
-//        LoginHelper.afterLogin();
         ActivityUtils.gotoMainActivity(mContext);
     }
 
     @Override
     public void onDestroy() {
         mCountDownTimer = null;
-    }
-
-    public void validateBtResume() {
-        if (mCountDownTimer != null) {
-            mCountDownTimer.onFinish();
-        }
     }
 
     public boolean isSended() {

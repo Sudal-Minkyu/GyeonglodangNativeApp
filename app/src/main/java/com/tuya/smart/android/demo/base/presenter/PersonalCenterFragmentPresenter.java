@@ -13,16 +13,11 @@ import com.tuya.smart.android.demo.personal.IPersonalCenterView;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.sdk.TuyaSdk;
 
-
-/**
- * Created by letian on 15/6/1.
- */
 public class PersonalCenterFragmentPresenter extends BasePresenter implements PersonalInfoEvent {
-    private static final String TAG = "PersonalCenterFragmentPresenter";
+
     private final Context mContext;
     private final IPersonalCenterView mView;
     private final IPersonalCenterModel mModel;
-
 
     public PersonalCenterFragmentPresenter(Context context, IPersonalCenterView view) {
         mContext = context;

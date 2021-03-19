@@ -1,13 +1,8 @@
 package com.tuya.smart.android.demo.base.presenter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.KeyEvent;
 
 import com.tuya.smart.android.base.event.NetWorkStatusEvent;
 import com.tuya.smart.android.base.event.NetWorkStatusEventModel;
@@ -16,19 +11,13 @@ import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BrowserActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
-import com.tuya.smart.android.demo.base.event.DeviceListUpdateModel;
-import com.tuya.smart.android.demo.base.event.DeviceUpdateEvent;
 import com.tuya.smart.android.demo.base.fragment.DeviceListFragment;
-import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.DialogUtil;
-import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.ProgressUtil;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
 import com.tuya.smart.android.demo.base.view.IDeviceListFragmentView;
 import com.tuya.smart.android.demo.camera.CameraPanelActivity;
-import com.tuya.smart.android.demo.config.AddDeviceTypeActivity;
 import com.tuya.smart.android.demo.config.CommonConfig;
-import com.tuya.smart.android.demo.device.CommonDeviceDebugActivity;
 import com.tuya.smart.android.demo.device.SwitchActivity;
 import com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
@@ -47,12 +36,7 @@ import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
 import java.util.List;
 import java.util.Map;
 
-//import com.tuya.smart.android.demo.base.activity.TestMeshActivity;
-
-/**
- * Created by letian on 15/6/1.
- */
-public class DeviceListFragmentPresenter extends BasePresenter implements NetWorkStatusEvent, DeviceUpdateEvent {
+public class DeviceListFragmentPresenter extends BasePresenter implements NetWorkStatusEvent {
 
     private static final String TAG = "DeviceListFragmentPresenter";
     private static final int WHAT_JUMP_GROUP_PAGE = 10212;
@@ -74,40 +58,37 @@ public class DeviceListFragmentPresenter extends BasePresenter implements NetWor
         final boolean isShared = deviceBean.isShare;
         DialogUtil.customDialog(mActivity, mActivity.getString(R.string.title_device_offline), mActivity.getString(R.string.content_device_offline),
                 mActivity.getString(isShared ? R.string.ty_offline_delete_share : R.string.cancel_connect),
-                mActivity.getString(R.string.right_button_device_offline), mActivity.getString(R.string.left_button_device_offline), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                if (isShared) {
+                mActivity.getString(R.string.right_button_device_offline), mActivity.getString(R.string.left_button_device_offline), (dialog, which) -> {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            if (isShared) {
 //                                    //공유 삭제로 이동
 //                                    Intent intent = new Intent(mActivity, SharedActivity.class);
 //                                    intent.putExtra(SharedActivity.CURRENT_TAB, SharedActivity.TAB_RECEIVED);
 //                                    mActivity.startActivity(intent);
-                                } else {
-                                    DialogUtil.simpleConfirmDialog(mActivity, mActivity.getString(R.string.device_confirm_remove), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (which == DialogInterface.BUTTON_POSITIVE) {
-                                                unBindDevice(deviceBean);
-                                            }
+                            } else {
+                                DialogUtil.simpleConfirmDialog(mActivity, mActivity.getString(R.string.device_confirm_remove), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                                            unBindDevice(deviceBean);
                                         }
-                                    });
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEUTRAL:
+                                    }
+                                });
+                            }
+                            break;
+                        case DialogInterface.BUTTON_NEUTRAL:
 //                              //재설정 지침
-                                Intent intent = new Intent(mActivity, BrowserActivity.class);
-                                intent.putExtra(BrowserActivity.EXTRA_LOGIN, false);
-                                intent.putExtra(BrowserActivity.EXTRA_REFRESH, true);
-                                intent.putExtra(BrowserActivity.EXTRA_TOOLBAR, true);
-                                intent.putExtra(BrowserActivity.EXTRA_TITLE, mActivity.getString(R.string.left_button_device_offline));
-                                intent.putExtra(BrowserActivity.EXTRA_URI, CommonConfig.RESET_URL);
-                                mActivity.startActivity(intent);
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
+                            Intent intent = new Intent(mActivity, BrowserActivity.class);
+                            intent.putExtra(BrowserActivity.EXTRA_LOGIN, false);
+                            intent.putExtra(BrowserActivity.EXTRA_REFRESH, true);
+                            intent.putExtra(BrowserActivity.EXTRA_TOOLBAR, true);
+                            intent.putExtra(BrowserActivity.EXTRA_TITLE, mActivity.getString(R.string.left_button_device_offline));
+                            intent.putExtra(BrowserActivity.EXTRA_URI, CommonConfig.RESET_URL);
+                            mActivity.startActivity(intent);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            break;
                     }
                 }).show();
 
@@ -141,16 +122,8 @@ public class DeviceListFragmentPresenter extends BasePresenter implements NetWor
     }
 
     private ITuyaCameraDevice mDeviceControl;
-    private LoginHelper loginHelper;
     protected Activity mActivity;
     public void gotoDeviceCommonActivity(DeviceBean devBean) {
-//        if ("sp".equals(devBean.getProductBean().getCategory())) {
-//            Log.e("sper : ",devBean.getProductBean().getCategory());
-//            Log.e("deviceId : ",devBean.getProductBean().getId());
-//            loginHelper.afterLogin();
-//            mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance("ebe5f4d1e2c6e343b3vx44");
-//            mDeviceControl.wirelessWake("e8c6b49c71392f57","ebe5f4d1e2c6e343b3vx44");
-
         Intent intent = new Intent(mActivity, CameraPanelActivity.class);
         if(devBean == null){
             intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID,"devId");
@@ -171,11 +144,6 @@ public class DeviceListFragmentPresenter extends BasePresenter implements NetWor
             mDeviceControl.wirelessWake(devBean.getLocalKey(),devBean.getDevId());
         }
         mActivity.startActivity(intent);
-//        } else {
-//            Intent intent = new Intent(mActivity, CommonDeviceDebugActivity.class);
-//            intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, devBean.getDevId());
-//            mActivity.startActivity(intent);
-//        }
     }
 
     public void getDataFromServer() {
@@ -249,33 +217,6 @@ public class DeviceListFragmentPresenter extends BasePresenter implements NetWor
         });
     }
 
-    public void gotoAddDevice() {
-
-//        ActivityUtils.gotoActivity(mActivity, TCPActivity.class, ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM, false);
-        ActivityUtils.gotoActivity(mActivity, AddDeviceTypeActivity.class, ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM, false);
-//        ActivityUtils.gotoActivity(mActivity, ZigBeeConfigActivity.class, ActivityUtils.ANIMATE_SLIDE_TOP_FROM_BOTTOM, false);
-    }
-
-    //添加设备
-    public void addDevice() {
-        final WifiManager mWifiManager = (WifiManager) mActivity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (!mWifiManager.isWifiEnabled()) {
-            DialogUtil.simpleConfirmDialog(mActivity, mActivity.getString(R.string.open_wifi), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            mWifiManager.setWifiEnabled(true);
-                            gotoAddDevice();
-                            break;
-                    }
-                }
-            });
-        } else {
-            gotoAddDevice();
-        }
-    }
-
     public boolean onDeviceLongClick(final DeviceBean deviceBean) {
         if (deviceBean.getIsShare()) {
             return false;
@@ -316,24 +257,13 @@ public class DeviceListFragmentPresenter extends BasePresenter implements NetWor
         mView.loadFinish();
     }
 
-
-    private void updateLocalData() {
-        updateDeviceData(TuyaHomeSdk.getDataInstance().getHomeDeviceList(Constant.HOME_ID));
-    }
-
-    @Override
-    public void onEventMainThread(DeviceListUpdateModel event) {
-        getData();
-    }
-
     @Override
     public void onEvent(NetWorkStatusEventModel eventModel) {
         netStatusCheck(eventModel.isAvailable());
     }
 
-    public boolean netStatusCheck(boolean isNetOk) {
+    public void netStatusCheck(boolean isNetOk) {
         networkTip(isNetOk, R.string.ty_no_net_info);
-        return true;
     }
 
     private void networkTip(boolean networkok, int tipRes) {

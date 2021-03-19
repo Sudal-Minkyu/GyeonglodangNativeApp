@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public abstract class BaseListArrayAdapter<E> extends ArrayAdapter<E> {
@@ -33,6 +35,7 @@ public abstract class BaseListArrayAdapter<E> extends ArrayAdapter<E> {
 
     protected abstract void bindView(ViewHolder viewHolder, E data);
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (null == convertView) {
@@ -49,21 +52,6 @@ public abstract class BaseListArrayAdapter<E> extends ArrayAdapter<E> {
         return mData;
     }
 
-    /**
-     * 获取当前的view的position
-     *
-     * @return
-     */
-    public int getCurrentPosition() {
-        return currentPosition;
-    }
-
-    /**
-     * 获取数据信息
-     *
-     * @param id
-     * @return
-     */
     public String getString(int id) {
         return mContext.getString(id);
     }

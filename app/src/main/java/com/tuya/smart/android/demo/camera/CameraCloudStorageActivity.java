@@ -96,7 +96,6 @@ public class CameraCloudStorageActivity extends AppCompatActivity implements ICl
         findViewById(R.id.query_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //查询数据
                 cameraCloudSDK.getCloudMediaCount(devId, TimeZone.getDefault().getID(), CameraCloudStorageActivity.this);
             }
         });
@@ -104,7 +103,6 @@ public class CameraCloudStorageActivity extends AppCompatActivity implements ICl
         findViewById(R.id.query_time_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //这里获取查询到的第一天时间数据
                 if (dayBeanList.size() > 0) {
                     getAppointedDayCloudTimes(dayBeanList.get(0));
                 }

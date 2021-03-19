@@ -13,20 +13,10 @@ import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 
-
-/**
- * 热点模式: 添加设备页面
- * <p>
- * Created by sunch on 16/6/21.
- */
 public class AddDeviceAPTipActivity extends BaseActivity implements View.OnClickListener {
     private static String TAG = "AddDeviceAPTipActivity";
     public static final String FROM_EZ_FAILURE = "FROM_EZ_FAILURE";
 
-    private TextView mStatusLightTip;
-    private Button mStatusLightOption;
-    private Button mStatusLightHelp;
-    private ImageView mStatusLightImageView;
     private AnimationDrawable mStatusLightAnimation;
 
 
@@ -42,15 +32,15 @@ public class AddDeviceAPTipActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-        mStatusLightTip = (TextView) findViewById(R.id.status_light_tip);
+        TextView mStatusLightTip = (TextView) findViewById(R.id.status_light_tip);
         mStatusLightTip.setText(R.string.ty_add_device_ap_info);
 
         initTipImageview();
 
-        mStatusLightOption = (Button) findViewById(R.id.status_light_option);
+        Button mStatusLightOption = (Button) findViewById(R.id.status_light_option);
         mStatusLightOption.setText(R.string.ty_add_device_ap_btn_info);
         mStatusLightOption.setOnClickListener(this);
-        mStatusLightHelp = (Button) findViewById(R.id.status_light_help);
+        Button mStatusLightHelp = (Button) findViewById(R.id.status_light_help);
         mStatusLightHelp.setOnClickListener(this);
         if (getIntent().getBooleanExtra(FROM_EZ_FAILURE, false)) {
             ((TextView) findViewById(R.id.status_light_tip)).setText(R.string.ty_add_device_ez_failure_ap_tip);
@@ -58,7 +48,7 @@ public class AddDeviceAPTipActivity extends BaseActivity implements View.OnClick
     }
 
     private void initTipImageview() {
-        mStatusLightImageView = (ImageView) findViewById(R.id.status_light_imageview);
+        ImageView mStatusLightImageView = (ImageView) findViewById(R.id.status_light_imageview);
         mStatusLightAnimation = new AnimationDrawable();
         mStatusLightAnimation.addFrame(ContextCompat.getDrawable(this, R.drawable.ty_adddevice_lighting), 1500);
         mStatusLightAnimation.addFrame(ContextCompat.getDrawable(this, R.drawable.ty_adddevice_light), 1500);

@@ -23,10 +23,6 @@ import com.tuya.smart.sdk.bean.DeviceBean;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-
-/**
- * Created by letian on 16/7/21.
- */
 public class SwitchPresenter extends BasePresenter implements IDevListener {
     private final ISwitchView mView;
     private final Context mContext;
@@ -43,12 +39,10 @@ public class SwitchPresenter extends BasePresenter implements IDevListener {
         initListener();
     }
 
-
     private void initListener() {
         mTuyaDevice = TuyaHomeSdk.newDeviceInstance(mDevId);
         mTuyaDevice.registerDevListener(this);
     }
-
 
     private void initData() {
         mDevId = ((Activity) mContext).getIntent().getStringExtra(SwitchActivity.INTENT_DEVID);
@@ -70,19 +64,16 @@ public class SwitchPresenter extends BasePresenter implements IDevListener {
             return;
         }
         mSwitchBean.setOpen(!mSwitchBean.isOpen());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendCommand();
-                try {
-                    mDownLatch.await(2, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                checkResult();
-                mDownLatch = null;
+        new Thread(() -> {
+            sendCommand();
+            try {
+                mDownLatch.await(2, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+            checkResult();
+            mDownLatch = null;
         }).start();
     }
 
@@ -184,31 +175,26 @@ public class SwitchPresenter extends BasePresenter implements IDevListener {
     }
 
     public void resetFactory() {
-        DialogUtil.simpleConfirmDialog(mContext, mContext.getString(R.string.ty_control_panel_factory_reset_info),
-                new DialogInterface.OnClickListener() {
+        DialogUtil.simpleConfirmDialog(mContext, mContext.getString(R.string.ty_control_panel_factory_reset_info), (dialog, which) -> {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                ProgressUtil.showLoading(mContext, R.string.ty_control_panel_factory_reseting);
+                mTuyaDevice.resetFactory(new IResultCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            ProgressUtil.showLoading(mContext, R.string.ty_control_panel_factory_reseting);
-                            mTuyaDevice.resetFactory(new IResultCallback() {
-                                @Override
-                                public void onError(String code, String error) {
-                                    ProgressUtil.hideLoading();
-                                    ToastUtil.shortToast(mContext, R.string.ty_control_panel_factory_reset_fail);
-                                }
+                    public void onError(String code, String error) {
+                        ProgressUtil.hideLoading();
+                        ToastUtil.shortToast(mContext, R.string.ty_control_panel_factory_reset_fail);
+                    }
 
-                                @Override
-                                public void onSuccess() {
-                                    ProgressUtil.hideLoading();
-                                    ToastUtil.shortToast(mContext, R.string.ty_control_panel_factory_reset_succ);
-                                    ((Activity) mContext).finish();
-                                }
-                            });
-                        }
+                    @Override
+                    public void onSuccess() {
+                        ProgressUtil.hideLoading();
+                        ToastUtil.shortToast(mContext, R.string.ty_control_panel_factory_reset_succ);
+                        ((Activity) mContext).finish();
                     }
                 });
+            }
+        });
     }
-
 
     public void removeDevice() {
         ProgressUtil.showLoading(mContext, R.string.loading);

@@ -4,30 +4,19 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.tuya.smart.android.demo.R;
 
-
-/**
- * Created by mikeshou on 15/6/18.
- */
 public class ProgressUtil {
 
     private static Dialog progressDialog;
 
     public static void showLoading(Context context, String message) {
         if (progressDialog == null) {
-            progressDialog = getSimpleProgressDialog(context, "", new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    progressDialog = null;
-                }
-            });
+            progressDialog = getSimpleProgressDialog(context, "", dialog -> progressDialog = null);
         }
         if (!TextUtils.isEmpty(message)) {
             ((TextView) progressDialog.findViewById(R.id.progress_dialog_message)).setText(message);
@@ -36,15 +25,6 @@ public class ProgressUtil {
             progressDialog.show();
         }
     }
-
-    public static void setAlpha(float dimAmount, float alpha) {
-        WindowManager.LayoutParams lp = progressDialog.getWindow().getAttributes();
-        lp.dimAmount = dimAmount;
-        lp.alpha = alpha;
-        progressDialog.getWindow().setAttributes(lp);
-        progressDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
-
 
     public static void showLoading(Context context, CharSequence title, CharSequence message) {
         showLoading(context, title, message, false);
@@ -96,7 +76,8 @@ public class ProgressUtil {
     }
 
     public static void hideLoading() {
-        if (progressDialog != null && progressDialog.getContext() != null) {
+        if (progressDialog != null) {
+            progressDialog.getContext();
             Log.e("", "로딩창 숨기기");
             progressDialog.dismiss();
             try {
@@ -106,41 +87,6 @@ public class ProgressUtil {
             }
         }
         progressDialog = null;
-    }
-
-    /**
-     * 获取进度条对话框
-     *
-     * @param mContext
-     * @param title
-     * @param msg
-     * @return
-     */
-    public static ProgressDialog getProgressDialog(Context mContext, String title, String msg) {
-        ProgressDialog progressDialog = new ProgressDialog(mContext);
-        if (!TextUtils.isEmpty(title)) {
-            progressDialog.setTitle(title);
-        }
-        if (!TextUtils.isEmpty(msg)) {
-            progressDialog.setMessage(msg);
-        }
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-        Drawable drawable = mContext.getResources().getDrawable(R.drawable.progress_normal);
-        progressDialog.setProgressDrawable(drawable);
-        progressDialog.setIndeterminate(false);
-        return progressDialog;
-    }
-
-    /**
-     * 简单菊花进度
-     *
-     * @param mContext
-     * @param msg
-     * @return
-     */
-    public static Dialog getSimpleProgressDialog(Context mContext, String msg) {
-        return getSimpleProgressDialog(mContext, msg, null);
     }
 
     public static Dialog getSimpleProgressDialog(Context mContext, String msg, DialogInterface.OnCancelListener listener) {

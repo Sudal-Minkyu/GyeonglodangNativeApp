@@ -2,24 +2,20 @@ package com.tuya.smart.android.demo.base.fragment;
 
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.tuya.smart.android.demo.R;
 
-
-/**
- * Created by mikeshou on 15/6/16.
- */
 public abstract class BaseFragment extends Fragment {
 
     protected Toolbar mToolBar;
 
     protected void initToolbar(View contentView) {
         if (mToolBar == null) {
-            mToolBar = (Toolbar) contentView.findViewById(R.id.toolbar_top_view);
+            mToolBar = contentView.findViewById(R.id.toolbar_top_view);
             if (mToolBar != null) {
                 TypedArray a = getActivity().obtainStyledAttributes(new int[]{
                         R.attr.status_font_color});
@@ -29,31 +25,9 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public Toolbar getToolBar() {
-        return mToolBar;
-    }
-
     protected void setTitle(String title) {
         if (mToolBar != null) {
             mToolBar.setTitle(title);
-        }
-    }
-
-    protected void setSubTitle(String title) {
-        if (mToolBar != null) {
-            mToolBar.setSubtitle(title);
-        }
-    }
-
-    protected void setLogo(Drawable logo) {
-        if (mToolBar != null) {
-            mToolBar.setLogo(logo);
-        }
-    }
-
-    protected void setNavigationIcon(Drawable logo) {
-        if (mToolBar != null) {
-            mToolBar.setNavigationIcon(logo);
         }
     }
 
@@ -67,12 +41,7 @@ public abstract class BaseFragment extends Fragment {
     protected void setDisplayHomeAsUpEnabled() {
         if (mToolBar != null) {
             mToolBar.setNavigationIcon(R.drawable.tysmart_back);
-            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().onBackPressed();
-                }
-            });
+            mToolBar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         }
     }
 
@@ -80,18 +49,6 @@ public abstract class BaseFragment extends Fragment {
         if (mToolBar != null) {
             mToolBar.setNavigationIcon(R.drawable.tysmart_back);
             mToolBar.setNavigationOnClickListener(listener);
-        }
-    }
-
-    protected void hideToolBarView() {
-        if (mToolBar != null && mToolBar.isShown()) {
-            mToolBar.setVisibility(View.GONE);
-        }
-    }
-
-    protected void showToolBarView() {
-        if (mToolBar != null && !mToolBar.isShown()) {
-            mToolBar.setVisibility(View.VISIBLE);
         }
     }
 

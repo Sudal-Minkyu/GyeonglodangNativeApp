@@ -5,11 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.TextView;
 
-/**
- * Created by letian on 16/5/14.
- */
 public class ViewUtils {
-
 
     public static void setTextViewDrawableLeft(Context context, TextView textView, int drawId) {
         Drawable drawable;
@@ -31,4 +27,5 @@ public class ViewUtils {
             return context.getResources().getColor(color);
         }
     }
+
 }

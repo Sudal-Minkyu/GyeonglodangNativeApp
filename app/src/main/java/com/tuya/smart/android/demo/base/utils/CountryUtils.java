@@ -7,8 +7,8 @@ import android.text.TextUtils;
 import com.tuya.smart.android.base.bean.CountryBean;
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.common.utils.TyCommonUtil;
-import com.tuya.smart.android.demo.login.CountryViewBean;
 import com.tuya.smart.android.demo.base.widget.contact.ContactItemInterface;
+import com.tuya.smart.android.demo.login.CountryViewBean;
 import com.tuya.smart.sdk.TuyaSdk;
 
 import java.util.ArrayList;
@@ -27,20 +27,14 @@ public class CountryUtils {
     public static final String TAG = "CountryData";
     public static boolean isPutInMap = false;
 
-    public static void initCountryData(final CountryDataGetListener listener) {
-        putCountryDataToMap(CommonUtil.getDefaultCountryData());
-        if (listener != null) {
-            listener.onSuccess();
-        }
-    }
 
     public static List<ContactItemInterface> getSampleContactList() {
         if (!isPutInMap) {
             isPutInMap = true;
             putCountryDataToMap(CommonUtil.getDefaultCountryData());
         }
-        List<ContactItemInterface> list = new ArrayList<ContactItemInterface>();
-        Iterator iter = null;
+        List<ContactItemInterface> list = new ArrayList<>();
+        Iterator iter;
         if (TyCommonUtil.isZh(TuyaSdk.getApplication())) {
             iter = mIdWithChiHashMap.entrySet().iterator();
         } else {
@@ -105,7 +99,7 @@ public class CountryUtils {
         return countryKey;
     }
 
-    public static String getCountryDefault(Context context) {
+    public static String getCountryDefault() {
         TimeZone tz = TimeZone.getDefault();
         String id = tz.getID();
         if (TextUtils.equals(id, "Asia/Shanghai")) {
@@ -116,12 +110,6 @@ public class CountryUtils {
         } else {
             return "US";
         }
-//        if (TextUtils.isEmpty(countryKey)) {
-//            countryKey = Locale.getDefault().getCountry().toUpperCase();
-//        }
     }
 
-    public interface CountryDataGetListener {
-        public void onSuccess();
-    }
 }

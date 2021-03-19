@@ -34,15 +34,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Created by letian on 16/7/15.
- */
 public class MainActivity extends BaseActivity implements IFamilyAddView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private FamilyAddPresenter mPresenter;
-
-    DoorBellLogin doorBellLogin;
 
     private void initPresenter() {
         mPresenter = new FamilyAddPresenter(this);

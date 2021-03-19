@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
@@ -20,9 +18,6 @@ import com.tuya.smart.android.demo.base.utils.CommonUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by mikeshou on 15/6/15.
- */
 public class BrowserActivity extends BaseActivity {
 
     private static final String TAG = "Browser";
@@ -36,11 +31,7 @@ public class BrowserActivity extends BaseActivity {
 
     protected WebView mWebView;
 
-    /**
-     * 是否需要登录
-     */
     private boolean needlogin;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +48,16 @@ public class BrowserActivity extends BaseActivity {
         if (TextUtils.isEmpty(url) || !CommonUtil.checkUrl(url)) {
             url = "about:blank";
         }
-        setMenu(R.menu.toolbar_top_refresh, new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_refresh) {
-                    mWebView.stopLoading();
-                    mWebView.reload();
-                    return true;
-                }
-                return false;
+        setMenu(R.menu.toolbar_top_refresh, item -> {
+            if (item.getItemId() == R.id.menu_refresh) {
+                mWebView.stopLoading();
+                mWebView.reload();
+                return true;
             }
+            return false;
         });
-        mWebView = (WebView) findViewById(R.id.webview);
-        Map<String, String> headers = new HashMap<String, String>();
+        mWebView = findViewById(R.id.webview);
+        Map<String, String> headers = new HashMap<>();
         headers.put("Accept-Language", TyCommonUtil.getLang(this));
         mWebView.loadUrl(url, headers);
     }
@@ -90,7 +78,6 @@ public class BrowserActivity extends BaseActivity {
         if (isFromPannel) {
             setDisplayHomeAsUpEnabled();
             hideTitleBarLine();
-            //面板title字体颜色写死白色
             if (mToolBar != null) {
                 mToolBar.setTitleTextColor(Color.WHITE);
             }
@@ -158,9 +145,7 @@ public class BrowserActivity extends BaseActivity {
     @Override
     protected boolean onPanelKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if (mWebView.canGoBack()) {
-                return true;
-            }
+            return mWebView.canGoBack();
         }
         return false;
 
