@@ -5,10 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.tuya.smart.android.demo.R;
 
@@ -23,21 +20,19 @@ public class ImageViewActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
         initToolbar();
-        imageview = (ImageView)findViewById(R.id.image_View);
+        imageview = findViewById(R.id.image_View);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(Intent.createChooser(intent, "Get Album"), GET_GALLERY_IMAGE);
 
-        imageview.setOnClickListener(v -> {
-            startActivityForResult(Intent.createChooser(intent, "Get Album"), GET_GALLERY_IMAGE);
-        });
+        imageview.setOnClickListener(v -> startActivityForResult(Intent.createChooser(intent, "Get Album"), GET_GALLERY_IMAGE));
     }
 
     protected void initToolbar() {
         if (mToolBar == null) {
-            mToolBar = (Toolbar) findViewById(R.id.toolbar_view);
+            mToolBar = findViewById(R.id.toolbar_view);
             mToolBar.setNavigationIcon(R.drawable.tysmart_back_white);
             TypedArray a = obtainStyledAttributes(new int[]{
                     R.attr.status_font_color});
@@ -47,12 +42,7 @@ public class ImageViewActivity extends BaseActivity  {
             setSupportActionBar(mToolBar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            mToolBar.setNavigationOnClickListener(v -> finish());
         }
     }
 

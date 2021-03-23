@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Display;
@@ -41,6 +40,7 @@ import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.activity.ImageViewActivity;
 import com.tuya.smart.android.demo.base.activity.PersonalInfoActivity;
+import com.tuya.smart.android.demo.base.activity.VideoViewActivity;
 import com.tuya.smart.android.demo.base.presenter.PersonalInfoPresenter;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
@@ -273,6 +273,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
             ProgressUtil.hideLoading();
         } else {
             Log.e(TAG, "KMK 카메라연결실패 다시 새로고침합니다.");
+            isPlay = false;
             ProgressUtil.hideLoading();
 //            ToastUtil.shortToast(CameraPanelActivity.this, "카메라 연결상태가 좋지않습니다.\n잠시만 기다려주세요.");
             ToastUtil.shortToast(CameraPanelActivity.this, "카메라 연결상태가 좋지않습니다.\n잠시후 상단의 새로고침 버튼을 눌러주세요.");
@@ -293,14 +294,12 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_panel);
         checkVerify();
-//        checkWhiteListRegist();
         mBind = ButterKnife.bind(this);
         initPresenter();
         initView();
         initMenu();
         initData();
         initListener();
-        BatteryTxt.performClick();
 
         TrafficStats.setThreadStatsTag(THREAD_ID);
         int value = DoorOpen();
@@ -345,7 +344,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
         devId = getIntent().getStringExtra(INTENT_DEVID);
         localKey = getIntent().getStringExtra(INTENT_LOCALKEY);
-        mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
 
         ToastUtil.shortToast(CameraPanelActivity.this, "장방 경로당 앱이 실행되었습니다.");
 
@@ -396,8 +394,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    final int GET_GALLERY_IMAGE = 200;
-
     private void initMenu() {
         devId = getIntent().getStringExtra(INTENT_DEVID);
 
@@ -406,44 +402,40 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         p2pType = getIntent().getIntExtra(INTENT_P2P_TYPE, -1);
         if (devId.equals("devId")) {
             mToolBar.setTitle("장방경로당 (도어벨을 등록해주세요.)");
-            setMenu(R.menu.toolbar_top_smart_camera, new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent;
-                    switch (item.getItemId()) {
-                        case R.id.profile: // 프로필
-                            intent = new Intent(CameraPanelActivity.this, PersonalInfoActivity.class);
-                            // onUserLeaveHint함수 호출하지않기.
-                            // intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                            startActivity(intent);
-                            break;
-                        case R.id.device_add: // 장비등록 : 장비가존재하지않을때 나옴
-                            intent = new Intent(CameraPanelActivity.this, AddDeviceTypeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                            startActivity(intent);
-                            break;
-                        case R.id.gallery: // 갤러리
-                            intent = new Intent(CameraPanelActivity.this, ImageViewActivity.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.history: // 알림센터림
-                            intent = new Intent(CameraPanelActivity.this, AlarmDetectionActivity.class);
-                            intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, devId);
+            setMenu(R.menu.toolbar_top_smart_camera, item -> {
+                Intent intent;
+                switch (item.getItemId()) {
+                    case R.id.profile: // 프로필
+                        intent = new Intent(CameraPanelActivity.this, PersonalInfoActivity.class);
+                        // onUserLeaveHint함수 호출하지않기.
+                        // intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                        startActivity(intent);
+                        break;
+                    case R.id.device_add: // 장비등록 : 장비가존재하지않을때 나옴
+                        intent = new Intent(CameraPanelActivity.this, AddDeviceTypeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                        startActivity(intent);
+                        break;
+                    case R.id.gallery: // 갤러리
+                        intent = new Intent(CameraPanelActivity.this, ImageViewActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.history: // 알림센터림
+                        intent = new Intent(CameraPanelActivity.this, AlarmDetectionActivity.class);
+                        intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, devId);
 
-                            startActivity(intent);
-                            break;
-                        case R.id.tutorial: // 튜토리얼
-                            Log.e("튜토리얼 클릭", "");
-                            tutorialStep = 0;
-                            GetTutorial();
-                            break;
-                    }
-                    return false;
+                        startActivity(intent);
+                        break;
+                    case R.id.tutorial: // 튜토리얼
+                        Log.e("튜토리얼 클릭", "");
+                        tutorialStep = 0;
+                        GetTutorial();
+                        break;
                 }
+                return false;
             });
         } else {
             String userId = ActivityUtils.GetString(getBaseContext(), "user_id");
-
 
             if (nickName != null && !nickName.trim().equals("")) {
                 mToolBar.setTitle(nickName);
@@ -452,69 +444,66 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
             } else {
                 mToolBar.setTitle("장방경로당");
             }
-            setMenu(R.menu.toolbar_top_smart_camera2, new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent;
-                    switch (item.getItemId()) {
-                        case R.id.profile:  //  프로필
-                            intent = new Intent(CameraPanelActivity.this, PersonalInfoActivity.class);
+            setMenu(R.menu.toolbar_top_smart_camera2, item -> {
+                Intent intent;
+                switch (item.getItemId()) {
+                    case R.id.profile:  //  프로필
+                        intent = new Intent(CameraPanelActivity.this, PersonalInfoActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                            startActivity(intent);
-                            break;
-                        case R.id.action_unconnect:  // 장비제거 : 장비가존재할때 나옴
-                            //  한스탭밟고 제거하기
-                            AlertDialog.Builder builder = new AlertDialog.Builder(CameraPanelActivity.this);
-                            builder.setTitle("도어벨제거");
-                            builder.setMessage("등록된 도어벨을 제거 하시겠습니까?");
-                            builder.setPositiveButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    //  취소시 처리 로직
-                                    Toast.makeText(CameraPanelActivity.this, "도어벨 제거를 취소하였습니다.", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        break;
+                    case R.id.action_unconnect:  // 장비제거 : 장비가존재할때 나옴
+                        //  한스탭밟고 제거하기
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CameraPanelActivity.this);
+                        builder.setTitle("도어벨제거");
+                        builder.setMessage("등록된 도어벨을 제거 하시겠습니까?");
+                        builder.setPositiveButton(android.R.string.no, (dialog, whichButton) -> {
+                            //  취소시 처리 로직
+                            Toast.makeText(CameraPanelActivity.this, "도어벨 제거를 취소하였습니다.", Toast.LENGTH_SHORT).show();
+                        });
+                        builder.setNegativeButton(android.R.string.yes, (dialog, whichButton) -> {
+                            // 확인시 처리 로직
+                            TuyaHomeSdk.newDeviceInstance(devId).removeDevice(new IResultCallback() {
+                                @Override
+                                public void onError(String code, String error) {
+                                    ToastUtil.shortToast(getApplicationContext(), "도어벨 제거를 실패하였습니다. 인터넷연결 확인 후 다시 시도해주시길 바랍니다.");
                                 }
-                            });
-                            builder.setNegativeButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    // 확인시 처리 로직
-                                    TuyaHomeSdk.newDeviceInstance(devId).removeDevice(new IResultCallback() {
-                                        @Override
-                                        public void onError(String code, String error) {
-                                            ToastUtil.shortToast(getApplicationContext(), "도어벨 제거를 실패하였습니다. 인터넷연결 확인 후 다시 시도해주시길 바랍니다.");
-                                        }
 
-                                        @Override
-                                        public void onSuccess() {
-                                            ToastUtil.showToast(getApplicationContext(), "도어벨을 제거하였습니다.");
-                                            Intent intent = new Intent(CameraPanelActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    finish();
+                                @Override
+                                public void onSuccess() {
+                                    ToastUtil.showToast(getApplicationContext(), "도어벨을 제거하였습니다.");
+                                    Intent intent1 = new Intent(CameraPanelActivity.this, MainActivity.class);
+                                    startActivity(intent1);
                                 }
                             });
-                            builder.create().show();
-                            break;
-                        case R.id.gallery: // 갤러리
-                            intent = new Intent(CameraPanelActivity.this, ImageViewActivity.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.history: // 알림센터
-                            intent = new Intent(CameraPanelActivity.this, AlarmDetectionActivity.class);
-                            intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, devId);
-                            startActivity(intent);
-                            break;
-                        case R.id.tutorial: // 튜토리얼
-                            // 튜토리얼클릭
-                            tutorialStep = 0;
-                            GetTutorial();
-                            break;
-                        case R.id.main_refresh: // 새로고침버튼
-                            isPlay = false;
-                            onRefresh();
-                            break;
-                    }
-                    return false;
+                            finish();
+                        });
+                        builder.create().show();
+                        break;
+                    case R.id.gallery: // 이미지 갤러리
+                        intent = new Intent(CameraPanelActivity.this, ImageViewActivity.class);
+                        startActivity(intent);
+                        break;
+//                    case R.id.gallery2: // 동영상 갤러리
+//                        intent = new Intent(CameraPanelActivity.this, VideoViewActivity.class);
+//                        startActivity(intent);
+//                        break;
+                    case R.id.history: // 알림센터
+                        intent = new Intent(CameraPanelActivity.this, AlarmDetectionActivity.class);
+                        intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, devId);
+                        startActivity(intent);
+                        break;
+                    case R.id.tutorial: // 튜토리얼
+                        // 튜토리얼클릭
+                        tutorialStep = 0;
+                        GetTutorial();
+                        break;
+                    case R.id.main_refresh: // 새로고침버튼
+                        isPlay = false;
+                        onRefresh();
+                        break;
                 }
+                return false;
             });
         }
     }
@@ -535,10 +524,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                 .on(tutorialTargetArray[tutorialStep])
                 .addCircle()
                 .withBorder()
-                .onClick(new View.OnClickListener() {
-                    public void onClick(View view) {
+                .onClick(view -> {
 
-                    }
                 })
                 .onClickContentView(R.id.touchView, view -> {
                     tutorialStep++;
@@ -592,8 +579,9 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     int getDisplayWidth(Context context) {
         int width;
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        assert wm != null;
         Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT > 12) {
+        if (Build.VERSION.SDK_INT >= 19) {
             Point size = new Point();
             display.getSize(size);
             width = size.x;
@@ -630,6 +618,11 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
             showNotSupportToast();
         } else {
             mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(devId);
+            mDeviceControl.publishCameraDps(DpWirelessElectricity.ID, null);
+            mDeviceControl.publishCameraDps(DpWirelessBatterylock.ID, true);
+            mDeviceControl.publishCameraDps(DpWirelessLowpower.ID, 10);
+            mDeviceControl.publishCameraDps(DpWirelessPowermode.ID, null);
+            mDeviceControl.publishCameraDps(DpPIRSwitch.ID, "1");
         }
     }
 
@@ -699,10 +692,11 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                 mDeviceControl.registorTuyaCameraDeviceControlCallback(DpWirelessElectricity.ID, new ITuyaCameraDeviceControlCallback<Integer>() {
                     @Override
                     public void onSuccess(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, Integer o) {
+                        Log.e(TAG,"KMK 배터리 o : "+o);
                         if (o == 0) {
                             BatteryTxt.setText("충천중");
                         } else {
-                            BatteryTxt.setText(o + "%");
+                            BatteryTxt.setText(o+"%");
                         }
                     }
 
@@ -711,11 +705,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
                     }
                 });
-                mDeviceControl.publishCameraDps(DpWirelessElectricity.ID, null);
-                mDeviceControl.publishCameraDps(DpWirelessBatterylock.ID, true);
-                mDeviceControl.publishCameraDps(DpWirelessLowpower.ID, 50);
-                mDeviceControl.publishCameraDps(DpWirelessPowermode.ID, null);
-                mDeviceControl.publishCameraDps(DpPIRSwitch.ID, "3");
                 break;
             default:
                 break;

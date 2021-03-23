@@ -30,6 +30,7 @@ import com.tuyasmart.camera.devicecontrol.utils.CRC32;
 import com.tuyasmart.camera.devicecontrol.utils.IntToButeArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -41,7 +42,6 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
 
     private void initPresenter() {
         mPresenter = new FamilyAddPresenter(this);
-//        doorBellLogin = new DoorBellLogin();
     }
 
     private void initService() {
@@ -68,15 +68,10 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
         setContentView(R.layout.activity_main);
 
         initPresenter();
-//        initData();
         initService();
         new Handler(Objects.requireNonNull(Looper.myLooper())).postDelayed(() -> {
             if (TuyaHomeSdk.getUserInstance().isLogin()) {
                 Log.e(TAG, "KMK 앱실행 완료");
-//                    LoginHelper.afterLogin(); //CIS삭제
-//                    DoorBellLogin doorBellLogin = new DoorBellLogin();
-//                    doorBellLogin.afterLogout();
-//                doorBellLogin.afterLogin(this);
                 deviceLoad();
             } else {
                 ActivityUtils.gotoActivity(MainActivity.this, LoginActivity.class, ActivityUtils.ANIMATE_FORWARD, true);
@@ -108,11 +103,10 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICE, "false");
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICESTART, "false");
                             } else {
-//                                ITuyaCameraDevice mDeviceControl;
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_DEVID, bean.getDeviceList().get(0).getDevId());
                                 intent.putExtra(CommonDeviceDebugPresenter.INTENT_LOCALKEY, bean.getDeviceList().get(0).getLocalKey());
                                 Map<String, Object> map = bean.getDeviceList().get(0).getSkills();
-                                int p2pType = -1;
+                                int p2pType;
                                 if (map == null || map.size() == 0) {
                                     p2pType = -1;
                                 } else {
@@ -123,14 +117,14 @@ public class MainActivity extends BaseActivity implements IFamilyAddView {
                                 intent.putExtra(CommonDeviceDebugPresenter.CALL, "false");
                                 intent.putExtra(CommonDeviceDebugPresenter.DEVICESTART, "true");
                                 Log.e(TAG, "KMK 장비아이디 : "+bean.getDeviceList().get(0).getDevId());
-//                                mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
+//                              ITuyaCameraDevice mDeviceControl = TuyaCameraDeviceControlSDK.getCameraDeviceInstance(bean.getDeviceList().get(0).getDevId());
                                 Log.e(TAG, "KMK 앱 처음 실행 카메라를 켭니다.");
                                 int crcsum = CRC32.getChecksum(bean.getDeviceList().get(0).getLocalKey().getBytes());
                                 Log.e(TAG, "KMK CAMERA_ON crcsum : "+crcsum);
                                 String topicId = "m/w/" + bean.getDeviceList().get(0).getDevId();
                                 Log.e(TAG, "KMK CAMERA_ON topicId : "+topicId);
                                 byte[] bytes = IntToButeArray.intToByteArray(crcsum);
-                                Log.e(TAG, "KMK CAMERA_ON bytes : "+bytes);
+                                Log.e(TAG, "KMK CAMERA_ON bytes : "+ Arrays.toString(bytes));
                                 ITuyaHomeCamera homeCamera = TuyaHomeSdk.getCameraInstance();
                                 Log.e(TAG, "KMK CAMERA_ON homeCamera : "+homeCamera);
                                 homeCamera.publishWirelessWake(topicId, bytes);

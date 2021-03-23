@@ -5,13 +5,11 @@ android {
     compileSdkVersion 29
     buildToolsVersion "28.0.3"
     defaultConfig {
-        // applicationId "kr.co.broadwave.broadwavehomeservice"
         applicationId "kr.co.gyeonglodang.jbgyeonglodang"
-        //  applicationId "kr.co.gyeonglodang.bwgyeonglodang"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
-        versionName "1.1.0"
+        versionName "1.1.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
 
@@ -56,7 +54,6 @@ repositories {
 }
 
 dependencies {
-//    implementation "com.android.support:support-compat:28.0.0"
 
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
@@ -107,8 +104,6 @@ dependencies {
     implementation 'com.tuya.smart:tuyasmart-ipc-camera-outside:3.20.0'
     implementation 'com.tuya.smart:tuyasmart-base-utils:3.18.0r143-rc.9'
 
-//    implementation group: 'com.tuya.smart', name: 'tuyasmart-ipc-camera-v2', version: '3.22.0'
-
     //option
     implementation 'com.tuya.smart:tuyasmart-ipc-camera-message:3.13.0r128'
     implementation 'com.tuya.smart:tuyasmart-ipc-devicecontrol:3.17.0r139'
@@ -129,7 +124,6 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.1.2' // material date picker custom library add
     compile 'com.github.florent37:tutoshowcase:1.0.1'// tutorial view add
 
-//    implementation 'com.reactiveandroid:reactiveandroid:1.4.3' // local database
     compile 'com.github.satyan:sugar:1.5'// local database
     implementation 'com.nex3z:toggle-button-group:1.1.9'
 }

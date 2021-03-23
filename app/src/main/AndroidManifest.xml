@@ -93,6 +93,11 @@
             android:theme="@style/Splash.Theme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
+            android:name=".base.activity.VideoViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.Theme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
             android:name=".config.ECBindActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash.Theme"
