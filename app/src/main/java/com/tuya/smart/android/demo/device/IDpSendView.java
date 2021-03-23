@@ -20,8 +20,6 @@ public interface IDpSendView {
 
     String getStrValue();
 
-    String getEnumValue();
-
     String getValue();
 
     String getRAWValue();

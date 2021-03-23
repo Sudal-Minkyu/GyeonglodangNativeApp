@@ -1,38 +1,13 @@
 package com.tuya.smart.android.demo.utils;
 
-
-import android.content.ContentResolver;
-import android.content.Context;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-
-/**
- * Created by lee on 2017/4/18.
- */
 
 public class DateUtils {
 
-    /**
-     * 获取当前时间的起点（00:00:00）
-     *
-     * @param currentTime
-     * @return
-     */
     public static long getTodayStart(long currentTime) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(currentTime);
@@ -42,12 +17,6 @@ public class DateUtils {
         return calendar.getTimeInMillis() / 1000L;
     }
 
-    /**
-     * 获取当前时间的结点（00:00:00）
-     *
-     * @param currentTime
-     * @return
-     */
     public static long getTodayEnd(long currentTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(currentTime));
@@ -58,13 +27,6 @@ public class DateUtils {
         return calendar.getTimeInMillis() / 1000L;
     }
 
-    /**
-     *
-     * @param year
-     * @param month
-     * @param day
-     * @return
-     */
     public static long getCurrentTime(int year, int month, int day) {
         String monthStr;
         if (month < 10) {
@@ -88,6 +50,5 @@ public class DateUtils {
         }
         return 0;
     }
-
 
 }

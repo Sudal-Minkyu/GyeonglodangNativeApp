@@ -32,7 +32,7 @@ import java.util.List;
  * @author angelo.marchesin
  */
 @SuppressWarnings("unused")
-public class NiceSpinner extends TextView {
+public class NiceSpinner extends androidx.appcompat.widget.AppCompatTextView {
 
     private static final int MAX_LEVEL = 10000;
     private static final int DEFAULT_ELEVATION = 16;

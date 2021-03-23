@@ -28,9 +28,6 @@ import com.tuya.smart.sdk.api.IResultCallback;
 
 import static com.tuya.smart.android.demo.login.activity.AccountConfirmActivity.MODE_REGISTER;
 
-/**
- * Created by lee on 16/6/3.
- */
 public class AccountConfirmPresenter extends BasePresenter {
 
     public static final int MSG_SEND_VALIDATE_CODE_SUCCESS = 12;
@@ -188,26 +185,20 @@ public class AccountConfirmPresenter extends BasePresenter {
         switch (mView.getMode()) {
             //비밀번호 변경
             case AccountConfirmActivity.MODE_CHANGE_PASSWORD:
-                DialogUtil.simpleConfirmDialog(mContext, "비밀번호변경", "정말 비밀번호를 변경 하시겠습니까?", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (DialogInterface.BUTTON_POSITIVE == i) {
-                            resetPassword();
-                        }
-                        dialogInterface.dismiss();
+                DialogUtil.simpleConfirmDialog(mContext, "비밀번호변경", "정말 비밀번호를 변경 하시겠습니까?", (dialogInterface, i) -> {
+                    if (DialogInterface.BUTTON_POSITIVE == i) {
+                        resetPassword();
                     }
+                    dialogInterface.dismiss();
                 });
                 break;
             //비밀번호 찾기
             case AccountConfirmActivity.MODE_FORGET_PASSWORD:
-                DialogUtil.simpleConfirmDialog(mContext, "비밀번호찾기", "작성하신 비밀번호로 변경됩니다.", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (DialogInterface.BUTTON_POSITIVE == i) {
-                            resetPassword();
-                        }
-                        dialogInterface.dismiss();
+                DialogUtil.simpleConfirmDialog(mContext, "비밀번호찾기", "작성하신 비밀번호로 변경됩니다.", (dialogInterface, i) -> {
+                    if (DialogInterface.BUTTON_POSITIVE == i) {
+                        resetPassword();
                     }
+                    dialogInterface.dismiss();
                 });
                 break;
             case MODE_REGISTER:
@@ -228,40 +219,14 @@ public class AccountConfirmPresenter extends BasePresenter {
                 Toast.makeText (mContext, "회원가입 실패, 다시 시도해주세요." + error, Toast.LENGTH_SHORT).show ();
             }
         });
-//        switch (mView.getPlatform()) {
-//            case AccountConfirmActivity.PLATFORM_EMAIL:
-//                System.out.println("이메일 가입완료");
-//                TuyaHomeSdk.getUserInstance().registerAccountWithEmail(mCountryCode, mEmail, mView.getPassword(), mView.getValidateCode(),mIRegisterCallback);
-//                break;
-//            case AccountConfirmActivity.PLATFORM_PHONE:
-//                TuyaHomeSdk.getUserInstance().registerAccountWithPhone(mCountryCode, mPhoneNum, mView.getPassword(), mView.getValidateCode(), mIRegisterCallback);
-//                break;
-//        }
     }
 
     private void resetPassword() {
-//        switch (mView.getPlatform()) {
-
-//            case AccountConfirmActivity.PLATFORM_EMAIL:
-                TuyaHomeSdk.getUserInstance().resetEmailPassword(mCountryCode, mEmail, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
-//                break;
-
-//            case AccountConfirmActivity.PLATFORM_PHONE:
-//                TuyaHomeSdk.getUserInstance().resetPhonePassword(mCountryCode, mPhoneNum, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
-//                break;
-//        }
+        TuyaHomeSdk.getUserInstance().resetEmailPassword(mCountryCode, mEmail, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);
     }
 
     private void loginWithPhoneCode() {
         TuyaHomeSdk.getUserInstance().loginWithPhone(mCountryCode, mPhoneNum, mView.getValidateCode(), mILoginCallback);
-    }
-
-    private void loginWithPassword() {
-//        if (mView.getPlatform() == AccountConfirmActivity.PLATFORM_PHONE) {
-//            TuyaHomeSdk.getUserInstance().loginWithPhonePassword(mCountryCode, mPhoneNum, mView.getPassword(), mILoginCallback);
-//        } else {
-            TuyaHomeSdk.getUserInstance().loginWithEmail(mCountryCode, mEmail, mView.getPassword(), mILoginCallback);
-//        }
     }
 
     @Override
@@ -302,12 +267,11 @@ public class AccountConfirmPresenter extends BasePresenter {
                 if (mView.getMode() == AccountConfirmActivity.MODE_CHANGE_PASSWORD) {
                     // 비밀번호 변경 로직
                     Toast.makeText(mContext, "비밀번호가 변경되었습니다.\n다시 로그인해주세요.", Toast.LENGTH_LONG).show();
-                    LoginHelper.reLogin(mContext, false);
                 } else {
                     // 비밀번호 찾기 로직
                     Toast.makeText(mContext, "작성하신 비밀번호로 변경되었습니다.\n다시 로그인해주세요.", Toast.LENGTH_LONG).show();
-                    LoginHelper.reLogin(mContext, false);
                 }
+                LoginHelper.reLogin(mContext, false);
 
                 break;
 

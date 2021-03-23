@@ -97,10 +97,6 @@ public class ContactListAdapter extends ArrayAdapter<ContactItemInterface> {
 
     }
 
-    public boolean isInSearchMode() {
-        return inSearchMode;
-    }
-
     public void setInSearchMode(boolean inSearchMode) {
         this.inSearchMode = inSearchMode;
     }

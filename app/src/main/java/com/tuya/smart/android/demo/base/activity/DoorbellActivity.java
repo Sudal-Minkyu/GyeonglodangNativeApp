@@ -22,10 +22,6 @@ import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * Created by letian on 16/7/19.
- */
 public class DoorbellActivity extends Activity {
 
     @Override

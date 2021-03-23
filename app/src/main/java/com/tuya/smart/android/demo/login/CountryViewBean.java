@@ -11,7 +11,6 @@ public class CountryViewBean implements ContactItemInterface {
     private String number;
     private String pinyin;
 
-
     private boolean isChinese;
 
     public CountryViewBean(String key, String countryName, String number, String pinyin) {

@@ -1,71 +1,17 @@
 <resources>
-    <array name="family_add_default_name_array">
-        <item>living room</item>
-        <item>master bedroom</item>
-        <item>secondary bedroom</item>
-        <item>dining room</item>
-        <item>kitchen</item>
-        <item>study</item>
-    </array>
-
     <string name="app_name">장방경로당</string>
-<!--    <string name="app_name">JD_SDK_장방경로당</string>-->
-<!--    <string name="app_name">BW_SDK_장방경로당</string>-->
-
-    <string name="action_settings">Settings</string>
-    <string name="device_list">Device list</string>
-    <string name="share_list">Share list</string>
     <string name="reNickName">닉네임입력</string>
     <string name="reTopic">토픽변경</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
-    <string name="ec_start">Start EZConfig</string>
-    <string name="ec_cancel">Cancel EZConfig</string>
-    <string name="remove_device">Remove Device</string>
-    <string name="ap_start">Start APConfig</string>
-    <string name="offline">Off-line</string>
-    <string name="IntranetControl">Online-Intranet</string>
 
     <string name="OnlineControl">Online</string>
     <string name="Confirm">확인</string>
     <string name="at_login_sns">Sign in with social media account</string>
     <string name="binding">Binding&#046;&#046;</string>
     <string name="cancel_tip">OK</string>
-    <string name="click_bind_phone">Tap bind phone number</string>
     <string name="click_set_neekname">프로필 수정</string>
-    <string name="contact_use_tip">You sign in with %s account</string>
-    <string name="env_preview">(Preview)</string>
-    <string name="env_wrong_tip">장치는 온라인 상태이고 앱은 미리보기 환경에서 실행됩니다.</string>
     <string name="ty_loading">로딩중…</string>
-    <string name="every_week_five">매주 금요일 Friday</string>
-    <string name="every_week_four">매주 목요일</string>
-    <string name="every_week_one">매주 월요일</string>
-    <string name="every_week_seven">매주 일요일</string>
-    <string name="every_week_six">매주 토요일</string>
-    <string name="every_week_three">매주 수요일</string>
-    <string name="every_week_two">매주 화요일</string>
-    <string name="experience_center">체험 센터</string>
-    <string name="experience_center_enter">Enter experience center</string>
-    <string name="firmware_device_updating">Updating: device control module</string>
-    <string name="firmware_gw_updating">Updating:connection module</string>
-    <string name="firmware_has_upgrade_title">New device firmware</string>
-    <string name="firmware_no_update_one">Version:</string>
-    <string name="firmware_no_update_title">Firmware is the latest version</string>
-    <string name="firmware_upgrade_dev">Device control module</string>
-    <string name="firmware_upgrade_failure_description">Please restart the device and try again
-    </string>
-    <string name="firmware_upgrade_gw">Connectioxn module:</string>
-    <string name="firmware_upgrade_now">Upgrade now</string>
-    <string name="gesture_password_forget">Forgot pattern password</string>
-    <string name="gesture_password_input_limit">Trying too often, please retry after %d minutes
-    </string>
-    <string name="gesture_password_input_new">New pattern password</string>
-    <string name="gesture_password_input_original">Enter correct pattern password</string>
-    <string name="gesture_password_reset">Whether to reset pattern password?</string>
-    <string name="gesture_password_set_successful">Successfully set your pattern</string>
-    <string name="home_no_device">Empty List</string>
-    <string name="input_login_password">Enter login password</string>
-    <string name="input_password_again">Enter password again</string>
     <string name="key_num_not_reasonable">Password length is 6-13 characters, please try again
     </string>
     <string name="key_num_not_uniform">Password not the same, please try again</string>
@@ -136,60 +82,8 @@
     <string name="ty_input_old_keyword">이전 비밀번호 입력하세요</string>
     <string name="ty_keep_net_working">전원을 끄지 마시고 네트워크를 유지하십시오.</string>
     <string name="ty_keep_power_working">연결중...</string>
-    <string name="ty_login_fb">facebook</string>
-    <string name="ty_login_forget_keyword_find">Find password</string>
-    <string name="ty_login_ins">instagram</string>
-    <string name="ty_login_qq">QQ</string>
-    <string name="ty_login_tw">twitter</string>
-    <string name="ty_login_wechat">WeChat</string>
-    <string name="ty_login_weibo">weibo</string>
-    <string name="ty_mobile_binding_tip">Login with mobile number after verification</string>
-    <string name="ty_mobile_change_button">Change mobile number</string>
-    <string name="ty_mobile_change_phone">Your mobile number</string>
-    <string name="ty_mobile_change_tip">Login with mobile number</string>
-    <string name="ty_modify_device_name_length_limit">No more than 25 characters for device name
-    </string>
-    <string name="ty_modify_group_name_length_limit">No more than 25 characters for group name
-    </string>
-    <string name="ty_mqtt_connecting">Device is connecting&#046;&#046;&#046;.</string>
-    <string name="ty_net_useless_info">Network is unavailable</string>
-    <string name="ty_no_net_info">Network error, please check</string>
-    <string name="ty_not_bind_phone_num">Not bind phone number yet\n Can\'t change password</string>
-    <string name="ty_offline_delete_share">Delete sharing</string>
-    <string name="ty_offline_subtitle">Please check or retry</string>
-    <string name="ty_offline_title">The device is offline</string>
-    <string name="ty_pattern_auto_des">Turn on to add new timer</string>
-    <string name="ty_pattern_manual">Manual</string>
-    <string name="ty_permission_tip_contact">Failed to obtain contact information, please grant the
-        permission in phone \"Settings-Applications-%1$s-Permissions\"
-    </string>
-    <string name="ty_permission_tip_location">- Get permission to location information</string>
-    <string name="ty_permission_tip_phone_state">- Get permission to read phone status</string>
-    <string name="ty_permission_tip_read_set">To normally use %1$s, please grant permission to
-        \"read or write system settings\"
-    </string>
-    <string name="ty_permission_tip_tail">Please grant permissions above in phone
-        \"Settings\"-\"Applications\"-%1$s-\"Permission\"
-    </string>
-    <string name="ty_permission_tip_title">To normally use %1s, please grant permissions below:
-    </string>
-    <string name="ty_permission_tip_write_storage">- Get permission to operate storage</string>
+    <string name="ty_login_forget_keyword_find">비밀번호 찾기</string>
     <string name="ty_phone_num_error">이메일을 확인해주세요.</string>
-    <string name="ty_profile_gesture">Pattern unlock</string>
-    <string name="ty_profile_scan">Scan</string>
-    <string name="ty_send_veri_code">Verification code is sent to number %s</string>
-    <string name="ty_share_edit_account">User</string>
-    <string name="ty_time_correct">Time setting error, please correct and try again</string>
-    <string name="ty_timer_delete_confirm">Sure to delete the timer setting?</string>
-    <string name="ty_timer_params_open_time_empty">Start time can\'t be empty</string>
-    <string name="ty_timer_repeat">Repeat</string>
-    <string name="ty_timer_switch">ON/OFF</string>
-    <string name="ty_timer_switch_off">Off</string>
-    <string name="ty_timer_switch_on">On</string>
-    <string name="ty_verification_code_error">Verification code error</string>
-    <string name="ty_virtual_device_add_fail">Failed to add the virtual device</string>
-    <string name="ty_virtual_device_add_succ">Successfully add virtual device</string>
-    <string name="ty_write_new_keyword">New password</string>
 
     <!-- old -->
     <string name="ty_write_old_keyword">Old password</string>
@@ -202,9 +96,6 @@
     <string name="action_more">More</string>
     <string name="action_send">Send</string>
     <string name="action_tips_exit_hint">종료하려면 한번 더 누르세요.</string>
-    <string name="activity_ap_no_smart_wifi">No Location authorization, or there is no hotspot
-        network.
-    </string>
     <string name="activity_ec_begin_config">Configure</string>
     <string name="activity_title_setting">설정</string>
     <string name="add_alarm_timer">Add timer</string>
@@ -244,77 +135,12 @@
     <string name="config_wifi_error">the gateway is not initalized</string>
     <string name="config_wifi_failure">Please connect to network</string>
     <string name="confirm">확인</string>
-    <string name="connect_phone_to_network">Please make sure your phone connected to Wi-Fi.</string>
-    <string name="connect_to_the_hotspot">Connect Hotspot</string>
-    <string name="connect_to_the_hotspot_error">Hotspot connection failed, please check password.
-    </string>
-    <string name="connect_to_the_hotspot_tip">Please connect to the hotspot named %s-XXXX. Please
-        check password in instruction
-    </string>
-    <string name="connect_to_wifi">Connect Wi-Fi</string>
-    <string name="connect_to_wifi_failure">Hotspot connection failed, please check password.
-    </string>
-    <string name="connect_to_wifi_tip">Connect power, choose usable Wi-Fi network, and smart device
-        will use it to connect to the Internet.
-    </string>
-    <string name="connectedto">Connected to</string>
-    <string name="connecting">Connecting to</string>
-    <string name="connectionError">An error occurred connecting to</string>
-    <string name="content_device_offline">Pleases check or try:\n1. if the device powered on\n2. if
-        Wi-Fi available\n3. Reset the device
-    </string>
-    <string name="control_data_error">DP data error</string>
-    <string name="control_data_error_code">11001</string>
-    <string name="copy_right">©2015 Tuya Inc. All Rights Reserved</string>
-    <string name="current_version">Current version</string>
-    <string name="custom_day">Customize</string>
-    <string name="delete_member_tips">Sure not to share device with%s?</string>
-    <string name="device_auto_switch_error">Make sure your phone network is available</string>
     <string name="device_confirm_remove">현재 도어벨을 제거 하시겠습니까?</string>
-    <string name="device_connect_ap">Connecting</string>
-    <string name="device_has_unbinded">Device remove</string>
-    <string name="device_on_off">ON/OFF</string>
-    <string name="device_reset">Reset Device</string>
-    <string name="disconnected">Disconnected from</string>
-    <string name="disconnecting">Disconnecting from</string>
     <string name="done">확인</string>
-    <string name="download_error_with_md5_unrectify">MD5 verification failed</string>
-    <string name="download_unzip_error">Uncompress UI panel package failed</string>
-    <string name="ec_mode">EZ Mode</string>
-    <string name="edit_alarm">Edit Timer</string>
-    <string name="edit_timer">Edit Timer</string>
-    <string name="everyday">Every day</string>
-    <string name="fail">Failure</string>
-    <string name="feed_back_add_hint">Please describe your issue</string>
-    <string name="feed_back_no_content">Empty Feedback List</string>
-    <string name="feed_back_submiting">Submit</string>
-    <string name="feedback_default_content">Hey, there. As we\'re growing, your feedback is
-        desperately needed.\nOr any bugs that piss you off, shout it out here :)\n
-    </string>
-    <string name="feedback_edit_title">Write your feedback</string>
-    <string name="feedback_faq">문의하기</string>
-    <string name="feedback_out_of_range">The words number can not exceed 240 characters</string>
-    <string name="feedback_success_result">Feedback sent, please wait for our reply.</string>
-    <string name="feedback_title">Feedback</string>
-    <string name="feedback_type">Feedback Type</string>
     <string name="find_device_cancel">취소</string>
     <string name="find_device_confirm">확인</string>
-    <string name="finish">Done</string>
-    <string name="finish_at_once">Finish</string>
-    <string name="firmware_no_update">Current version %s is the latest one</string>
-    <string name="firmware_upgrade">Firmware Upgrade</string>
-    <string name="firmware_upgrade_failure">upgrade failed</string>
-    <string name="firmware_upgrade_success">Firmware upgrade succeed</string>
-    <string name="firmware_upgrade_update">Upgrade to new version</string>
-    <string name="firmware_upgrading">Updating firmware, don\'t cut off power</string>
-    <string name="friday">Friday</string>
-    <string name="friend">장치 공유</string>
-    <string name="get_the_latest_ui_version">최신 UI 패널 가져 오기</string>
     <string name="go_next">다음</string>
-    <string name="has_update"><![CDATA[<font color="#ff0000">새로운 버전 %s</font>]]></string>
-    <string name="head_icon">사진</string>
     <string name="home_add_device">장치 추가</string>
-    <string name="home_my_device">장치들</string>
     <string name="home_personal_center">프로필</string>
     <string name="input_new_user_phone_number">새 회원 입력\'s 전화번호</string>
     <string name="input_password">비밀번호</string>

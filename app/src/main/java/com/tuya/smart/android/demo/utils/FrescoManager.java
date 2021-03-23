@@ -20,11 +20,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
-/**
- * huangdaju
- * 2020-02-20
- **/
-
 public class FrescoManager {
     public static void initFresco(Context context){
         ImagePipelineConfig defaultConfig = getDefaultConfig(context, null, null);

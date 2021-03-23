@@ -28,17 +28,6 @@ public class DialogUtil {
         alertDialog.show();
     }
 
-    public static void simpleSmartDialog(Context context, int msgResId,
-                                         final DialogInterface.OnClickListener listener) {
-        simpleSmartDialog(context, context.getString(msgResId), listener);
-    }
-
-    public static void simpleConfirmDialog(Context context, CharSequence msg,
-                                           final DialogInterface.OnClickListener listener) {
-        simpleConfirmDialog(context, context.getString(R.string.ty_simple_confirm_title), msg,
-                listener);
-    }
-
     public static void simpleConfirmDialog(Context context, String title, CharSequence msg,
                                            final DialogInterface.OnClickListener listener) {
         DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
@@ -97,25 +86,6 @@ public class DialogUtil {
     public interface SimpleInputDialogInterface {
         void onPositive(DialogInterface dialog, String inputText);
         void onNegative(DialogInterface dialog);
-    }
-
-    public static AlertDialog customDialog(Context context, String title, CharSequence message, String positiveButton,
-                                           String negativeButton, String neutralButton, DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder dialog = UIFactory.buildAlertDialog(context);
-        if (!TextUtils.isEmpty(positiveButton)) {
-            dialog.setPositiveButton(positiveButton, listener);
-        }
-        if (!TextUtils.isEmpty(negativeButton)) {
-            dialog.setNegativeButton(negativeButton, listener);
-        }
-        if (!TextUtils.isEmpty(neutralButton)) {
-            dialog.setNeutralButton(neutralButton, listener);
-        }
-        if (!TextUtils.isEmpty(title)) {
-            dialog.setTitle(title);
-        }
-        dialog.setMessage(message);
-        return dialog.create();
     }
 
 }

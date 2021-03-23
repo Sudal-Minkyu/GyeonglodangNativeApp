@@ -6,11 +6,6 @@ import android.os.Build;
 import java.util.Locale;
 import java.util.SimpleTimeZone;
 
-/**
- * huangdaju
- * 2019-11-19
- **/
-
 public class TimeZoneUtils {
     public static String getTimezoneGCMById(String timezoneId) {
         int timeZoneByRawOffset;

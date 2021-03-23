@@ -121,27 +121,6 @@ public class FullscreenActivity extends Activity {
         DisableVibrator();
     }
 
-    /**
-     * 진동 초기화
-     */
-    private void initVibrator() {
-//        ShowVibrator(false);
-//        ShowVibrator(true);
-    }
-
-    /**
-     * 진동 활성화 여부
-     *
-     * @param isShowing 활성화 여부
-     */
-//    private void ShowVibrator(boolean isShowing) {
-//        if (isShowing) {
-//            EnableVibrator();
-//        } else {
-//            DisableVibrator();
-//        }
-//    }
-
     private boolean hasVibrator = true; // 진동여부
 
     /**
@@ -257,13 +236,7 @@ public class FullscreenActivity extends Activity {
     }
 
 
-    /**
-     * huangdaju
-     * 2019-11-19
-     **/
-
     private String devId;
-    private List<CameraMessageBean> mWaitingDeleteCameraMessageList;
     protected List<CameraMessageBean> mCameraMessageList;
     private CameraMessageBusiness messageBusiness;
     private CameraMessageClassifyBean selectClassify;
@@ -345,13 +318,10 @@ public class FullscreenActivity extends Activity {
 
 
     private void Notify() {
-        mWaitingDeleteCameraMessageList = new ArrayList<>();
         mCameraMessageList = new ArrayList<>();
         messageBusiness = new CameraMessageBusiness();
         queryCameraMessageClassify(devId);
         queryAlarmDetectionByMonth();
-
-
     }
 
     public void queryCameraMessageClassify(String devId) {

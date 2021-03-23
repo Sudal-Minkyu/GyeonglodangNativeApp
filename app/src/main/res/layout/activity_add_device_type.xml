@@ -18,12 +18,6 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/sirenorder_qr_btn_p"
             android:visibility="visible" />
-        <!--        <Button-->
-        <!--            android:id="@+id/gateway_btn"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="50dp"-->
-        <!--            android:text="@string/ty_add_device_gateway"-->
-        <!--            />-->
 
         <Button
             android:id="@+id/grcode_btn"
@@ -39,6 +33,7 @@
             android:layout_marginLeft="@dimen/mg_50"
             android:textSize="@dimen/ts_18"
             android:text="@string/ty_add_device_grcode" />
+
     </RelativeLayout>
 
     <include

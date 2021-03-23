@@ -76,11 +76,6 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
         return null;
     }
 
-    DoorBellLogin doorBellLogin;
-    private void initPresenter() {
-        doorBellLogin = new DoorBellLogin();
-    }
-
     private void checkLogin() {
         if (needLogin() && !TuyaHomeSdk.getUserInstance().isLogin()) {
             LoginHelper.reLogin(this);
@@ -109,7 +104,6 @@ public class BackgroundService extends Service implements IFamilyAddView, ITuyaG
 
         mContext = getApplicationContext();
         checkLogin();
-        initPresenter();
 
         if (Build.VERSION.SDK_INT >= 26) {
             String CHANNEL_ID = "my_channel_01";

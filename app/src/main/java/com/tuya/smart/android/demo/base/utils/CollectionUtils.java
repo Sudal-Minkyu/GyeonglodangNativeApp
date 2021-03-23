@@ -10,8 +10,4 @@ public class CollectionUtils {
         return null == collection || collection.isEmpty();
     }
 
-    public static boolean isNotEmpty(Collection collection) {
-        return null != collection && !collection.isEmpty();
-    }
-
 }

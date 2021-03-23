@@ -70,6 +70,7 @@ public class QrCodeConfigActivity extends AppCompatActivity implements ITuyaSmar
     private void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             WifiManager wifimanager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            assert wifimanager != null;
             WifiInfo wifiInfo = wifimanager.getConnectionInfo();
             wifiSSId = wifiInfo.getSSID();
             wifiSSId = wifiSSId.replaceAll("\"", "");

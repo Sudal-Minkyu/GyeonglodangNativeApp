@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -156,7 +155,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void initToolbar() {
         if (mToolBar == null) {
-            mToolBar = (Toolbar) findViewById(R.id.toolbar_top_view);
+            mToolBar = findViewById(R.id.toolbar_top_view);
             if (mToolBar == null) {
             } else {
                 TypedArray a = obtainStyledAttributes(new int[]{
@@ -164,13 +163,6 @@ public class BaseActivity extends AppCompatActivity {
                 int titleColor = a.getInt(0, Color.WHITE);
                 mToolBar.setTitleTextColor(titleColor);
             }
-        }
-    }
-
-    protected void hideTitleBarLine() {
-        View line = findViewById(R.id.v_title_down_line);
-        if (line != null) {
-            line.setVisibility(View.GONE);
         }
     }
 
@@ -217,18 +209,6 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setDisplayHomeAsUpEnabled(final View.OnClickListener listener) {
         setDisplayHomeAsUpEnabled(R.drawable.tysmart_back_white, listener);
-    }
-
-    protected void hideToolBarView() {
-        if (mToolBar != null) {
-            mToolBar.setVisibility(View.GONE);
-        }
-    }
-
-    protected void showToolBarView() {
-        if (mToolBar != null) {
-            mToolBar.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -396,30 +376,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public boolean needLogin() {
         return true;
-    }
-
-    public static void setViewVisible(View view) {
-        if (view.getVisibility() != View.VISIBLE) {
-            view.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public static void setViewGone(View view) {
-        if (view.getVisibility() != View.GONE) {
-            view.setVisibility(View.GONE);
-        }
-    }
-
-    protected boolean isPause() {
-        return mIsPaused;
-    }
-
-    protected void hideIMM() {
-        if (getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        }
     }
 
     public void initSystemBarColor() {

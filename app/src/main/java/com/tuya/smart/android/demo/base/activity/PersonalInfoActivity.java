@@ -18,7 +18,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class PersonalInfoActivity extends BaseActivity implements IPersonalInfoView {
-    private static final String TAG = PersonalInfoActivity.class.getSimpleName();
     private PersonalInfoPresenter mPersonalInfoPresenter;
 
     @BindView(R.id.tv_renickname)

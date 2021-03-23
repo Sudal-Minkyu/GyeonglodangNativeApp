@@ -92,8 +92,9 @@ public class CountryUtils {
         String countryKey = "";
         try {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            assert tm != null;
             countryKey = tm.getNetworkCountryIso().toUpperCase();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return countryKey;

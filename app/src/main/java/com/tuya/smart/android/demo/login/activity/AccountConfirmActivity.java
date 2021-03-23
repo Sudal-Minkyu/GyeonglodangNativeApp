@@ -22,9 +22,6 @@ import com.tuya.smart.android.demo.login.IAccountConfirmView;
 import com.tuya.smart.android.demo.login.presenter.AccountConfirmPresenter;
 import com.tuya.smart.android.mvp.bean.Result;
 
-/**
- * 注册\忘记密码\更换密码 都会进入这里
- */
 public class AccountConfirmActivity extends BaseActivity implements TextWatcher, IAccountConfirmView {
     public static final String EXTRA_ACCOUNT_CONFIRM_MODE = "extra_account_confirm_mode";
     public static final String EXTRA_ACCOUNT_PLATFORM = "extra_account_platform";
@@ -70,7 +67,7 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT_PLATFORM, accountType);
         intent.putExtra(AccountConfirmActivity.EXTRA_ACCOUNT_CONFIRM_MODE, mode);
-        ActivityUtils.startActivityForResult(mContext, intent, requestCode, 0);
+        ActivityUtils.startActivityForResult(mContext, intent, requestCode);
     }
 
 
@@ -87,7 +84,6 @@ public class AccountConfirmActivity extends BaseActivity implements TextWatcher,
 
     public void sendValidateCode() {
         if (mGetValidateCode.isEnabled()) {
-            hideIMM();
             // 확인 코드가 전송되었습니다.
             disableGetValidateCode();
             mPresenter.getValidateCode();

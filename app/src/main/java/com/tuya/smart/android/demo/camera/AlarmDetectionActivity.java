@@ -59,11 +59,6 @@ import static com.tuya.smart.android.demo.utils.Constants.MOTION_CLASSIFY_SUCCES
 import static com.tuya.smart.android.demo.utils.Constants.MSG_DELETE_ALARM_DETECTION;
 import static com.tuya.smart.android.demo.utils.Constants.MSG_GET_ALARM_DETECTION;
 
-/**
- * huangdaju
- * 2019-11-19
- **/
-
 public class AlarmDetectionActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG = AlarmDetectionActivity.class.getSimpleName();
     private String devId;
@@ -397,25 +392,25 @@ public class AlarmDetectionActivity extends AppCompatActivity implements View.On
         queryRv.setLayoutManager(mLayoutManager);
         queryRv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapter = new AlarmDetectionAdapter(this, mCameraMessageList);
-        adapter.setListener(new AlarmDetectionAdapter.OnItemListener() {
-            @Override
-            public void onLongClick(CameraMessageBean o) {
-                deleteCameraMessageClassify(o);
-            }
-
-            @Override
-            public void onItemClick(CameraMessageBean o) {
-                if (o.getAttachVideos() != null && o.getAttachVideos().length > 0) {
-                    Intent intent = new Intent(AlarmDetectionActivity.this, CameraCloudVideoActivity.class);
-                    String attachVideo = o.getAttachVideos()[0];
-                    String playUrl = attachVideo.substring(0, attachVideo.lastIndexOf('@'));
-                    String encryptKey = attachVideo.substring(attachVideo.lastIndexOf('@') + 1);
-                    intent.putExtra("playUrl", playUrl);
-                    intent.putExtra("encryptKey", encryptKey);
-                    startActivity(intent);
-                }
-            }
-        });
+//        adapter.setListener(new AlarmDetectionAdapter.OnItemListener() {
+//            @Override
+//            public void onLongClick(CameraMessageBean o) {
+//                deleteCameraMessageClassify(o);
+//            }
+//
+//            @Override
+//            public void onItemClick(CameraMessageBean o) {
+//                if (o.getAttachVideos() != null && o.getAttachVideos().length > 0) {
+//                    Intent intent = new Intent(AlarmDetectionActivity.this, CameraCloudVideoActivity.class);
+//                    String attachVideo = o.getAttachVideos()[0];
+//                    String playUrl = attachVideo.substring(0, attachVideo.lastIndexOf('@'));
+//                    String encryptKey = attachVideo.substring(attachVideo.lastIndexOf('@') + 1);
+//                    intent.putExtra("playUrl", playUrl);
+//                    intent.putExtra("encryptKey", encryptKey);
+//                    startActivity(intent);
+//                }
+//            }
+//        });
 
 
         queryRv.setAdapter(adapter);

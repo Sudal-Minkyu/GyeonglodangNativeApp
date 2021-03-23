@@ -6,32 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.orm.SugarContext;
 import com.tuya.smart.android.common.utils.L;
 import com.tuya.smart.android.demo.login.activity.LoginActivity;
 import com.tuya.smart.android.demo.utils.FrescoManager;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.sdk.TuyaSdk;
-import com.tuya.smart.sdk.api.INeedLoginListener;
-
-import androidx.multidex.MultiDexApplication;
-
 
 public class TuyaSmartApp extends MultiDexApplication {
 
     private static final String TAG = "TuyaSmartApp";
-    private Intent mBackgroundServiceIntent;
-    private BackgroundService mBackgroundService;
-    private String deviceId;
     public Vibrator vibrator;
-
-    public void SetDeviceId(String state) {
-        this.deviceId = deviceId;
-    }
-
-    public String GetDeviceId() {
-        return deviceId;
-    }
 
     @Override
     public void onCreate() {
@@ -43,15 +30,12 @@ public class TuyaSmartApp extends MultiDexApplication {
         L.d(TAG, "onCreate " + getProcessName(this));
         L.setSendLogOn(true);
         TuyaHomeSdk.init(this);
-        TuyaHomeSdk.setOnNeedLoginListener(new INeedLoginListener() {
-            @Override
-            public void onNeedLogin(Context context) {
-                Intent intent = new Intent(context, LoginActivity.class);
-                if (!(context instanceof Activity)) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
-                startActivity(intent);
+        TuyaHomeSdk.setOnNeedLoginListener(context -> {
+            Intent intent = new Intent(context, LoginActivity.class);
+            if (!(context instanceof Activity)) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
+            startActivity(intent);
         });
 
         FrescoManager.initFresco(this);

@@ -26,10 +26,6 @@ public class Foreground implements MultiDexApplication.ActivityLifecycleCallback
 
     private static AppStatus mAppStatus;
 
-    public AppStatus getAppStatus() {
-        return mAppStatus;
-    }
-
     // check if app is return foreground
     public static boolean isBackground() {
         return mAppStatus.ordinal() == AppStatus.BACKGROUND.ordinal();

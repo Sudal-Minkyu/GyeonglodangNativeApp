@@ -14,9 +14,6 @@ import android.util.Log;
 
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.tuya.smart.android.base.utils.PreferencesUtil;
 import com.tuya.smart.android.camera.api.ITuyaHomeCamera;
 import com.tuya.smart.android.camera.api.bean.CameraPushDataBean;
@@ -25,7 +22,6 @@ import com.tuya.smart.android.demo.BackgroundService;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
-import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
 import com.tuya.smart.android.demo.base.utils.ProgressUtil;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
@@ -46,15 +42,11 @@ import com.tuya.smart.sdk.api.ITuyaGetBeanCallback;
 import com.tuyasmart.camera.devicecontrol.ITuyaCameraDevice;
 import com.tuyasmart.camera.devicecontrol.TuyaCameraDeviceControlSDK;
 
-import org.json.JSONObject;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import androidx.annotation.NonNull;
 
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_DEVID;
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_P2P_TYPE;

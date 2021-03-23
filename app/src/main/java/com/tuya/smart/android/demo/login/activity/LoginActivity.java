@@ -1,21 +1,17 @@
 package com.tuya.smart.android.demo.login.activity;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.tuya.smart.android.common.utils.ValidatorUtil;
-import com.tuya.smart.android.demo.MainActivity;
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
@@ -33,7 +28,6 @@ import com.tuya.smart.android.demo.base.utils.ProgressUtil;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
 import com.tuya.smart.android.demo.login.ILoginView;
 import com.tuya.smart.android.demo.login.presenter.LoginPresenter;
-import com.tuya.smart.android.demo.utils.Constants;
 import com.tuya.smart.android.mvp.bean.Result;
 
 import butterknife.BindView;
@@ -44,9 +38,6 @@ import butterknife.Unbinder;
 import static com.tuya.smart.android.demo.login.activity.AccountInputActivity.EXTRA_ACCOUNT_INPUT_MODE;
 import static com.tuya.smart.android.demo.login.activity.AccountInputActivity.MODE_PASSWORD_FOUND;
 
-/**
- * Created by letian on 16/7/15.
- */
 public class LoginActivity extends BaseActivity implements ILoginView, TextWatcher {
 
     @BindView(R.id.login_submit)
@@ -110,12 +101,7 @@ public class LoginActivity extends BaseActivity implements ILoginView, TextWatch
         disableLogin();
 
         regBtn = findViewById(R.id.action_login_reg_onclick);
-        regBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AccountInputActivity.gotoAccountInputActivity(LoginActivity.this, AccountInputActivity.MODE_REGISTER, 0);
-            }
-        });
+        regBtn.setOnClickListener(v -> AccountInputActivity.gotoAccountInputActivity(LoginActivity.this, AccountInputActivity.MODE_REGISTER, 0));
 
         mLoginPresenter = new LoginPresenter(this, this);
     }
@@ -182,11 +168,6 @@ public class LoginActivity extends BaseActivity implements ILoginView, TextWatch
         return false;
     }
 
-    @OnClick(R.id.option_validate_code)
-    public void onClickLoginWithPhoneCode() {
-        startActivity(new Intent(LoginActivity.this, LoginWithPhoneActivity.class));
-    }
-
     @OnClick(R.id.option_forget_password)
     public void onClickRetrievePassword() {
         Intent intent = new Intent(LoginActivity.this, AccountInputActivity.class);
@@ -227,7 +208,7 @@ public class LoginActivity extends BaseActivity implements ILoginView, TextWatch
                 ToastUtil.shortToast(LoginActivity.this, getString(R.string.ty_phone_num_error));
                 return;
             }
-            hideIMM();
+//            hideIMM();
             disableLogin();
             ProgressUtil.showLoading(LoginActivity.this, R.string.logining);
             ActivityUtils.SetString(getBaseContext(), "user_id", userName);

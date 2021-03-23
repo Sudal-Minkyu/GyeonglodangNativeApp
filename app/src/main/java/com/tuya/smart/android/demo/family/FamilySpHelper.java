@@ -2,7 +2,6 @@ package com.tuya.smart.android.demo.family;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.tuya.smart.android.demo.TuyaSmartApp;
@@ -12,7 +11,7 @@ import com.tuya.smart.home.sdk.bean.HomeBean;
 
 public class FamilySpHelper {
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     private static final String PREFERENCE_NAME = "tuya_Home";
 
@@ -37,23 +36,7 @@ public class FamilySpHelper {
             userId = user.getUid();
         }
         editor.putString(CURRENT_FAMILY_SUFFIX + userId, JSON.toJSONString(homeBean));
-        editor.commit();
+        editor.apply();
     }
-
-
-    public HomeBean getCurrentHome() {
-        String userId = null;
-        User user = TuyaHomeSdk.getUserInstance().getUser();
-        if (null != user) {
-            userId = user.getUid();
-        }
-
-        String currentFamilyStr = mPreferences.getString(CURRENT_FAMILY_SUFFIX + userId, "");
-        if (TextUtils.isEmpty(currentFamilyStr)) {
-            return null;
-        }
-        return JSON.parseObject(currentFamilyStr, HomeBean.class);
-    }
-
 
 }

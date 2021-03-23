@@ -4,31 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
-import android.text.TextUtils;
 
 import com.tuya.smart.android.common.utils.ValidatorUtil;
-//import com.tuya.smart.android.demo.base.activity.SplashActivity;
-import com.tuya.smart.android.demo.camera.CameraPanelActivity;
-import com.tuya.smart.android.demo.login.activity.CountryListActivity;
-import com.tuya.smart.android.demo.base.app.Constant;
 import com.tuya.smart.android.demo.base.utils.ActivityUtils;
 import com.tuya.smart.android.demo.base.utils.CountryUtils;
 import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
 import com.tuya.smart.android.demo.login.ILoginView;
+import com.tuya.smart.android.demo.login.activity.CountryListActivity;
 import com.tuya.smart.android.mvp.bean.Result;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
 import com.tuya.smart.android.user.api.ILoginCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
-import com.tuya.smart.sdk.TuyaSdk;
 
-
-/**
- * 登录逻辑
- * <p/>
- * Created by sunch on 16/6/4.
- */
 public class LoginPresenter extends BasePresenter {
     protected Activity mContext;
     protected ILoginView mView;
@@ -67,7 +56,7 @@ public class LoginPresenter extends BasePresenter {
         }
     }
 
-    private ILoginCallback mLoginCallback = new ILoginCallback() {
+    private final ILoginCallback mLoginCallback = new ILoginCallback() {
         @Override
         public void onSuccess(User user) {
             mHandler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
@@ -87,11 +76,8 @@ public class LoginPresenter extends BasePresenter {
             case MSG_LOGIN_SUCCESS:
                 // 로그인 성공
                 mView.modelResult(msg.what, null);
-//                Constant.finishActivity();
                 LoginHelper.afterLogin(mContext);
-//                ActivityUtils.gotoHomeActivity(mContext); // 기존메인페이지
                 ActivityUtils.gotoMainActivity(mContext); // 스플레쉬액티비티 실행 -> 최초로그인후 나오는화면
-//                ActivityUtils.gotoMainActivity(mContext);
                 break;
             case MSG_LOGIN_FAILURE:
                 // 로그인 실패
@@ -110,14 +96,12 @@ public class LoginPresenter extends BasePresenter {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0x01:
-                if (resultCode == Activity.RESULT_OK) {
-                    mCountryName = data.getStringExtra(CountryListActivity.COUNTRY_NAME);
-                    mCountryCode = data.getStringExtra(CountryListActivity.PHONE_CODE);
-                    mView.setCountry(mCountryName, mCountryCode);
-                }
-                break;
+        if (requestCode == 0x01) {
+            if (resultCode == Activity.RESULT_OK) {
+                mCountryName = data.getStringExtra(CountryListActivity.COUNTRY_NAME);
+                mCountryCode = data.getStringExtra(CountryListActivity.PHONE_CODE);
+                mView.setCountry(mCountryName, mCountryCode);
+            }
         }
     }
 }

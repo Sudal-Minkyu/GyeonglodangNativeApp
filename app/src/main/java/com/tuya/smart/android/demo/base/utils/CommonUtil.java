@@ -5,41 +5,20 @@ import android.app.Activity;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
-import androidx.core.view.ViewCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.tuya.smart.android.base.bean.CountryBean;
 import com.tuya.smart.android.demo.R;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-/**
- * Created by mikeshou on 15/5/30.
- */
 public class CommonUtil {
-
-    public static boolean checkUrl(String url) {
-        if (TextUtils.isEmpty(url)) {
-            return false;
-        }
-        try {
-            url = URLDecoder.decode(url, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return !url.contains("http://") || !url.contains("https://") || !url.contains("file:///");
-    }
 
     public static String getLanguage() {
         Locale l = Locale.getDefault();
@@ -66,7 +45,6 @@ public class CommonUtil {
                     R.attr.status_system_bg_color, R.attr.status_bg_color});
             int setColor = a.getColor(0, -1);
             int statusBgColor = a.getColor(1, -1);
-            //通知栏所需颜色
             if (setColor != -1) {
                 tintManager.setStatusBarTintColor(setColor);
             } else if (statusBgColor != -1) {
@@ -85,29 +63,6 @@ public class CommonUtil {
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         winParams.flags |= bits;
         win.setAttributes(winParams);
-    }
-
-    public static void initSystemBarColor(Activity activity, int color) {
-        if (activity == null) return;
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = activity.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(color);
-            ViewGroup mContentView = activity.findViewById(Window.ID_ANDROID_CONTENT);
-            View mChildView = mContentView.getChildAt(0);
-            if (mChildView != null) {
-                mChildView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                ViewCompat.setFitsSystemWindows(mChildView, true);
-            }
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            Window window = activity.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-            tintManager.setStatusBarTintColor(color);
-            tintManager.setStatusBarTintEnabled(true);
-        }
     }
 
     public static boolean isEmail(String data) {

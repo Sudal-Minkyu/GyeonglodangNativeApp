@@ -13,10 +13,6 @@ public class TimePieceBean implements Comparable<TimePieceBean> {
         this.playTime = playTime;
     }
 
-    public int getStartTime() {
-        return startTime;
-    }
-
     public int getEndTime() {
         return endTime;
     }

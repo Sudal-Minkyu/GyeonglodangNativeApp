@@ -6,17 +6,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.tuya.smart.android.demo.R;
 import com.tuya.smart.android.demo.base.activity.BaseActivity;
-import com.tuya.smart.android.demo.login.CountryAdpater;
-import com.tuya.smart.android.demo.login.CountryViewBean;
 import com.tuya.smart.android.demo.base.utils.CountryUtils;
 import com.tuya.smart.android.demo.base.widget.contact.ContactItemInterface;
 import com.tuya.smart.android.demo.base.widget.contact.CountryListView;
+import com.tuya.smart.android.demo.login.CountryAdpater;
+import com.tuya.smart.android.demo.login.CountryViewBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,35 +45,28 @@ public class CountryListActivity extends BaseActivity implements TextWatcher {
         setTitle(getString(R.string.choose_country_code));
         setDisplayHomeAsUpEnabled();
 
-        filterList = new ArrayList<ContactItemInterface>();
+        filterList = new ArrayList<>();
         contactList = CountryUtils.getSampleContactList();
         CountryAdpater adapter = new CountryAdpater(this, R.layout.country_list_item, contactList);
-        listview = (CountryListView) findViewById(R.id.listview);
+        listview = findViewById(R.id.listview);
         listview.setFastScrollEnabled(true);
         listview.setAdapter(adapter);
 
-        // use this to process individual clicks
-        // cannot use OnClickListener as the touch event is overrided by IndexScroller
-        // use last touch X and Y if want to handle click for an individual item within the row
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView parent, View v, int position,
-                                    long id) {
-                List<ContactItemInterface> searchList = inSearchMode ? filterList : contactList;
-                CountryViewBean countryViewBean = (CountryViewBean) searchList.get(position);
-                if (countryViewBean != null) {
-                    Intent intent = new Intent();
-                    intent.putExtra(PHONE_CODE, countryViewBean.getNumber());
-                    intent.putExtra(COUNTRY_NAME, countryViewBean.getCountryName());
-                    setResult(RESULT_OK, intent);
-                } else {
-                    setResult(RESULT_CANCELED);
-                }
-                finish();
+        listview.setOnItemClickListener((parent, v, position, id) -> {
+            List<ContactItemInterface> searchList = inSearchMode ? filterList : contactList;
+            CountryViewBean countryViewBean = (CountryViewBean) searchList.get(position);
+            if (countryViewBean != null) {
+                Intent intent = new Intent();
+                intent.putExtra(PHONE_CODE, countryViewBean.getNumber());
+                intent.putExtra(COUNTRY_NAME, countryViewBean.getCountryName());
+                setResult(RESULT_OK, intent);
+            } else {
+                setResult(RESULT_CANCELED);
             }
+            finish();
         });
 
-        searchBox = (EditText) findViewById(R.id.input_search_query);
+        searchBox = findViewById(R.id.input_search_query);
         searchBox.addTextChangedListener(this);
     }
 

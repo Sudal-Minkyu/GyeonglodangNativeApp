@@ -5,13 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.tuya.smart.android.demo.base.utils.CollectionUtils;
-import com.tuya.smart.android.demo.family.event.EventCurrentHomeChange;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -46,28 +43,18 @@ public class FamilyManager {
         if (null == homeBean) {
             return;
         }
-        boolean isChange = false;
 
         Log.e(TAG, "KMK setCurrentHome - homeBean : "+homeBean);
-        if (null == currentHomeBean) {
-            isChange = true;
-        } else {
+        if (null != currentHomeBean) {
             long currentHomeId = currentHomeBean.getHomeId();
             long targetHomeId = homeBean.getHomeId();
             Log.e(TAG, "KMK setCurrentHome - currentHomeBean : "+currentHomeBean);
             Log.i(TAG, "KMK setCurrentHome: currentHomeId=" + currentHomeId + " targetHomeId=" + targetHomeId);
-            if (currentHomeId != targetHomeId) {
-                isChange = true;
-            }
         }
         // 메모리 업데이트
         currentHomeBean = homeBean;
         System.out.println("currentHomeBean : "+currentHomeBean);
         mFamilySpHelper.putCurrentHome(currentHomeBean);
-        if (isChange) {
-            EventBus.getDefault().post(new EventCurrentHomeChange(currentHomeBean));
-        }
-
     }
 
 

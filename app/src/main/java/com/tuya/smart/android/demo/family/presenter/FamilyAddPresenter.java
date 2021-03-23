@@ -1,7 +1,5 @@
 package com.tuya.smart.android.demo.family.presenter;
 
-import com.tuya.smart.android.demo.base.utils.ActivityUtils;
-import com.tuya.smart.android.demo.base.utils.CollectionUtils;
 import com.tuya.smart.android.demo.family.activity.IFamilyAddView;
 import com.tuya.smart.android.demo.family.model.FamilyAddModel;
 import com.tuya.smart.android.demo.family.model.IFamilyAddModel;
@@ -13,10 +11,9 @@ import java.util.List;
 
 public class FamilyAddPresenter extends BasePresenter {
 
+    private final IFamilyAddModel mFamilyAddModel;
 
-    private IFamilyAddModel mFamilyAddModel;
-
-    private IFamilyAddView mFamilyAddView;
+    private final IFamilyAddView mFamilyAddView;
 
     public FamilyAddPresenter(IFamilyAddView view) {
         super(view.getContext());
@@ -24,11 +21,7 @@ public class FamilyAddPresenter extends BasePresenter {
         this.mFamilyAddModel = new FamilyAddModel();
     }
 
-
     public void addFamily(String homeName, List<String> roomList) {
-//        if (CollectionUtils.isEmpty(roomList)) {
-//            return;
-//        }
         mFamilyAddModel.createHome(homeName, roomList, new ITuyaHomeResultCallback() {
             @Override
             public void onSuccess(HomeBean homeBean) {

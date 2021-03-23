@@ -15,11 +15,6 @@ import android.widget.Toast;
 
 import java.io.File;
 
-/**
- * huangdaju
- * 2018/12/17
- **/
-
 public class Constants {
 
     public static final int EXTERNAL_STORAGE_REQ_CODE = 10;

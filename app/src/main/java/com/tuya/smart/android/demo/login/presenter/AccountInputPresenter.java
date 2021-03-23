@@ -2,25 +2,20 @@ package com.tuya.smart.android.demo.login.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.TextUtils;
 
+import com.tuya.smart.android.demo.base.utils.CountryUtils;
+import com.tuya.smart.android.demo.login.IAccountInputView;
 import com.tuya.smart.android.demo.login.activity.AccountConfirmActivity;
 import com.tuya.smart.android.demo.login.activity.AccountInputActivity;
 import com.tuya.smart.android.demo.login.activity.CountryListActivity;
-import com.tuya.smart.android.demo.base.utils.CountryUtils;
-import com.tuya.smart.android.demo.login.IAccountInputView;
 import com.tuya.smart.android.mvp.presenter.BasePresenter;
-import com.tuya.smart.sdk.TuyaSdk;
 
-/**
- * Created by lee on 16/6/3.
- */
 public class AccountInputPresenter extends BasePresenter {
     private static final int REQUEST_COUNTRY_CODE = 998;
     private static final int REQUEST_CONFIRM = 999;
-    private IAccountInputView mView;
+    private final IAccountInputView mView;
 
-    private Activity mContext;
+    private final Activity mContext;
 
     private String mCountryName;
     private String mCountryCode;

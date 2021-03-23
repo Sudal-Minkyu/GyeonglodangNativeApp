@@ -34,7 +34,7 @@ public class AccountInputActivity extends BaseActivity implements TextWatcher, I
     private EditText mEtAccount;
     private Button mNextStepBtn;
 
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.bt_next) {
@@ -59,7 +59,7 @@ public class AccountInputActivity extends BaseActivity implements TextWatcher, I
     public static void gotoAccountInputActivity(Activity activity, int mode, int requestCode) {
         Intent intent = new Intent(activity, AccountInputActivity.class);
         intent.putExtra(EXTRA_ACCOUNT_INPUT_MODE, mode);
-        ActivityUtils.startActivityForResult(activity, intent, requestCode, 0);
+        ActivityUtils.startActivityForResult(activity, intent, requestCode);
 
     }
 
@@ -89,12 +89,12 @@ public class AccountInputActivity extends BaseActivity implements TextWatcher, I
     }
 
     private void initView() {
-        mCountryName = (TextView) findViewById(R.id.country_name);
+        mCountryName = findViewById(R.id.country_name);
         mCountryName.setOnClickListener(mOnClickListener);
-        mNextStepBtn = (Button) findViewById(R.id.bt_next);
+        mNextStepBtn = findViewById(R.id.bt_next);
         mNextStepBtn.setOnClickListener(mOnClickListener);
         mNextStepBtn.setEnabled(false);
-        mEtAccount = (EditText) findViewById(R.id.et_account);
+        mEtAccount = findViewById(R.id.et_account);
         mEtAccount.addTextChangedListener(this);
     }
 

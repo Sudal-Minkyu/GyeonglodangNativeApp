@@ -9,10 +9,6 @@ import com.tuya.smart.android.user.api.IReNickNameCallback;
 import com.tuya.smart.android.user.bean.User;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 
-
-/**
- * Created by letian on 15/6/22.
- */
 public class PersonalInfoModel extends BaseModel implements IPersonalInfoModel {
     public static final int RENAME_NICKNAME_ERROR = 0x01;
     public static final int RENAME_NICKNAME_SUCCESS = 0x02;
@@ -38,16 +34,8 @@ public class PersonalInfoModel extends BaseModel implements IPersonalInfoModel {
     }
 
     @Override
-    public String getMobile() {
-        User user = TuyaHomeSdk.getUserInstance().getUser();
-        if (user == null) return "";
-        //这里恒定显示手机号
-        return user.getMobile();
-    }
-
-    @Override
     public void reNickName(final String nickName) {
-        TuyaHomeSdk.getUserInstance().reRickName(nickName, new IReNickNameCallback() {
+        TuyaHomeSdk.getUserInstance().updateNickName(nickName, new IReNickNameCallback() {
             @Override
             public void onSuccess() {
                 resultSuccess(RENAME_NICKNAME_SUCCESS, nickName);
@@ -58,7 +46,6 @@ public class PersonalInfoModel extends BaseModel implements IPersonalInfoModel {
                 resultError(RENAME_NICKNAME_ERROR, s, s1);
             }
         });
-
     }
 
     @Override
