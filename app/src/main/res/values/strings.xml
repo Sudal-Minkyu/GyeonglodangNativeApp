@@ -530,4 +530,5 @@
     <string name="fullscreen_open_btn" translatable="false">수락</string>
     <string name="fullscreen_cancel_btn" translatable="false">거절</string>
     <string name="fullscreen_content" translatable="false">문열기</string>
+    <string name="doorbellcall" translatable="false">초인종이 울렸습니다.</string>
 </resources>

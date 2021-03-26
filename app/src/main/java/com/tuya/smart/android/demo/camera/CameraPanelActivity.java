@@ -108,7 +108,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
 
     private static final String TAG = "CameraPanelActivity";
 
-    private PersonalInfoPresenter mPersonalInfoPresenter;
     @BindView(R.id.camera_video_view)
     public TuyaCameraView mVideoView;
     @BindView(R.id.camera_mute)
@@ -165,7 +164,8 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         return false;
     }
 
-    private Handler mHandler = new Handler() {
+    private final MyHandler mHandler = new MyHandler();
+    private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -202,7 +202,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
             }
             super.handleMessage(msg);
         }
-    };
+    }
 
     private void handleStopTalk(Message msg) {
         if (msg.arg1 == ARG1_OPERATE_SUCCESS) {
@@ -281,7 +281,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     private static final int THREAD_ID = 10000;
 
     private void initPresenter() {
-        mPersonalInfoPresenter = new PersonalInfoPresenter(this, this);
+        PersonalInfoPresenter mPersonalInfoPresenter = new PersonalInfoPresenter(this, this);
         nickName = mPersonalInfoPresenter.getNickName();
     }
 

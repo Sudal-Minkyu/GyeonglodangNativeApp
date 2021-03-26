@@ -45,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import static com.tuya.smart.android.demo.device.common.CommonDeviceDebugPresenter.INTENT_DEVID;
@@ -94,10 +95,10 @@ public class FullscreenActivity extends Activity {
         super.onResume();
         //진동울리기
 //        initVibrator();
-        if(hasVibrator) {
+        if (hasVibrator) {
             EnableVibrator();
         }
-        if(media) {
+        if (media) {
             initMedia();
         }
     }
@@ -114,7 +115,7 @@ public class FullscreenActivity extends Activity {
 
     @Override
     public void onUserLeaveHint() {
-        Log.e(TAG, "KMK - 전원버튼클릭 ");
+        Log.e(TAG, "KMK 홈버튼클릭 ");
         media = true;
         mediaPlayer.stop();
         hasVibrator = true;
@@ -150,20 +151,25 @@ public class FullscreenActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
     private BroadcastReceiver scrOffReceiver;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_fullscreen);
-        if(media) {
+        if (media) {
             initMedia();
         }
-        if(hasVibrator) {
+        if (hasVibrator) {
             EnableVibrator();
         }
-        mSnapshot = (DecryptImageView) findViewById(R.id.call_Icon);
+
+        // 상단 카메라 이미지 불러오기.
+        mSnapshot = findViewById(R.id.call_Icon);
+
         devId = getIntent().getStringExtra(INTENT_DEVID);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -173,9 +179,9 @@ public class FullscreenActivity extends Activity {
         scrOffReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("android.intent.action.SCREEN_OFF")) {
-                    System.out.println("인텐트 : " + intent.getAction());
-                    System.out.println("전원버튼 클릭 (꺼짐)");
+                if (Objects.equals(intent.getAction(), "android.intent.action.SCREEN_OFF")) {
+                    Log.e(TAG,"KMK 인텐트 : " + intent.getAction());
+                    Log.e(TAG,"KMK 전원버튼 클릭 (꺼짐)");
                     mediaPlayer.stop();
                     hasVibrator = true;
                     media = true;
@@ -191,37 +197,32 @@ public class FullscreenActivity extends Activity {
         registerReceiver(scrOffReceiver, scrFilter);
 
         Button cancelBtn = findViewById(R.id.fullscreen_cancel_btn);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cancelBtn.setOnClickListener(v -> {
+            Log.e(TAG,"KMK 종료클릭");
+            DisableVibrator();
+            hasVibrator = true;
+            media = true;
+            mediaPlayer.stop();
+            mediaPlayer.reset();
 
-                DisableVibrator();
-                hasVibrator = true;
-                media = true;
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-
-                Constant.finishActivity();
-                finish();
-            }
+            Constant.finishActivity();
+            finish();
         });
 
         // 문 열기 버튼에 해당 액션 연결 필요
         Button openBtn = findViewById(R.id.fullscreen_open_btn);
-        openBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Constant.finishActivity();
-                finish();
-                DisableVibrator();
-                hasVibrator = true;
-                media = true;
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-                Intent intent = new Intent(FullscreenActivity.this, DoorbellActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        openBtn.setOnClickListener(v -> {
+            Log.e(TAG,"KMK 통화클릭");
+            Constant.finishActivity();
+            finish();
+            DisableVibrator();
+            hasVibrator = true;
+            media = true;
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            Intent intent = new Intent(FullscreenActivity.this, DoorbellActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
     }
@@ -231,11 +232,6 @@ public class FullscreenActivity extends Activity {
         return event.getAction() != MotionEvent.ACTION_OUTSIDE;
     }
 
-    @Override
-    public void onBackPressed() {
-    }
-
-
     private String devId;
     protected List<CameraMessageBean> mCameraMessageList;
     private CameraMessageBusiness messageBusiness;
@@ -243,14 +239,15 @@ public class FullscreenActivity extends Activity {
     private int day, year, month;
     private int offset = 0;
 
-    private Handler mHandler = new Handler() {
+    private final MyHandler mHandler = new MyHandler();
+    private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ALARM_DETECTION_DATE_MONTH_FAILED:
                     break;
                 case ALARM_DETECTION_DATE_MONTH_SUCCESS:
-                    handlAlarmDetectionDateSuccess(msg);
+                    handlAlarmDetectionDateSuccess();
                     break;
                 case MSG_GET_ALARM_DETECTION:
                     handleAlarmDetection();
@@ -261,8 +258,7 @@ public class FullscreenActivity extends Activity {
             }
             super.handleMessage(msg);
         }
-    };
-
+    }
 
     private void handleAlarmDetection() {
         Log.d(TAG, "handleAlarmDetection size " + mCameraMessageList.size());
@@ -271,7 +267,7 @@ public class FullscreenActivity extends Activity {
         }
     }
 
-    private void handlAlarmDetectionDateSuccess(Message msg) {
+    private void handlAlarmDetectionDateSuccess() {
         if (null != messageBusiness) {
             long time = DateUtils.getCurrentTime(year, month, day);
             long startTime = DateUtils.getTodayStart(time);
@@ -328,14 +324,13 @@ public class FullscreenActivity extends Activity {
         if (messageBusiness != null) {
             messageBusiness.queryAlarmDetectionClassify(devId, new Business.ResultListener<ArrayList<CameraMessageClassifyBean>>() {
                 @Override
-                public void onFailure(BusinessResponse businessResponse, ArrayList<CameraMessageClassifyBean> cameraMessageClassifyBeans, String s) {
-                    mHandler.sendEmptyMessage(MOTION_CLASSIFY_FAILED);
-                }
-
-                @Override
                 public void onSuccess(BusinessResponse businessResponse, ArrayList<CameraMessageClassifyBean> cameraMessageClassifyBeans, String s) {
                     selectClassify = cameraMessageClassifyBeans.get(0);
                     mHandler.sendEmptyMessage(MOTION_CLASSIFY_SUCCESS);
+                }
+                @Override
+                public void onFailure(BusinessResponse businessResponse, ArrayList<CameraMessageClassifyBean> cameraMessageClassifyBeans, String s) {
+                    mHandler.sendEmptyMessage(MOTION_CLASSIFY_FAILED);
                 }
             });
         }
@@ -344,7 +339,8 @@ public class FullscreenActivity extends Activity {
 
     private void queryAlarmDetectionByMonth() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd",java.util.Locale.getDefault());
+
         Date date = new Date(System.currentTimeMillis());
         String inputStr = simpleDateFormat.format(date);
         if (TextUtils.isEmpty(inputStr)) {
@@ -364,21 +360,22 @@ public class FullscreenActivity extends Activity {
 
 
         messageBusiness.queryAlarmDetectionDaysByMonth(object.toJSONString(),
-                new Business.ResultListener<JSONArray>() {
-                    @Override
-                    public void onFailure(BusinessResponse businessResponse, JSONArray objects, String s) {
-                        mHandler.sendEmptyMessage(ALARM_DETECTION_DATE_MONTH_FAILED);
-                        Log.d(TAG, "error : " + s);
+            new Business.ResultListener<JSONArray>() {
+                @Override
+                public void onFailure(BusinessResponse businessResponse, JSONArray objects, String s) {
+                    mHandler.sendEmptyMessage(ALARM_DETECTION_DATE_MONTH_FAILED);
+                    Log.d(TAG, "error : " + s);
 
-                    }
+                }
 
-                    @Override
-                    public void onSuccess(BusinessResponse businessResponse, JSONArray objects, String s) {
-                        Log.d(TAG, "success : " + s);
+                @Override
+                public void onSuccess(BusinessResponse businessResponse, JSONArray objects, String s) {
+                    Log.d(TAG, "success : " + s);
 
-                        mHandler.sendEmptyMessage(ALARM_DETECTION_DATE_MONTH_SUCCESS);
-                    }
-                });
+                    mHandler.sendEmptyMessage(ALARM_DETECTION_DATE_MONTH_SUCCESS);
+                }
+            }
+        );
     }
 
     @Override
@@ -391,9 +388,7 @@ public class FullscreenActivity extends Activity {
             unregisterReceiver(scrOffReceiver);
         }
 
-        if (null != mHandler) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
+        mHandler.removeCallbacksAndMessages(null);
 
         if (null != messageBusiness) {
             messageBusiness.onDestroy();
