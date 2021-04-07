@@ -129,7 +129,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     public Toolbar mToolBar;
     @BindView(R.id.doorImage)
     public ImageView doorImage;
-    @BindView(R.id.Battery_Txt)
+
     public TextView BatteryTxt;
 
     private static final int ASPECT_RATIO_WIDTH = 9;
@@ -292,6 +292,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_camera_panel);
         checkVerify();
         mBind = ButterKnife.bind(this);
+        BatteryTxt = findViewById(R.id.Battery_Txt);
         initPresenter();
         initView();
         initMenu();
@@ -657,7 +658,6 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
         photoTxt.setOnClickListener(this);
 
         OpenDoorTxt.setOnClickListener(this);
-        BatteryTxt.setOnClickListener(this);
     }
 
     @Override
@@ -685,27 +685,49 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
                     openDoorActiveData();
                 }
                 break;
-            case R.id.Battery_Txt:
-                mDeviceControl.registorTuyaCameraDeviceControlCallback(DpWirelessElectricity.ID, new ITuyaCameraDeviceControlCallback<Integer>() {
-                    @Override
-                    public void onSuccess(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, Integer o) {
-                        Log.e(TAG,"KMK 배터리 o : "+o);
-                        if (o == 0) {
-                            BatteryTxt.setText("충천중");
-                        } else {
-                            BatteryTxt.setText(o+"%");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, String s1, String s2) {
-
-                    }
-                });
-                break;
+//            case R.id.Battery_Txt:
+//                Log.e(TAG, "KMK Bettery 배터리상태 조회하기");
+//                mDeviceControl.registorTuyaCameraDeviceControlCallback(DpWirelessElectricity.ID, new ITuyaCameraDeviceControlCallback<Integer>() {
+//                    @Override
+//                    public void onSuccess(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, Integer o) {
+//                        Log.e(TAG,"KMK Bettery 배터리 o : "+o);
+//                        if (o == 0) {
+//                            BatteryTxt.setText("충천중");
+//                        } else {
+//                            BatteryTxt.setText(o+"%");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, String s1, String s2) {
+//                        Log.e(TAG,"KMK Bettery 배터리조회 에러");
+//                    }
+//                });
+//                break;
             default:
                 break;
         }
+    }
+
+    // 배터리 조회하기
+    public void betteryInit(){
+        Log.e(TAG, "KMK Bettery 배터리상태 조회하기");
+        mDeviceControl.registorTuyaCameraDeviceControlCallback(DpWirelessElectricity.ID, new ITuyaCameraDeviceControlCallback<Integer>() {
+            @Override
+            public void onSuccess(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, Integer o) {
+                Log.e(TAG,"KMK Bettery 배터리 o : "+o);
+                if (o == 0) {
+                    BatteryTxt.setText("충천중");
+                } else {
+                    BatteryTxt.setText(o+"%");
+                }
+            }
+
+            @Override
+            public void onFailure(String s, DpNotifyModel.ACTION action, DpNotifyModel.SUB_ACTION sub_action, String s1, String s2) {
+                Log.e(TAG,"KMK Bettery 배터리조회 에러");
+            }
+        });
     }
 
     public void openDoorNowData() {
@@ -998,7 +1020,7 @@ public class CameraPanelActivity extends BaseActivity implements View.OnClickLis
     private void onRefresh() {
         if (!isPlay) {
             mVideoView.onResume();
-            BatteryTxt.performClick();
+            betteryInit();
             if (!Boolean.parseBoolean(device)) {
                 mHandler.sendMessage(MessageUtil.getMessage(MSG_CONNECT, DEVICENOT));
             } else {

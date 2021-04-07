@@ -28,21 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/Battery_Txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/app_main_font"
-                tools:text="100%"
-                tools:textColor="@color/black"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="28dp" />
-
             <ImageView
                 android:id="@+id/camera_mute"
                 android:layout_width="53dp"
@@ -55,22 +40,37 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:src="@drawable/camera_mute_btn" />
+                android:src="@drawable/camera_mute_btn"
+            />
 
-        <ImageView
-            android:id="@+id/speak_Txt"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="280dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/camera_icon_mic_selector"
-            android:gravity="center" />
+            <ImageView
+                android:id="@+id/speak_Txt"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="280dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/camera_icon_mic_selector"
+                android:gravity="center"
+            />
 
-        <!-- android:visibility="gone" -->
-        <!-- android:enabled="false" -->
+            <TextView
+                android:id="@+id/Battery_Txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/app_main_font"
+                tools:text="100%"
+                tools:textColor="@color/black"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+            />
+
             <TextView
                 android:id="@+id/record_Txt"
                 android:layout_width="55dp"
