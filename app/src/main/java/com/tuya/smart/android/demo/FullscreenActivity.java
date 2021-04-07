@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.text.TextUtils;
@@ -29,6 +30,8 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.tuya.drawee.view.DecryptImageView;
 import com.tuya.smart.android.demo.base.activity.DoorbellActivity;
 import com.tuya.smart.android.demo.base.app.Constant;
+import com.tuya.smart.android.demo.base.utils.ActivityUtils;
+import com.tuya.smart.android.demo.base.utils.LoginHelper;
 import com.tuya.smart.android.demo.base.utils.MessageUtil;
 import com.tuya.smart.android.demo.base.utils.ToastUtil;
 import com.tuya.smart.android.demo.utils.DateUtils;
@@ -123,6 +126,27 @@ public class FullscreenActivity extends Activity {
     }
 
     private boolean hasVibrator = true; // 진동여부
+
+    /**
+     * 2분후 진동, 벨소리 종료 핸들러
+     */
+    private void BellHandler() {
+        Log.e(TAG,"KMK 10초후 종료 핸들러 시작");
+        new Handler(Objects.requireNonNull(Looper.myLooper())).postDelayed(() -> {
+            Log.e(TAG,"KMK 10초후 종료 핸들러 실행");
+            Log.e(TAG,"KMK hasVibrator : "+hasVibrator);
+            if(!hasVibrator) {
+                Log.e(TAG, "KMK 반응없음 자동종료");
+                DisableVibrator();
+                hasVibrator = true;
+                media = true;
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                Constant.finishActivity();
+                finish();
+            }
+        }, 120000); // 테스트 10초후 벨소리,진동 종료
+    }
 
     /**
      * 진동 활성화
@@ -224,6 +248,8 @@ public class FullscreenActivity extends Activity {
                     .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
+
+        BellHandler();
 
     }
 
